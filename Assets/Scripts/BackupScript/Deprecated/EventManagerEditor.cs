@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
-
+/*
 [CustomEditor(typeof(EventManager))]
 //[CanEditMultipleObjects]
 public class EventManagerEditor : Editor
@@ -98,4 +98,4 @@ public class EventManagerEditor : Editor
             EditorUtility.SetDirty(manager);
         }
     }
-}
+}*/

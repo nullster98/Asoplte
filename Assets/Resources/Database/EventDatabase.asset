@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7cb0015f8d20283468296b1fdc25ef53, type: 3}
+  m_Name: EventDatabase
+  m_EditorClassIdentifier: 
+  events:
+  - EventName: "\uC2DC\uC791\uC774\uBCA4\uD2B8"
+    Phases:
+    - PhaseName: "\uC2DC\uC791\uC774\uBCA4\uD2B8"
+      Script: "\uAC8C\uC784 \uCC98\uC74C\uC2DC\uC791\uC2DC \uC2E4\uD589\uB418\uB294
+        \uC2A4\uD06C\uB9BD\uD2B8 \uC785\uB2C8\uB2E4."
+      EventImage: {fileID: 21300000, guid: d0188f5340fc2f4468a81d8b04a76aaa, type: 3}
+      Choices:
+      - ChoiceName: "\uB2E4\uC74C\uB79C\uB364"
+        RequiredTraits: 
+        NextEventName: END
+        NextPhaseIndex: -1
+      - ChoiceName: "\uB2E4\uC74C\uD398\uC774\uC988"
+        RequiredTraits: 
+        NextEventName: 
+        NextPhaseIndex: 1
+    - PhaseName: "\uC2DC\uC791\uC774\uBCA4\uD2B82"
+      Script: "\uB2E4\uC74C \uD398\uC774\uC988\uB85C \uC798 \uB118\uC5B4\uC640 \uC84C\uC2B5\uB2C8\uB2E4.."
+      EventImage: {fileID: 21300000, guid: 52f2ca293272c7f49a3bed0d52d335aa, type: 3}
+      Choices:
+      - ChoiceName: "\uB2E4\uC74C\uB79C\uB364"
+        RequiredTraits: 
+        NextEventName: END
+        NextPhaseIndex: -1
+      - ChoiceName: "\uC694\uAD6C\uD2B9\uC131:\uC2E0\uC559"
+        RequiredTraits: "\uAD73\uAC74\uD55C \uC2E0\uC559"
+        NextEventName: END
+        NextPhaseIndex: -1
+    EventType: 0

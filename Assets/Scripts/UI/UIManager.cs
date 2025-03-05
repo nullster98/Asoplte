@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -33,19 +34,32 @@ public class TraitHoverHandler : MonoBehaviour, IPointerEnterHandler, IPointerEx
     }
 }//특성 이미지 마우스 호버 기능
 
-public class PlayerUIManager : MonoBehaviour
+public class UIManager : MonoBehaviour
 {
+    public static UIManager Instance { get; private set; }
+
     [Header("플레이어 UI")]
+    [SerializeField] private Image Hp; //HP바
+    [SerializeField] private Image MP; //Mp바
+    [SerializeField] private int currentProgress = 0; //진행도
+    [SerializeField] private Slider ProgressSlider; //슬라이더
+    [SerializeField] private TMP_Text CurrentGold;
+    [SerializeField] private TMP_Text CurrentFaithPoint;
     [SerializeField] private Image playerImage;
-    [SerializeField] private TMP_Text playerRace;
-    [SerializeField] private TMP_Text playerStats;
-    [SerializeField] private Transform traitsContainer;
-    [SerializeField] private GameObject traitsPrefab;
 
     [Header("정보창 UI")]
+    [SerializeField] private GameObject PlayerInfoBox; // 플레이어 정보 박스
+    [SerializeField] Image InfoImg;
+    [SerializeField] TMP_Text CharacterName;
+    [SerializeField] TMP_Text InfoStats;
+
     [SerializeField] private GameObject traitTextBox; // 마우스 오버 시 표시될 텍스트 박스
     [SerializeField] private TMP_Text traitText; // 특성 설명 텍스트
-    [SerializeField] private GameObject PlayerInfoBox; // 플레이어 정보 박스
+    [SerializeField] Transform TraitContainer;
+    [SerializeField] GameObject TraitPrefab; //특성이미지 프리팹
+
+    public Action<int> OnChoiceSelected;
+
 
     public void UpdatePlayerUI(Player player)
     {
@@ -55,52 +69,43 @@ public class PlayerUIManager : MonoBehaviour
 
         //플레이어 데이터 동기화
         playerImage.sprite = player.PlayerImg;
-        playerRace.text = player.Race.ToString();
-        playerStats.text = $@"
+        CurrentGold.text = player.GetStat("Gold").ToString();
+        CurrentFaithPoint.text = player.GetStat("FaithPoint").ToString();
+    }
+
+    public void UpdatePlayerInfo(Player player)
+    {
+        player = Player.Instance;
+
+        InfoImg.sprite = player.PlayerImg;
+        CharacterName.text = player.Race.ToString();
+        InfoStats.text = $@"
         체력 : {player.GetStat("CurrentHP")} / {player.GetStat("HP")}
         마나 : {player.GetStat("CurrentMP")} / {player.GetStat("MP")}
         골드 : {player.GetStat("Gold")}
-        신앙 포인트 : {player.GetStat("FaithPoint")}";
+        신앙 포인트 : {player.GetStat("FaithStat")}";
 
         UpdateTraitsUI();
-
     }
 
-    /*public void UpdateTraits(List<Trait> traits)
+    public void UpdateHPUI()
     {
-        //기존 특성 오브젝트 제거
-        foreach (Transform child in traitsContainer)
-        {
-            Destroy(child.gameObject);
-        }
-
-        //다시 추가
-        foreach (var trait in traits)
-        {
-            GameObject traitObj = Instantiate(traitsPrefab, traitsContainer);
-            Image traitImage = traitObj.GetComponent<Image>();
-            traitImage.sprite = trait.TraitImg;
-
-            if (traitsPrefab == null)
-            {
-                Debug.LogError("Traits Prefab이 연결되지 않았습니다!");
-                return;
-            }
-        }
-    }*/
+        if (Player.Instance != null)
+            Hp.fillAmount = Player.Instance.GetStat("CurrentHP") / Player.Instance.GetStat("HP");
+    }
 
     public void UpdateTraitsUI()
     {
         List<Trait> traits = Player.Instance.selectedTraits;
 
-        foreach (Transform child in traitsContainer) // 기존 UI 삭제
+        foreach (Transform child in TraitContainer) // 기존 UI 삭제
         {
             Destroy(child.gameObject);
         }
 
         foreach (Trait trait in traits)
         {
-            GameObject traitObj = Instantiate(traitsPrefab, traitsContainer); // UI 생성
+            GameObject traitObj = Instantiate(TraitPrefab, TraitContainer); // UI 생성
             Image traitImage = traitObj.GetComponent<Image>();
             traitImage.sprite = trait.TraitImg;
 
@@ -112,12 +117,11 @@ public class PlayerUIManager : MonoBehaviour
         }
     }
 
- 
     //  플레이어 정보 박스를 열 때만 특성 UI를 갱신하도록 설정
     public void OpenPlayerInfoBox()
     {
-        UpdatePlayerUI(Player.Instance);
-        PlayerInfoBox.SetActive(true);       
+        UpdatePlayerInfo(Player.Instance);
+        PlayerInfoBox.SetActive(true);
     }
 
     public void ClosePlayerInfoBox()
@@ -126,20 +130,24 @@ public class PlayerUIManager : MonoBehaviour
     }
 
 
-    void Start()
+
+    private void Awake()
     {
-        //UpdatePlayerUI(Player.Instance);
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(gameObject);
     }
 
-   /* public void RefreshTraitsUI()
+    void Start()
     {
-        //특성 리스트 업데이트
-        UpdateTraits(Player.Instance.selectedTraits);
-    }*/
+
+    }
+
 
     // Update is called once per frame
     void Update()
     {
-        //UpdatePlayerUI(Player.Instance);
+        UpdatePlayerUI(Player.Instance);
     }
 }

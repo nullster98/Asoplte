@@ -294,4 +294,22 @@ public class Player : MonoBehaviour
         return true;
     }
 
+    /*private void Damage()
+    {
+        if (Player.Instance == null) return;
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Player.Instance.ChangeStat("CurrentHP", -10);
+            UIManager.UpdateHPUI();
+        }
+
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            float newHP = Mathf.Min(Player.Instance.GetStat("CurrentHP") + 10, Player.Instance.GetStat("HP"));
+            Player.Instance.ChangeStat("CurrentHP", newHP - Player.Instance.GetStat("CurrentHP"));
+            UpdateHPUI();
+        }
+    }*/
+
 }

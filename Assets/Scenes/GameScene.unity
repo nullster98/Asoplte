@@ -2415,8 +2415,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1997265346}
-        m_TargetAssemblyTypeName: PlayerUIManager, Assembly-CSharp
+      - m_Target: {fileID: 1997265348}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: ClosePlayerInfoBox
         m_Mode: 1
         m_Arguments:
@@ -5103,8 +5103,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1997265346}
-        m_TargetAssemblyTypeName: PlayerUIManager, Assembly-CSharp
+      - m_Target: {fileID: 1997265348}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: OpenPlayerInfoBox
         m_Mode: 1
         m_Arguments:
@@ -5734,34 +5734,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1997265347}
-  - component: {fileID: 1997265346}
+  - component: {fileID: 1997265348}
   m_Layer: 0
-  m_Name: PlayerInfoManager
+  m_Name: UIManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1997265346
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1997265345}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea539a08db1154b408f0ded231b77663, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerImage: {fileID: 1165617149}
-  playerRace: {fileID: 827865400}
-  playerStats: {fileID: 451566358}
-  traitsContainer: {fileID: 433378587}
-  traitsPrefab: {fileID: 2593810034020010840, guid: 2598521c2fd6e2e4a91fd6d883a958dd, type: 3}
-  traitTextBox: {fileID: 850271850}
-  traitText: {fileID: 1044583167}
-  PlayerInfoBox: {fileID: 2006907185}
 --- !u!4 &1997265347
 Transform:
   m_ObjectHideFlags: 0
@@ -5777,6 +5757,33 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1997265348
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1997265345}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 124d9c6c26759ed4bbf54563955f8f6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Hp: {fileID: 1678267267}
+  MP: {fileID: 195666193}
+  currentProgress: 0
+  ProgressSlider: {fileID: 1467494635}
+  CurrentGold: {fileID: 869308461}
+  CurrentFaithPoint: {fileID: 578971046}
+  playerImage: {fileID: 1721555627}
+  PlayerInfoBox: {fileID: 2006907185}
+  InfoImg: {fileID: 1165617149}
+  CharacterName: {fileID: 827865400}
+  InfoStats: {fileID: 451566358}
+  traitTextBox: {fileID: 850271850}
+  traitText: {fileID: 1044583167}
+  TraitContainer: {fileID: 433378587}
+  TraitPrefab: {fileID: 2593810034020010840, guid: 2598521c2fd6e2e4a91fd6d883a958dd, type: 3}
 --- !u!1 &2006907185
 GameObject:
   m_ObjectHideFlags: 0
@@ -5802,7 +5809,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2006907185}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -6060,80 +6067,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf68b6892f817e443bb8ecb82e7aab9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: {fileID: 1678267267}
-  MP: {fileID: 195666193}
-  ProgressSlider: {fileID: 0}
-  currentProgress: 0
-  CurrentGold: {fileID: 869308461}
-  CurrentFaithPoint: {fileID: 578971046}
-  CharacterName: {fileID: 69687220}
-  CharacterImg: {fileID: 1721555627}
-  PlayerInfoBox: {fileID: 2006907185}
-  TraitContainer: {fileID: 433378587}
-  TraitPrefeb: {fileID: 4738205589686011740, guid: 91bba62abba9e2d4e81990890570ee3e, type: 3}
-  TraitTextBox: {fileID: 850271850}
-  TraitText: {fileID: 1044583167}
   EventText: {fileID: 853098932}
   EventSprite: {fileID: 975924960}
   ButtonContainer: {fileID: 1449012430}
   ButtonPrefab: {fileID: 555772823842051698, guid: e4d92286dbed35544ba60cd7b43f54ff, type: 3}
   eventScrollView: {fileID: 907760008}
-  Events:
-  - Tags: 1
-    isUsed: 0
-    EventName: "\uC2DC\uC791"
-    DisplayImg: {fileID: 21300000, guid: d0188f5340fc2f4468a81d8b04a76aaa, type: 3}
-    EventText: "\uC2DC\uC791\uD654\uBA74 \uC785\uB2C8\uB2E4. \uACC4\uC18D \uC9C4\uD589\uD558\uC2E4\uB824\uBA74
-      \uD654\uBA74\uC744 \uB20C\uB7EC\uC8FC\uC138\uC694. \uC2A4\uD06C\uB864 \uAE30\uB2A5
-      \uD14C\uC2A4\uD2B8\uB97C \uC704\uD574 \uCD5C\uB300\uD55C \uAE38\uAC8C \uC368\uBCF4\uB3C4\uB85D
-      \uD558\uACA0\uC2B5\uB2C8\uB2E4. 12345678910 111212315687456"
-    Buttons:
-    - ChoiceName: "\uB2E4\uC74C \uC9C0\uBB38\uC73C\uB85C \uB118\uC5B4\uAC04\uB2E4"
-      RequiredTraits: 
-      nextEventID: 1
-    - ChoiceName: "\uD2B9\uC131\uC2E4\uD5D8\uC120\uD0DD"
-      RequiredTraits: "\uAD73\uAC74\uD55C \uC2E0\uC559"
-      nextEventID: 1
-  - Tags: 256
-    isUsed: 0
-    EventName: "\uC2DC\uC791 -2"
-    DisplayImg: {fileID: 21300000, guid: 52f2ca293272c7f49a3bed0d52d335aa, type: 3}
-    EventText: "\uB2E4\uC74C \uC9C0\uBB38\uC73C\uB85C \uC798 \uB118\uC5B4\uC640\uC84C\uC2B5\uB2C8\uB2E4.
-      \uC774\uC81C \uB2E4\uC74C \uB79C\uB364 \uC774\uBCA4\uD2B8\uB97C \uCD9C\uB825\uD574
-      \uBCF4\uC138\uC694"
-    Buttons:
-    - ChoiceName: "\uB79C\uB364 \uC774\uBCA4\uD2B8 \uCD9C\uB825"
-      RequiredTraits: 
-      nextEventID: -1
-  - Tags: 8
-    isUsed: 0
-    EventName: "\uC804\uD22C \uC774\uBCA4\uD2B8"
-    DisplayImg: {fileID: 21300000, guid: 91d4625b691e0ba4e884f37cece9f822, type: 3}
-    EventText: "2\uBC88\uC9F8 \uC608\uC2DC \uD654\uBA74\uC785\uB2C8\uB2E4. \uC804\uD22C
-      \uC774\uBCA4\uD2B8\uB97C \uB2F4\uACE0 \uC788\uC2B5\uB2C8\uB2E4. \uC65C \uC9C0\uBB38\uC774
-      \uB098\uD0C0\uB098\uB294 \uC704\uCC28\uAC00 \uAC01\uC790 \uB2E4\uB978\uAC78\uAE4C\uC694?"
-    Buttons:
-    - ChoiceName: "1. \uC804\uD22C \uAC1C\uC2DC"
-      RequiredTraits: 
-      nextEventID: -1
-    - ChoiceName: "2. \uC120\uBE75\uD544\uC2B9(\uD2B9\uC131\uBCF4\uC720)"
-      RequiredTraits: "\uC2E0\uC18D"
-      nextEventID: -1
-  - Tags: 2
-    isUsed: 0
-    EventName: "\uAE0D\uC815\uC774\uBCA4\uD2B8"
-    DisplayImg: {fileID: 21300000, guid: 862f8a16043dd2046ae0b834edf6bd33, type: 3}
-    EventText: "3\uBC88\uC9F8 \uC608\uC2DC \uD654\uBA74\uC785\uB2C8\uB2E4. \uBCF4\uBB3C\uC774\uBCA4\uD2B8\uC785\uB2C8\uB2E4."
-    Buttons:
-    - ChoiceName: "\uBB34\uC2DC\uD55C\uB2E4"
-      RequiredTraits: 
-      nextEventID: -1
-    - ChoiceName: "\uD655\uC778\uD55C\uB2E4"
-      RequiredTraits: 
-      nextEventID: -1
-    - ChoiceName: "\uC548\uC804\uD655\uC778"
-      RequiredTraits: "\uAC10\uC815"
-      nextEventID: -1
+  eventDatabase: {fileID: 11400000, guid: 46aa3be6f670f28478a24715462c5cc3, type: 2}
 --- !u!1 &2048851935
 GameObject:
   m_ObjectHideFlags: 0
