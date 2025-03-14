@@ -24,10 +24,14 @@ MonoBehaviour:
         RequiredTraits: 
         NextEventName: END
         NextPhaseIndex: -1
+        BattleTrigger: 0
+        FixedID: -1
       - ChoiceName: "\uB2E4\uC74C\uD398\uC774\uC988"
         RequiredTraits: 
         NextEventName: 
         NextPhaseIndex: 1
+        BattleTrigger: 0
+        FixedID: -1
     - PhaseName: "\uC2DC\uC791\uC774\uBCA4\uD2B82"
       Script: "\uB2E4\uC74C \uD398\uC774\uC988\uB85C \uC798 \uB118\uC5B4\uC640 \uC84C\uC2B5\uB2C8\uB2E4.."
       EventImage: {fileID: 21300000, guid: 52f2ca293272c7f49a3bed0d52d335aa, type: 3}
@@ -36,8 +40,25 @@ MonoBehaviour:
         RequiredTraits: 
         NextEventName: END
         NextPhaseIndex: -1
+        BattleTrigger: 0
+        FixedID: -1
       - ChoiceName: "\uC694\uAD6C\uD2B9\uC131:\uC2E0\uC559"
         RequiredTraits: "\uAD73\uAC74\uD55C \uC2E0\uC559"
         NextEventName: END
         NextPhaseIndex: -1
+        BattleTrigger: 0
+        FixedID: -1
     EventType: 0
+  - EventName: "\uC804\uD22C \uC774\uBCA4\uD2B8"
+    Phases:
+    - PhaseName: "\uC804\uD22C \uC774\uBCA4\uD2B8"
+      Script: "\uC804\uD22C \uBC1C\uC0DD \uC774\uBCA4\uD2B8\uC785\uB2C8\uB2E4."
+      EventImage: {fileID: 21300000, guid: 91d4625b691e0ba4e884f37cece9f822, type: 3}
+      Choices:
+      - ChoiceName: "\uC804\uD22C \uC2DC\uC791"
+        RequiredTraits: 
+        NextEventName: 
+        NextPhaseIndex: -1
+        BattleTrigger: 1
+        FixedID: 1
+    EventType: 8

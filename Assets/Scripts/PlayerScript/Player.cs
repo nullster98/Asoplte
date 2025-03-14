@@ -65,6 +65,7 @@ public class Player : MonoBehaviour
     };
 
     public Item[] PlayerEquip = new Item[6];
+    
 
     public int MaxCost { get; set; } // 코스트
     public Sprite PlayerImg; //플레이어 이미지
@@ -103,6 +104,7 @@ public class Player : MonoBehaviour
             _instance = this;
             DontDestroyOnLoad(gameObject);
             Debug.Log("플레이어 데이터 생성");
+
         }
         else
         {

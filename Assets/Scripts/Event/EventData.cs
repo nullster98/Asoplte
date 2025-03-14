@@ -45,6 +45,8 @@ public class EventChoice
     public string RequiredTraits; //필요 특성
     public string NextEventName;
     public int NextPhaseIndex = -1;
+    public bool BattleTrigger = false;
+    public int FixedID = -1; //기본값 -1(조우 없음), 0(랜덤 적), ID(특정 조우)
 
     public bool CanPlayerSelect(List<Trait> playerTraits)
     {

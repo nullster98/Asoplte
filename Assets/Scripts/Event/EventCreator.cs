@@ -63,7 +63,7 @@ public class EventCreator
                             }
                         }
                     },
-                            
+
                     new EventPhase
                     {
                         PhaseName = "시작이벤트2",
@@ -84,6 +84,31 @@ public class EventCreator
                                 NextEventName = "END"
                             }
                         }
+                    }
+                }
+            },
+
+            new EventData
+            {
+                EventName = "전투 이벤트",
+                EventType = EventTag.Battle,
+                Phases = new List<EventPhase>
+                {
+                    new EventPhase
+                    {
+                        PhaseName = "전투 이벤트",
+                        Script = "전투 발생 이벤트입니다.",
+                        EventImage = Resources.Load<Sprite>("images/Events/Battle1"),
+                        Choices = new List<EventChoice>
+                        {
+                            new EventChoice
+                            {
+                                ChoiceName = "전투 시작",
+                                BattleTrigger = true,
+                                FixedID = 1,
+                            }
+                        }
+
                     }
                 }
             }

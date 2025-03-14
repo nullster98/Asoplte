@@ -6,6 +6,7 @@ public class EventHandler
 {
 
     public EventDatabase eventDatabase;
+    public EventChoice SelectedChoice { get; private set; }
     private EventData currentEvent;
     private int currentPhaseIndex = 0;
 
@@ -87,28 +88,31 @@ public class EventHandler
     public void OnChoiceSelected(int choiceIndex)
     {
         EventPhase currentPhase = currentEvent.Phases[currentPhaseIndex - 1];
-        EventChoice choice = currentPhase.Choices[choiceIndex];
+        SelectedChoice = currentPhase.Choices[choiceIndex];
 
-        if (choice.NextEventName == "전투")
+        if (SelectedChoice.BattleTrigger)
         {
             Debug.Log("전투 시작!");
-            //BattleManager.Instance.StartBattle();
+            BattleManager battleManager = GameObject.FindObjectOfType<BattleManager>();
+
+            // 전투 시작
+            battleManager.StartBattle(SelectedChoice);
             return;
         }
 
-        if (choice.NextPhaseIndex != -1) //  특정 페이즈로 이동할 경우
+        if (SelectedChoice.NextPhaseIndex != -1) //  특정 페이즈로 이동할 경우
         {
-            MoveToNextPhase(choice.NextPhaseIndex); // 기존 `StartEvent()` 대신 `MoveToNextPhase()` 사용
+            MoveToNextPhase(SelectedChoice.NextPhaseIndex); // 기존 `StartEvent()` 대신 `MoveToNextPhase()` 사용
             return;
         }
 
-        if (choice.IsEventEnd())
+        if (SelectedChoice.IsEventEnd())
         {
             HandleEventEnd();
         }
         else
         {
-            StartEvent(choice.NextEventName);
+            StartEvent(SelectedChoice.NextEventName);
         }
     }
 

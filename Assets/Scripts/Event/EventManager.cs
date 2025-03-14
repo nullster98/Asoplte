@@ -8,6 +8,8 @@ public class EventManager : MonoBehaviour
 {
     public static EventManager Instance { get; private set; }
 
+    public int floor { get; private set; }
+
     [Header("Main Component")]
     [SerializeField] TMP_Text EventText;
     [SerializeField] Image EventSprite;
@@ -34,7 +36,7 @@ public class EventManager : MonoBehaviour
     {
         if (Instance == null)
         {
-            Instance = this;
+            Instance = this;           
 
             if (eventDatabase == null)
             {
@@ -145,6 +147,5 @@ public class EventManager : MonoBehaviour
             Debug.LogError("EventDatabase를 찾을 수 없습니다!");
         }
     }
-
 
 }
