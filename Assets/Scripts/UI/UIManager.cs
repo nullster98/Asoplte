@@ -82,6 +82,7 @@ public class UIManager : MonoBehaviour
         InfoStats.text = $@"
         체력 : {player.GetStat("CurrentHP")} / {player.GetStat("HP")}
         마나 : {player.GetStat("CurrentMP")} / {player.GetStat("MP")}
+        공격력 : {player.GetStat("Atk")} 방어력 : {player.GetStat("Def")}
         골드 : {player.GetStat("Gold")}
         신앙 포인트 : {player.GetStat("FaithStat")}";
 

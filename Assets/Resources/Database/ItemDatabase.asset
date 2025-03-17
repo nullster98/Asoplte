@@ -12,19 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0927cf9ff392eb46b068a6fc5098312, type: 3}
   m_Name: ItemDatabase
   m_EditorClassIdentifier: 
-  ItemList:
-  - ItemID: 1001
-    ItemName: "\uD55C\uC190\uAC80"
-    ItemDescription: "\uC801\uC744 \uACF5\uACA9\uD558\uBA74 \uB3C5 \uD53C\uD574\uB97C
-      \uC90D\uB2C8\uB2E4."
-    Slot: 2
-    PurchasePrice: 1500
-    SalePrice: 800
-    ItemImg: {fileID: 21300000, guid: 199bd895b5e3cce4381d81144ed313bd, type: 3}
-  - ItemID: 1002
-    ItemName: "\uBD88\uC758 \uAC80"
-    ItemDescription: "\uBD88 \uC18D\uC131 \uD53C\uD574\uB97C \uC90D\uB2C8\uB2E4."
-    Slot: 2
-    PurchasePrice: 2000
-    SalePrice: 1200
-    ItemImg: {fileID: 21300000, guid: d249423bed938684d9b4409490b29fc7, type: 3}
+  ItemList: []

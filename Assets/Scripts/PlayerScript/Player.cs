@@ -64,8 +64,9 @@ public class Player : MonoBehaviour
 
     };
 
-    public Item[] PlayerEquip = new Item[6];
-    
+    private Equipment[] equippedItem = new Equipment[6];
+    private EquipUI equipUI;
+
 
     public int MaxCost { get; set; } // 코스트
     public Sprite PlayerImg; //플레이어 이미지
@@ -74,7 +75,7 @@ public class Player : MonoBehaviour
 
     private float FaithPoint { get; set; } = 500f;//신앙포인트
     private God _god = God.None;
-    private Race _race = Race.None; 
+    private Race _race = Race.None;
 
     public God God
     {
@@ -112,6 +113,11 @@ public class Player : MonoBehaviour
             Destroy(gameObject);
         }
 
+    }
+
+    public void SetEquipUI(EquipUI uI)
+    {
+        equipUI = uI;
     }
 
 
@@ -164,7 +170,7 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        
+
     }
     #region FatihPoint Get,Set
     public string GetFatihString()
@@ -177,7 +183,7 @@ public class Player : MonoBehaviour
         return FaithPoint;
     }
 
-  
+
     public void SetFaithPoint(float value)
     {
         FaithPoint = value;
@@ -185,7 +191,7 @@ public class Player : MonoBehaviour
 
     public bool SpendFaith(float amount)
     {
-        if(FaithPoint >= amount)
+        if (FaithPoint >= amount)
         {
             FaithPoint -= amount;
             return true;
@@ -257,11 +263,6 @@ public class Player : MonoBehaviour
         ChangeStat("MentalStat", 100);
         ChangeStat("FaithStat", 100);
         God = God.None;
-
-        for (int i = 0; i < PlayerEquip.Length; i++)
-        {
-            PlayerEquip[i] = null;
-        }
     }
 
 
@@ -283,35 +284,55 @@ public class Player : MonoBehaviour
         return stats.ContainsKey(statName) ? stats[statName] : 0;
     }
 
-    public bool EquipItem(Item Item)
+    //  특정 슬롯의 장착된 장비를 가져오는 함수
+    public Equipment GetEquippedItem(EquipmentType slot)
     {
-        if (Item.Slot == Equipment.None)
+        return equippedItem[(int)slot]; // 배열 인덱스로 직접 접근
+    }
+
+    public bool EquipItem(Equipment equipItem)
+    {
+
+        int slotIndex = (int)equipItem.EquipmentType;
+
+        //기존 장비 제거
+        if (equippedItem[slotIndex] != null)
         {
-            Debug.Log("장비가 아님");
-            return false;
+            Debug.Log($"기존 장비 {equippedItem[slotIndex].ItemName}을 해제합니다.");
+
+            ChangeStat("Atk", -equippedItem[slotIndex].AttackPoint);
+            ChangeStat("Def", -equippedItem[slotIndex].DefensePoint);
+
+            equippedItem[slotIndex] = null;
         }
 
-        PlayerEquip[(int)Item.Slot] = Item;
-        Debug.Log($"{Item.ItemName}을(를) {Item.Slot}칸에 장착했습니다.");
+        //장비 장착
+        equippedItem[slotIndex] = equipItem;
+        Debug.Log($"{equipItem.ItemName}을 {equipItem.EquipmentType}칸에 장착했습니다.");
+
+        ChangeStat("Atk", equipItem.AttackPoint);
+        ChangeStat("Def", equipItem.DefensePoint);
+
+        equipUI?.UpdateEquipmentUI();
+
         return true;
     }
 
-    /*private void Damage()
+    public void ApplyItemEffects(Equipment equipItem)
     {
-        if (Player.Instance == null) return;
-
-        if (Input.GetKeyDown(KeyCode.Escape))
+        foreach (var effect in equipItem.Effects)
         {
-            Player.Instance.ChangeStat("CurrentHP", -10);
-            UIManager.UpdateHPUI();
+            effect.ApplyEffect(this); // 플레이어에게 효과 적용
         }
+    }
 
-        if (Input.GetKeyDown(KeyCode.V))
+    /*public void RemoveItemEffects(Equipment equipItem)
+    {
+        foreach (var effect in equipItem.Effects)
         {
-            float newHP = Mathf.Min(Player.Instance.GetStat("CurrentHP") + 10, Player.Instance.GetStat("HP"));
-            Player.Instance.ChangeStat("CurrentHP", newHP - Player.Instance.GetStat("CurrentHP"));
-            UpdateHPUI();
+            effect.RemoveEffect(this); // 플레이어에게 적용된 효과 제거
         }
     }*/
+
 
 }

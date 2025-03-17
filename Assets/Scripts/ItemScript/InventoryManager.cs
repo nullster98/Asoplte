@@ -38,12 +38,43 @@ public class InventoryManager : MonoBehaviour
             return;
         }
 
-        Item newItem = new Item(itemInfo.ItemID, itemInfo.ItemName, itemInfo.ItemDescription, itemInfo.Slot,
-                            itemInfo.PurchasePrice, itemInfo.SalePrice, itemInfo.ItemImg, itemInfo.Effects);
+        if (itemInfo is Equipment)
+        {
+            Debug.Log("장비 아이템은 인벤토리에 추가할 수 없습니다.");
+            return;
+        }
 
-        // 인벤토리에 아이템 추가
+        Item newItem = null;
+
+        // 소모품 (`Consumable`) 처리
+        if (itemInfo is Consumable consumable)
+        {
+            newItem = new Consumable(consumable.ItemID, consumable.ItemName, consumable.ItemDescription,
+                consumable.PurchasePrice, consumable.SalePrice, consumable.ItemImg, consumable.HealAmount,
+                consumable.ManaRestore, consumable.Target, consumable.Effects);
+        }
+        // 토템 (`Totem`) 처리
+        else if (itemInfo is Totem totem)
+        {
+            newItem = new Totem(totem.ItemID, totem.ItemName, totem.ItemDescription,
+                totem.PurchasePrice, totem.SalePrice, totem.ItemImg, totem.AttackPoint, totem.DefensePoint, totem.Effects);
+        }
+        // 귀중품 (`Valuable`) 처리
+        else if (itemInfo is Valuable valuable)
+        {
+            newItem = new Valuable(valuable.ItemID, valuable.ItemName, valuable.ItemDescription,
+                valuable.PurchasePrice, valuable.SalePrice, valuable.ItemImg, valuable.Effects);
+        }
+
+        if (newItem == null)
+        {
+            Debug.LogError("아이템 타입을 확인할 수 없음!");
+            return;
+        }
+
+        //  인벤토리에 아이템 추가
         inventory[slot] = newItem;
-        Debug.Log($"{slot}슬롯에 {itemInfo.ItemName}이 추가됨");
+        Debug.Log($"{slot} 슬롯에 {newItem.ItemName}이 추가됨");
 
         // UI 갱신
         UpdateInventoryUI();
