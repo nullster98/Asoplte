@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 #region 신앙 리스트
-public enum God
+public enum GodType
 {
     Fire,
     Water,
@@ -74,10 +74,10 @@ public class Player : MonoBehaviour
     public List<Trait> selectedTraits = new List<Trait>();
 
     private float FaithPoint { get; set; } = 500f;//신앙포인트
-    private God _god = God.None;
+    private GodType _god = GodType.None;
     private Race _race = Race.None;
 
-    public God God
+    public GodType God
     {
         get { return _god; }
         set
@@ -210,18 +210,18 @@ public class Player : MonoBehaviour
     {
         switch (_god)
         {
-            case God.Fire:
+            case GodType.Fire:
                 ChangeStat("Atk", 10);
                 ChangeStat("HP", 20);
                 ChangeStat("CurrentHP", 20);
                 break;
-            case God.Water:
+            case GodType.Water:
                 ChangeStat("MP", 15);
                 ChangeStat("CurrentMP", 15);
                 ChangeStat("MentalStat", 10);
                 ChangeStat("CurrnetMentalStat", 10);
                 break;
-            case God.Light:
+            case GodType.Light:
                 ChangeStat("HP", 30);
                 ChangeStat("CurrentHP", 30);
                 ChangeStat("FaithStat", 10);
@@ -262,7 +262,7 @@ public class Player : MonoBehaviour
         ChangeStat("CurrentMP", GetStat("MP"));
         ChangeStat("MentalStat", 100);
         ChangeStat("FaithStat", 100);
-        God = God.None;
+        God = GodType.None;
     }
 
 
@@ -295,16 +295,7 @@ public class Player : MonoBehaviour
 
         int slotIndex = (int)equipItem.EquipmentType;
 
-        //기존 장비 제거
-        if (equippedItem[slotIndex] != null)
-        {
-            Debug.Log($"기존 장비 {equippedItem[slotIndex].ItemName}을 해제합니다.");
-
-            ChangeStat("Atk", -equippedItem[slotIndex].AttackPoint);
-            ChangeStat("Def", -equippedItem[slotIndex].DefensePoint);
-
-            equippedItem[slotIndex] = null;
-        }
+        RemoveEquip(equipItem);
 
         //장비 장착
         equippedItem[slotIndex] = equipItem;
@@ -316,6 +307,23 @@ public class Player : MonoBehaviour
         equipUI?.UpdateEquipmentUI();
 
         return true;
+    }
+
+    public void RemoveEquip(Equipment equipitem)
+    {
+        int slotIndex = ( int)equipitem.EquipmentType;
+        // 장비 제거
+        if (equippedItem[slotIndex] != null)
+        {
+            Debug.Log($"기존 장비 {equippedItem[slotIndex].ItemName}을 해제합니다.");
+
+            ChangeStat("Atk", -equippedItem[slotIndex].AttackPoint);
+            ChangeStat("Def", -equippedItem[slotIndex].DefensePoint);
+
+            equippedItem[slotIndex] = null;
+        }
+
+        equipUI?.UpdateEquipmentUI();
     }
 
     public void ApplyItemEffects(Equipment equipItem)

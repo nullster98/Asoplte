@@ -16,8 +16,6 @@ public enum AcquisitionType
 
 public class AcquisitionUI : MonoBehaviour
 {
-    [SerializeField]private ItemDatabase itemDatabase;
-
     [SerializeField] GameObject AcquistPannel;
     [SerializeField] Image GetImage;
     [SerializeField] TMP_Text GetName;
@@ -124,6 +122,11 @@ public class AcquisitionUI : MonoBehaviour
         });
     }*/
 
+    public void OpenAcquisitionUI(AcquisitionType type, int id)
+    {
+        AcquistPannel.SetActive(true);
+    }
+
     public void CloseUI()
     {
         AcquistPannel.SetActive(false);
@@ -133,7 +136,7 @@ public class AcquisitionUI : MonoBehaviour
     public void GetTestSword()
     {
             
-            Item testItem = itemDatabase.GetItemByID(1001);
+            Item testItem = DatabaseManager.Instance.itemDatabase.GetItemByID(1001);
             UpdateItemUI(testItem);
         
     }

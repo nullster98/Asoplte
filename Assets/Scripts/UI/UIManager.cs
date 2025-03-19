@@ -58,12 +58,12 @@ public class UIManager : MonoBehaviour
     [SerializeField] Transform TraitContainer;
     [SerializeField] GameObject TraitPrefab; //특성이미지 프리팹
 
-    public Action<int> OnChoiceSelected;
+    public Action<int?> OnChoiceSelected;
 
 
-    public void UpdatePlayerUI(Player player)
+    public void UpdatePlayerUI()
     {
-        player = Player.Instance;
+        Player player = Player.Instance;
         Debug.Log($"UI 업데이트: {player.PlayerImg} -> {playerImage.sprite}"); // 디버깅 코드 추가
 
 
@@ -73,9 +73,9 @@ public class UIManager : MonoBehaviour
         CurrentFaithPoint.text = player.GetStat("FaithPoint").ToString();
     }
 
-    public void UpdatePlayerInfo(Player player)
+    public void UpdatePlayerInfo()
     {
-        player = Player.Instance;
+        Player player = Player.Instance;
 
         InfoImg.sprite = player.PlayerImg;
         CharacterName.text = player.Race.ToString();
@@ -121,7 +121,7 @@ public class UIManager : MonoBehaviour
     //  플레이어 정보 박스를 열 때만 특성 UI를 갱신하도록 설정
     public void OpenPlayerInfoBox()
     {
-        UpdatePlayerInfo(Player.Instance);
+        UpdatePlayerInfo();
         PlayerInfoBox.SetActive(true);
     }
 
@@ -149,6 +149,6 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        UpdatePlayerUI(Player.Instance);
+        
     }
 }

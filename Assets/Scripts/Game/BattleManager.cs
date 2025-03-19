@@ -9,7 +9,6 @@ public class BattleManager : MonoBehaviour
 {
     private EnemyData enemy;
 
-    [SerializeField] EnemyDatabase enemyDatabase;
     [SerializeField] GameObject BattleWindow;
     [SerializeField] Slider MonsterHP;
     [SerializeField] TMP_Text MonsterHP_Text;
@@ -23,13 +22,13 @@ public class BattleManager : MonoBehaviour
 
     private void Awake()
     {
-        if(enemyDatabase == null)
+        if(DatabaseManager.Instance.enemyDatabase == null)
         {
             Debug.LogError("EnemyDatabse missing by.BattleManager");
             return;
         }
 
-        EnemyCreator.InitializeEnemies(enemyDatabase);
+        EnemyCreator.InitializeEnemies();
         BattleWindow.SetActive(false);
     }
 
@@ -37,15 +36,15 @@ public class BattleManager : MonoBehaviour
     { 
         BattleWindow.SetActive(true);      
 
-        int enemyId = selectedChoice.FixedID;
+        int? enemyId = selectedChoice.FixedID;
 
         if(enemyId == 0 )
         {
-            enemy = enemyDatabase.GetRandomEnemy();
+            enemy = DatabaseManager.Instance.enemyDatabase.GetRandomEnemy();
         }
 
         else
-            enemy = enemyDatabase.GetEnemyByID(enemyId);
+            enemy = DatabaseManager.Instance.enemyDatabase.GetEnemyByID(enemyId);
 
         if(enemy == null )
         {

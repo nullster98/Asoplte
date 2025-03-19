@@ -7,7 +7,7 @@ public class EnemyDatabase : ScriptableObject
 {
     public List<EnemyData> EnemyList = new List<EnemyData>();
 
-    public EnemyData GetEnemyByID(int enemyID)
+    public EnemyData GetEnemyByID(int? enemyID)
     {
         return EnemyList.Find(enemy => enemy.EnemyID == enemyID);
     }

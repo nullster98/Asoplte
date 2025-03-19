@@ -12,7 +12,6 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private GameObject EquipContainer; // 인벤토리 UI 패널
     [SerializeField] private Transform InventoryContainerTransform; // 아이템 UI 위치
     [SerializeField] private GameObject ItemPrefab; // 아이템 프리팹
-    [SerializeField] private ItemDatabase itemDatabase;
     [SerializeField] private Sprite defaultSlotImage;
 
     private List<GameObject> itemUIList = new List<GameObject>(); // UI 아이템 리스트
@@ -31,7 +30,7 @@ public class InventoryManager : MonoBehaviour
             return;
         }
 
-        Item itemInfo = itemDatabase.GetItemByID(itemID);
+        Item itemInfo = DatabaseManager.Instance.itemDatabase.GetItemByID(itemID);
         if (itemInfo == null)
         {
             Debug.Log("아이템 정보 없음");
@@ -168,18 +167,17 @@ public class InventoryManager : MonoBehaviour
 
     private void InitializeItemDatabse()
     {
-        ItemDatabase database = Resources.Load<ItemDatabase>("Database/ItemDatabase");
-        if (database == null)
+        if (DatabaseManager.Instance.itemDatabase == null)
         {
             Debug.LogError("ItemDatabase를 찾을 수 없습니다! 폴더확인");
             return;
         }
 
-        database.ItemList.RemoveAll(item => item == null);
+        DatabaseManager.Instance.itemDatabase.ItemList.RemoveAll(item => item == null);
 
-        Debug.Log($"현재 데이터베이스에 등록된 아이템 갯수 : {database.ItemList.Count}");
+        Debug.Log($"현재 데이터베이스에 등록된 아이템 갯수 : {DatabaseManager.Instance.itemDatabase.ItemList.Count}");
 
-        if (database.ItemList.Count == 0)
+        if (DatabaseManager.Instance.itemDatabase.ItemList.Count == 0)
         {
             Debug.Log("아이템 데이터베이스가 비어 있음. 모든 아이템을 생성합니다.");
             ItemCreator.CreateAllItems();
@@ -189,14 +187,14 @@ public class InventoryManager : MonoBehaviour
             Debug.Log("아이템 데이터베이스가 이미 초기화되어 있습니다.");
         }
 
-        EditorUtility.SetDirty(database);
+        EditorUtility.SetDirty(DatabaseManager.Instance.itemDatabase);
     }
 
     private void ResetItemDatabase()
     {
-        if (itemDatabase != null)
+        if (DatabaseManager.Instance.itemDatabase != null)
         {
-            itemDatabase.ResetDatabase();
+            DatabaseManager.Instance.itemDatabase.ResetDatabase();
             Debug.Log("게임 시작 시 ItemDatabase 초기화 완료!");
         }
         else

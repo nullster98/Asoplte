@@ -5,25 +5,28 @@ using UnityEngine;
 public class EventHandler
 {
 
-    public EventDatabase eventDatabase;
     public EventChoice SelectedChoice { get; private set; }
     private EventData currentEvent;
     private int currentPhaseIndex = 0;
 
-    public EventHandler(EventDatabase dataabase)
+    private BattleManager battleManager;
+    private AcquisitionUI acquisitionUI;
+
+    public EventHandler(BattleManager battlemanager, AcquisitionUI acquisitionUI)
     {
-        this.eventDatabase = dataabase;
+        this.battleManager = battlemanager;
+        this.acquisitionUI = acquisitionUI;
     }
 
     public void StartEvent(string eventName)
     {
-        if (eventDatabase == null)
+        if (DatabaseManager.Instance.eventDatabase == null)
         {
             Debug.LogError("이벤트 데이터베이스가 존재하지 않습니다!");
             return;
         }
 
-        currentEvent = eventDatabase.GetEventByName(eventName);
+        currentEvent = DatabaseManager.Instance.eventDatabase.GetEventByName(eventName);
 
         if (currentEvent == null)
         {
@@ -75,14 +78,14 @@ public class EventHandler
 
     public EventData GetRandomEvent()
     {
-        if (eventDatabase == null || eventDatabase.events.Count == 0)
+        if (DatabaseManager.Instance.eventDatabase == null || DatabaseManager.Instance.eventDatabase.events.Count == 0)
         {
             Debug.LogWarning("이벤트 데이터베이스가 비어 있습니다!");
             return null;
         }
 
-        int randomIndex = Random.Range(0, eventDatabase.events.Count);
-        return eventDatabase.events[randomIndex]; // 중복 여부 상관없이 무작위 이벤트 선택
+        int randomIndex = Random.Range(0, DatabaseManager.Instance.eventDatabase.events.Count);
+        return DatabaseManager.Instance.eventDatabase.events[randomIndex]; // 중복 여부 상관없이 무작위 이벤트 선택
     }
 
     public void OnChoiceSelected(int choiceIndex)
@@ -90,11 +93,16 @@ public class EventHandler
         EventPhase currentPhase = currentEvent.Phases[currentPhaseIndex - 1];
         SelectedChoice = currentPhase.Choices[choiceIndex];
 
+        if (SelectedChoice.AcquisitionTrigger)
+        {
+            Debug.Log("획득 UI 활성화!");
+            acquisitionUI.OpenAcquisitionUI(SelectedChoice.AcqType.Value, SelectedChoice.AcqID.Value);
+            return;
+        }
+
         if (SelectedChoice.BattleTrigger)
         {
             Debug.Log("전투 시작!");
-            BattleManager battleManager = GameObject.FindObjectOfType<BattleManager>();
-
             // 전투 시작
             battleManager.StartBattle(SelectedChoice);
             return;

@@ -86,11 +86,10 @@ public class ItemCreator : MonoBehaviour
     // 아이템을 데이터베이스에 추가하는 함수
     private static void AddItemToDatabase(Item item)
     {
-        ItemDatabase database = Resources.Load<ItemDatabase>("Database/ItemDatabase");
-        if (database != null)
+        if (DatabaseManager.Instance.itemDatabase != null)
         {
-            database.ItemList.Add(item);
-            EditorUtility.SetDirty(database);
+            DatabaseManager.Instance.itemDatabase.ItemList.Add(item);
+            EditorUtility.SetDirty(DatabaseManager.Instance.itemDatabase);
             AssetDatabase.SaveAssets();
             Debug.Log($"{item.ItemName}이(가) 데이터베이스에 추가되었습니다!");
         }

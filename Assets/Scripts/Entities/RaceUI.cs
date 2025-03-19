@@ -38,7 +38,7 @@ public class Tribe
     public bool IsUnlocked = false; // 활성화 상태
 }
 
-public class RaceList : MonoBehaviour
+public class RaceUI : MonoBehaviour
 {
     [SerializeField] private Image MainImg; // 선택된 종족의 메인 이미지
     [SerializeField] private TMP_Text NameArea; // 선택된 종족 이름

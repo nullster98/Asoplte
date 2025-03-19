@@ -6,7 +6,7 @@ public class EventCreator
 {
     public static void HandleNextEvent(EventHandler eventManager, string nextEventName)
     {
-        if(!string.IsNullOrEmpty(nextEventName))
+        if (!string.IsNullOrEmpty(nextEventName))
         {
             eventManager.StartEvent(nextEventName);
         }
@@ -25,9 +25,9 @@ public class EventCreator
         }
     }
 
-    public static void GenerateEvents(EventDatabase eventDatabase)
+    public static void GenerateEvents()
     {
-        if(eventDatabase == null) 
+        if (DatabaseManager.Instance.eventDatabase == null)
         {
             Debug.LogError("EventDatabase가 비어있습니다.");
             return;
@@ -37,101 +37,99 @@ public class EventCreator
 
         List<EventData> newEvents = new List<EventData>
         {
-            new EventData // 시작이벤트
-            {
-                EventName = "시작이벤트",
-                EventType = EventTag.None,
-                Phases = new List<EventPhase>
-                {
-                    new EventPhase
-                    {
-                        PhaseName = "시작이벤트",
-                        Script = "게임 처음시작시 실행되는 스크립트 입니다.",
-                        EventImage = Resources.Load<Sprite>("images/Events/Start1"),
-                        Choices = new List<EventChoice>
-                        {
-                            new EventChoice
-                            {
-                                ChoiceName = "다음랜덤",
-                                NextEventName = "END"
-                            },
+             CreateEvent("시작이벤트", EventTag.None,
+                CreatePhase("시작이벤트", "게임 처음 시작 시 실행되는 스크립트 입니다.", "Start1",
+                    CreateChoice("다음랜덤", nextEvent: "END"),
+                    CreateChoice("다음페이즈", nextPhaseIndex: 1)
+                ),
+                CreatePhase("시작이벤트2", "다음 페이즈로 잘 넘어왔습니다.", "Start2",
+                    CreateChoice("다음랜덤", nextEvent: "END"),
+                    CreateChoice("요구특성:신앙", requiredTrait: "굳건한 신앙", nextEvent: "END")
+                )
+            ),
 
-                            new EventChoice
-                            {
-                                ChoiceName = "다음페이즈",
-                                NextPhaseIndex = 1
-                            }
-                        }
-                    },
+            CreateEvent("전투 이벤트", EventTag.Battle,
+                CreatePhase("전투 이벤트", "전투 발생 이벤트입니다.", "Battle1",
+                    CreateChoice("전투 시작", battleTrigger: true, fixedID: 1)
+                )
+            ),
 
-                    new EventPhase
-                    {
-                        PhaseName = "시작이벤트2",
-                        Script = "다음 페이즈로 잘 넘어와 졌습니다..",
-                        EventImage = Resources.Load<Sprite>("images/Events/Start2"),
-                        Choices = new List<EventChoice>
-                        {
-                            new EventChoice
-                            {
-                                ChoiceName = "다음랜덤",
-                                NextEventName = "END"
-                            },
-
-                            new EventChoice
-                            {
-                                ChoiceName = "요구특성:신앙",
-                                RequiredTraits = "굳건한 신앙",
-                                NextEventName = "END"
-                            }
-                        }
-                    }
-                }
-            },
-
-            new EventData
-            {
-                EventName = "전투 이벤트",
-                EventType = EventTag.Battle,
-                Phases = new List<EventPhase>
-                {
-                    new EventPhase
-                    {
-                        PhaseName = "전투 이벤트",
-                        Script = "전투 발생 이벤트입니다.",
-                        EventImage = Resources.Load<Sprite>("images/Events/Battle1"),
-                        Choices = new List<EventChoice>
-                        {
-                            new EventChoice
-                            {
-                                ChoiceName = "전투 시작",
-                                BattleTrigger = true,
-                                FixedID = 1,
-                            }
-                        }
-
-                    }
-                }
-            }
+            CreateEvent("보상 이벤트", EventTag.Positive,
+                CreatePhase("보상 이벤트", "랜덤 보상 이벤트입니다.", "Bonus1",
+                    CreateChoice("상자를 연다", nextEvent: "END")
+                 )
+            )
         };
 
 
         foreach (var newEvent in newEvents)
         {
-            if (!eventDatabase.events.Exists(e => e.EventName == newEvent.EventName))
+            if (!DatabaseManager.Instance.eventDatabase.events.Exists(e => e.EventName == newEvent.EventName))
             {
-                eventDatabase.events.Add(newEvent);
+                DatabaseManager.Instance.eventDatabase.events.Add(newEvent);
                 Debug.Log($"새로운 이벤트 추가됨: {newEvent.EventName}");
             }
         }
 
-        SaveEventDatabase(eventDatabase);
+        SaveEventDatabase();
     }
-    private static void SaveEventDatabase(EventDatabase eventDatabase)
+    private static void SaveEventDatabase()
     {
         Debug.Log("EventDatabase 저장 중...");
-        UnityEditor.EditorUtility.SetDirty(eventDatabase);
+        UnityEditor.EditorUtility.SetDirty(DatabaseManager.Instance.eventDatabase);
         UnityEditor.AssetDatabase.SaveAssets();
         UnityEditor.AssetDatabase.Refresh();
         Debug.Log("EventDatabase 저장 완료!");
     }
+
+    //이벤트 생성 헬퍼 함수
+    private static EventData CreateEvent(string name, EventTag type, params EventPhase[] phases)
+    {
+        return new EventData
+        {
+            EventName = name,
+            EventType = type,
+            Phases = new List<EventPhase>(phases)
+        };
+    }
+
+    //이벤트 페이즈 생성 헬퍼 함수
+    private static EventPhase CreatePhase(string phaseName, string script, string imageName, params EventChoice[] choices)
+    {
+        return new EventPhase
+        {
+            PhaseName = phaseName,
+            Script = script,
+            EventImage = LoadEventImage(imageName),
+            Choices = new List<EventChoice>(choices)
+        };
+    }
+
+    //선택지 생성 헬퍼 함수
+    private static EventChoice CreateChoice(
+        string choiceName, string nextEvent = null, int? nextPhaseIndex = null,
+        string requiredTrait = null, bool battleTrigger = false, int? fixedID = null,
+        bool acquisitionTrigger = false, AcquisitionType? acqType = null, int? acqID = null)
+    {
+        return new EventChoice
+        {
+            ChoiceName = choiceName,
+            NextEventName = nextEvent,
+            NextPhaseIndex = (int)nextPhaseIndex,
+            RequiredTraits = requiredTrait,
+            BattleTrigger = battleTrigger,
+            FixedID = fixedID,
+            AcquisitionTrigger = acquisitionTrigger,
+            AcqType = acqType,
+            AcqID = acqID
+
+        };
+    }
+
+    //이벤트 이미지 로드 헬퍼 함수
+    private static Sprite LoadEventImage(string imageName)
+    {
+        return Resources.Load<Sprite>($"images/Events/{imageName}");
+    }
 }
+

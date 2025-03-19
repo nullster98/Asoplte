@@ -18,8 +18,9 @@ public class EventManager : MonoBehaviour
     [SerializeField] ScrollRect eventScrollView;
 
     [Header("Event Data")]
-    public EventDatabase eventDatabase;
     private EventHandler eventHandler;
+    public BattleManager battleManger;
+    public AcquisitionUI acquisitionUI;
 
     /*IEnumerator WaitForPlayer()
     {
@@ -38,16 +39,16 @@ public class EventManager : MonoBehaviour
         {
             Instance = this;           
 
-            if (eventDatabase == null)
+            if (DatabaseManager.Instance.eventDatabase == null)
             {
                 Debug.LogError("EventDatabase가 연결되지 않았습니다!");
                 return;
             }
             ResetEventDatabase();
             Debug.Log("이벤트 생성 실행");
-            EventCreator.GenerateEvents(eventDatabase);
+            EventCreator.GenerateEvents();
 
-            eventHandler = new EventHandler(eventDatabase); //eventHandler 초기화
+            eventHandler = new EventHandler(battleManger, acquisitionUI); //eventHandler 초기화
         }
         else
         {
@@ -137,9 +138,9 @@ public class EventManager : MonoBehaviour
 
     private void ResetEventDatabase()
     {
-        if (eventDatabase != null)
+        if (DatabaseManager.Instance.eventDatabase != null)
         {
-            eventDatabase.ResetDatabase();
+            DatabaseManager.Instance.eventDatabase.ResetDatabase();
             Debug.Log("게임 시작 시 EventDatabase 초기화 완료!");
         }
         else

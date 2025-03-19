@@ -5,20 +5,20 @@ using UnityEngine;
 public static class EnemyCreator
 {
 
-    public static void InitializeEnemies(EnemyDatabase enemyDatabase)
+    public static void InitializeEnemies()
     {
-        if (enemyDatabase == null)
+        if (DatabaseManager.Instance.enemyDatabase == null)
         {
             Debug.LogError("적 데이터베이스가 null입니다! EnemyCreator에서 초기화 실패");
             return;
         }
         Debug.Log("적 데이터베이스 정상 확인");
 
-        enemyDatabase.ResetEnemyData();
+        DatabaseManager.Instance.enemyDatabase.ResetEnemyData();
         Debug.Log("적 데이터베이스 초기화 완료");
 
         EnemyData newEnemy = CreateEnemy(1, "Skeleton", Enemy.Monster, 30, 0, 5, 2, EventManager.Instance.floor);
-        if (newEnemy != null) enemyDatabase.AddEnemy(newEnemy);
+        if (newEnemy != null) DatabaseManager.Instance.enemyDatabase.AddEnemy(newEnemy);
     }
 
     private static EnemyData CreateEnemy(int id, string name,Enemy type,int basicHP, int basicMP, int basicAtk, int basicDef, int floor)

@@ -14,12 +14,15 @@ public class EquipInfo
 
 public class EquipUI : MonoBehaviour
 {
+    [Header("Equipment")]
     [SerializeField] EquipInfo[] equipinfo = new EquipInfo[6];
 
+    [Header("EquipDetail")]
     [SerializeField] GameObject equipDetailUI;
     [SerializeField] Image equipDetailImage;
     [SerializeField] TMP_Text equipDetailText;
     [SerializeField] TMP_Text equipDetailDescription;
+    [SerializeField] Button TrashButton;
 
     private Player player; // 플레이어 참조
 
@@ -43,6 +46,7 @@ public class EquipUI : MonoBehaviour
 
         UpdateEquipmentUI(); // 장비창 UI 초기 업데이트
         Debug.Log("장비창 초기UI업데이트 완료");
+
     }
 
     // 장비창 UI 업데이트 함수
@@ -90,5 +94,30 @@ public class EquipUI : MonoBehaviour
         equipDetailImage.sprite = equippedItem.ItemImg;
         equipDetailText.text = equippedItem.ItemName;
         equipDetailDescription.text = equippedItem.ItemDescription;
+
+        TrashButton.onClick.RemoveAllListeners();
+
+        TrashButton.onClick.AddListener(() =>
+            {
+                trashEquip(slot);
+                CloseEquipDetail();
+                UpdateEquipmentUI();
+            });
+    }
+
+    public void CloseEquipDetail()
+    {
+        equipDetailUI.SetActive(false);
+    }
+
+    public void trashEquip(EquipmentType slot)
+    {
+        Equipment equippedItem = player.GetEquippedItem(slot);
+        if (equippedItem == null)
+        {
+            Debug.LogWarning($"슬롯 {slot}에 장착된 장비가 없습니다.");
+            return;
+        }
+        player.RemoveEquip(equippedItem);
     }
 }

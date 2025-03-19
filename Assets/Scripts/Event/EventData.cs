@@ -46,7 +46,11 @@ public class EventChoice
     public string NextEventName;
     public int NextPhaseIndex = -1;
     public bool BattleTrigger = false;
-    public int FixedID = -1; //기본값 -1(조우 없음), 0(랜덤 적), ID(특정 조우)
+    public int? FixedID = -1; //기본값 -1(조우 없음), 0(랜덤 적), ID(특정 조우)
+
+    public bool AcquisitionTrigger = false; //보상 트리거
+    public AcquisitionType? AcqType; //획득하게할 타입
+    public int? AcqID; //획득할 아이템의 ID
 
     public bool CanPlayerSelect(List<Trait> playerTraits)
     {

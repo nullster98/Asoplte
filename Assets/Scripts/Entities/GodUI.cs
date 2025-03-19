@@ -9,14 +9,14 @@ public class ImageList
 {
     public Sprite Img; // 이미지 스프라이트
     public string Name; // 이름
-    public God GodName;
+    public GodType GodName;
     public Sprite BackgroundImg; //배경 이미지
     [TextArea]
     public string information; // 정보
 }
 
      
-public class GodList : MonoBehaviour
+public class GodUI : MonoBehaviour
 {
     [SerializeField]
     private List<ImageList> ImgList = new List<ImageList>(); // 인스펙터에서 설정할 이미지 리스트
