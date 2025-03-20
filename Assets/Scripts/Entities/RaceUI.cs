@@ -29,7 +29,7 @@ public class Tribe
     public Sprite RaceImg;
     public Sprite OffRaceImg;
     public string RaceName;
-    public Race race;
+    //public Race race;
     public float RequireFaith; // 해금 비용
 
     // 파생 캐릭터 리스트 추가
@@ -96,7 +96,7 @@ public class RaceUI : MonoBehaviour
         Tribe selectedRace = raceList[currentRaceIndex];
         MainImg.sprite = selectedRace.RaceImg;
         NameArea.text = selectedRace.RaceName;
-        Player.Instance.Race = selectedRace.race;
+        //Player.Instance.Race = selectedRace.race;
         RaceCollection.SetActive(false);
 
         EnsureMinimumCharacters(selectedRace);

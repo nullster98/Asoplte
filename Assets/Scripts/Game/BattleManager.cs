@@ -28,7 +28,7 @@ public class BattleManager : MonoBehaviour
             return;
         }
 
-        EnemyCreator.InitializeEnemies();
+        EnemyCreator.InitializeEnemies(EventManager.Instance.floor);
         BattleWindow.SetActive(false);
     }
 
@@ -40,7 +40,7 @@ public class BattleManager : MonoBehaviour
 
         if(enemyId == 0 )
         {
-            enemy = DatabaseManager.Instance.enemyDatabase.GetRandomEnemy();
+            enemy = EnemyCreator.StartBattle(EventManager.Instance.floor);
         }
 
         else

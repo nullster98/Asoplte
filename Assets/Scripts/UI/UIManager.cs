@@ -78,7 +78,7 @@ public class UIManager : MonoBehaviour
         Player player = Player.Instance;
 
         InfoImg.sprite = player.PlayerImg;
-        CharacterName.text = player.Race.ToString();
+        //CharacterName.text = player.Race.ToString();
         InfoStats.text = $@"
         체력 : {player.GetStat("CurrentHP")} / {player.GetStat("HP")}
         마나 : {player.GetStat("CurrentMP")} / {player.GetStat("MP")}

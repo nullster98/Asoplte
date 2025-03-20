@@ -48,21 +48,21 @@ public class InventoryManager : MonoBehaviour
         // 家葛前 (`Consumable`) 贸府
         if (itemInfo is Consumable consumable)
         {
-            newItem = new Consumable(consumable.ItemID, consumable.ItemName, consumable.ItemDescription,
-                consumable.PurchasePrice, consumable.SalePrice, consumable.ItemImg, consumable.HealAmount,
+            newItem = new Consumable(consumable.ItemID, consumable.ItemName,
+                consumable.PurchasePrice, consumable.SalePrice, consumable.HealAmount,
                 consumable.ManaRestore, consumable.Target, consumable.Effects);
         }
         // 配袍 (`Totem`) 贸府
         else if (itemInfo is Totem totem)
         {
-            newItem = new Totem(totem.ItemID, totem.ItemName, totem.ItemDescription,
-                totem.PurchasePrice, totem.SalePrice, totem.ItemImg, totem.AttackPoint, totem.DefensePoint, totem.Effects);
+            newItem = new Totem(totem.ItemID, totem.ItemName,
+                totem.PurchasePrice, totem.SalePrice, totem.AttackPoint, totem.DefensePoint, totem.Effects);
         }
         // 蓖吝前 (`Valuable`) 贸府
         else if (itemInfo is Valuable valuable)
         {
-            newItem = new Valuable(valuable.ItemID, valuable.ItemName, valuable.ItemDescription,
-                valuable.PurchasePrice, valuable.SalePrice, valuable.ItemImg, valuable.Effects);
+            newItem = new Valuable(valuable.ItemID, valuable.ItemName,
+                valuable.PurchasePrice, valuable.SalePrice, valuable.Effects);
         }
 
         if (newItem == null)

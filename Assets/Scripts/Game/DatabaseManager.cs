@@ -11,8 +11,6 @@ public class DatabaseManager : MonoBehaviour
     public EnemyDatabase enemyDatabase;
     //public TraitDatabae traitDatabase;
     //public SkillDatabase skillDatabase;
-    //public RaceDatabse raceDatabase;
-    //public GodDatabase godDatabase;
 
     public void Awake()
     {

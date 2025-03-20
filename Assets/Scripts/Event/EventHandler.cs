@@ -71,7 +71,7 @@ public class EventHandler
         }
 
         Debug.Log("UI 업데이트 호출");
-        EventManager.Instance.UpdateEventUI(phase.Script, availableChoices, phase.EventImage);
+        EventManager.Instance.UpdateEventUI(phase.EventDescription, availableChoices, phase.EventImage);
 
         currentPhaseIndex++;
     }

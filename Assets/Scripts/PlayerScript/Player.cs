@@ -3,29 +3,8 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
+using UnityEngine.Playables;
 using UnityEngine.UI;
-
-#region 신앙 리스트
-public enum GodType
-{
-    Fire,
-    Water,
-    Light,
-    Dark,
-    None
-}
-#endregion
-
-#region 종족 리스트
-public enum Race
-{
-    Human,
-    Orc,
-    Elf,
-    Golem,
-    None
-}
-#endregion
 
 public class Player : MonoBehaviour
 {
@@ -74,28 +53,20 @@ public class Player : MonoBehaviour
     public List<Trait> selectedTraits = new List<Trait>();
 
     private float FaithPoint { get; set; } = 500f;//신앙포인트
-    private GodType _god = GodType.None;
-    private Race _race = Race.None;
+    private GodData selectedGod;
+    //private RaceData selectedRace;
 
-    public GodType God
+    public GodData SelectedGod
     {
-        get { return _god; }
-        set
-        {
-            _god = value;
-            ApplyGodBonuses(); // 신 선택에 따른 보너스 적용
-        }
+        get { return selectedGod; }
+        set { selectedGod = value; }
     }
 
-    public Race Race
+    /*public RaceData SelectedRace
     {
-        get { return _race; }
-        set
-        {
-            _race = value;
-            ApplyRaceBonuses(); // 종족 선택에 따른 보너스 적용
-        }
-    }
+        get { return selectedRace; }
+        set { selectedRace = value; }
+    }*/
 
     private void Awake()
     {
@@ -206,50 +177,19 @@ public class Player : MonoBehaviour
     }
     #endregion
 
-    private void ApplyGodBonuses() //신앙 선택에 따른 추가효과
+    private void ApplyGodBonuses(GodData selectedGod) //신앙 선택에 따른 추가효과
     {
-        switch (_god)
+        foreach(var effect in selectedGod.GodStats)
         {
-            case GodType.Fire:
-                ChangeStat("Atk", 10);
-                ChangeStat("HP", 20);
-                ChangeStat("CurrentHP", 20);
-                break;
-            case GodType.Water:
-                ChangeStat("MP", 15);
-                ChangeStat("CurrentMP", 15);
-                ChangeStat("MentalStat", 10);
-                ChangeStat("CurrnetMentalStat", 10);
-                break;
-            case GodType.Light:
-                ChangeStat("HP", 30);
-                ChangeStat("CurrentHP", 30);
-                ChangeStat("FaithStat", 10);
-                break;
+            ChangeStat(effect.Key, effect.Value);
         }
+
+        selectedGod.SpecialEffect?.ApplyEffect(this);
     }
 
     private void ApplyRaceBonuses() //종족 선택에 따른 추가효과
     {
-        switch (_race)
-        {
-            case Race.Human:
-                ChangeStat("HP", 10);
-                ChangeStat("MentalStat", 5);
-                ChangeStat("CurrentHP", 10);
-                ChangeStat("CurrnetMentalStat", 5);
-                break;
-            case Race.Elf:
-                ChangeStat("MP", 20);
-                ChangeStat("CurrnetMP", 20);
-                ChangeStat("Atk", 5);
-                break;
-            case Race.Orc:
-                ChangeStat("Atk", 15);
-                ChangeStat("HP", 10);
-                ChangeStat("CurrentHP", 10);
-                break;
-        }
+        
     }
 
     void StartStat() //초기플레이어 스텟
@@ -261,8 +201,7 @@ public class Player : MonoBehaviour
         ChangeStat("CurrentHP", GetStat("HP"));
         ChangeStat("CurrentMP", GetStat("MP"));
         ChangeStat("MentalStat", 100);
-        ChangeStat("FaithStat", 100);
-        God = GodType.None;
+        ChangeStat("FaithStat", 100);       
     }
 
 
@@ -284,6 +223,7 @@ public class Player : MonoBehaviour
         return stats.ContainsKey(statName) ? stats[statName] : 0;
     }
 
+    #region 장비관련함수
     //  특정 슬롯의 장착된 장비를 가져오는 함수
     public Equipment GetEquippedItem(EquipmentType slot)
     {
@@ -342,5 +282,5 @@ public class Player : MonoBehaviour
         }
     }*/
 
-
+    #endregion
 }

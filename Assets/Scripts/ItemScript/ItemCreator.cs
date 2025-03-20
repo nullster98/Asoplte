@@ -12,22 +12,22 @@ public class ItemCreator : MonoBehaviour
         Debug.Log("모든 아이템 생성 시작...");
 
         // 장비 아이템 (한손검)
-        CreateEquipment(1001, "한손검", "적을 공격하면 독 피해를 줍니다.", 1500, 800, EquipmentType.LeftHand, "한손검",
+        CreateEquipment(1001, "한손검",  1500, 800, EquipmentType.LeftHand,
             new List<ItemEffect>(),10,0);           
 
         // 장비 아이템 (불의 검)
-        CreateEquipment(1002, "불의 검", "불 속성 피해를 줍니다.", 2000, 1200, EquipmentType.LeftHand, "FireSword",
+        CreateEquipment(1002, "불의 검", 2000, 1200, EquipmentType.LeftHand,
             new List<ItemEffect>
             {
                 new PoisonEffect(4, 3) // 매 턴 4 데미지, 3턴 지속
             }, 7, 0);
 
         // 소모품 아이템 (HP 포션)
-        CreateConsumable(2001, "HP 포션", "체력을 50 회복합니다.", 500, 250, "HP_Potion",
+        CreateConsumable(2001, "HP 포션",  500, 250,
             new List<ItemEffect>(), 50, 0, ItemTraget.Player);
 
         // 소모품 아이템 (독 포션 - 적용)
-        CreateConsumable(2002, "독 포션", "적에게 독을 부여합니다.", 800, 400, "Poison_Potion",
+        CreateConsumable(2002, "독 포션", 800, 400,
             new List<ItemEffect>
             {
                 new PoisonEffect(5, 3)
@@ -37,51 +37,26 @@ public class ItemCreator : MonoBehaviour
     }
 
     // 장비 아이템 생성 함수
-    private static void CreateEquipment(int id, string name, string description, int purchasePrice, int salePrice,
-        EquipmentType slot, string imageName, List<ItemEffect> effects, float attack, float defense)
+    private static void CreateEquipment(int id, string name, int purchasePrice, int salePrice,
+        EquipmentType slot, List<ItemEffect> effects, float attack, float defense)
     {
         Debug.Log($"장비 아이템 생성: {name}");
 
-        Sprite itemSprite = LoadItemSprite(imageName, ItemType.Equipment);
-
-        Equipment newItem = new Equipment(id, name, description, purchasePrice, salePrice, itemSprite, slot, attack, defense, effects);
+        Equipment newItem = new Equipment(id, name, purchasePrice, salePrice, slot, attack, defense, effects);
         AddItemToDatabase(newItem);
     }
 
     // 소모품 아이템 생성 함수
-    private static void CreateConsumable(int id, string name, string description, int purchasePrice, int salePrice,
-        string imageName, List<ItemEffect> effects, float healAmount, float manaRestore, ItemTraget target)
+    private static void CreateConsumable(int id, string name, int purchasePrice, int salePrice,
+         List<ItemEffect> effects, float healAmount, float manaRestore, ItemTraget target)
     {
         Debug.Log($"소모품 아이템 생성: {name}");
 
-        Sprite itemSprite = LoadItemSprite(imageName, ItemType.Consumable);
 
-        Consumable newItem = new Consumable(id, name, description, purchasePrice, salePrice, itemSprite, healAmount, manaRestore, target, effects);
+        Consumable newItem = new Consumable(id, name, purchasePrice, salePrice, healAmount, manaRestore, target, effects);
         AddItemToDatabase(newItem);
     }
 
-    // 공용 아이템 이미지 로드 함수
-    private static Sprite LoadItemSprite(string imageName, ItemType type)
-    {
-        string folderPath = type switch
-        { ItemType.Equipment => "Images/Items/Equipment",
-          ItemType.Consumable => "Images/Items/Consumables",
-          ItemType.Totem => "Images/Items/Totems",
-          ItemType.Valuable => "Images/Items/Valuables",
-            _ => "Images/Default" // 기본 폴더
-
-
-
-        };
-
-        Sprite itemSprite = Resources.Load<Sprite>($"{folderPath}/{imageName}");
-        if (itemSprite == null)
-        {
-            Debug.LogWarning($"이미지 {imageName}을(를) 찾을 수 없습니다! 기본 이미지로 설정.");
-            itemSprite = Resources.Load<Sprite>("Images/default");
-        }
-        return itemSprite;
-    }
 
     // 아이템을 데이터베이스에 추가하는 함수
     private static void AddItemToDatabase(Item item)

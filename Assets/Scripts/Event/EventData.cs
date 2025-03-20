@@ -33,9 +33,26 @@ public class EventData //이벤트 기본 뼈대
 public class EventPhase
 {
     public string PhaseName;
-    public string Script;
     public Sprite EventImage;
     public List<EventChoice> Choices;
+    public string EventDescription {  get; set; }
+
+    public void GetDescription()
+    {
+        TextAsset textAsset = Resources.Load<TextAsset>($"Event/Descriptions/{PhaseName}");
+        EventDescription = textAsset != null ? textAsset.text : "설명 없음";
+    }
+
+    //이벤트 이미지 로드 헬퍼 함수
+    public void LoadEventImage()
+    {
+        EventImage = Resources.Load<Sprite>($"Event/Images/{PhaseName}");
+        if (EventImage == null)
+        {
+            Debug.LogWarning($"{PhaseName} 이미지를 찾을 수 없습니다! 기본 이미지로 설정.");
+            EventImage = Resources.Load<Sprite>("Event/Images/default");
+        }
+    }
 }
 
 [System.Serializable]

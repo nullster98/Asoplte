@@ -5,16 +5,21 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "GodDatabase", menuName = "Game/God Database")]
 public class GodDatabase : ScriptableObject
 {
-    public List<GodData> GodData = new List<GodData>();
+    public List<GodData> GodList = new List<GodData>();
 
-    public GodData GetGodByID(int godID)
+    public GodData GetGodByIndex(int index)
     {
-        return GodData.Find(god => god.GodID == godID);
+        if (index < 0 || index >= GodList.Count)
+        {
+            Debug.LogError("인덱스 범위를 초과하였습니다.");
+            return null;
+        }
+        return GodList[index];
     }
 
     public void ResetDatabase()
     {
-        GodData.Clear();
+        GodList.Clear();
     }
 
 }

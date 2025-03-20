@@ -38,24 +38,24 @@ public class EventCreator
         List<EventData> newEvents = new List<EventData>
         {
              CreateEvent("시작이벤트", EventTag.None,
-                CreatePhase("시작이벤트", "게임 처음 시작 시 실행되는 스크립트 입니다.", "Start1",
+                CreatePhase("시작이벤트", 
                     CreateChoice("다음랜덤", nextEvent: "END"),
                     CreateChoice("다음페이즈", nextPhaseIndex: 1)
                 ),
-                CreatePhase("시작이벤트2", "다음 페이즈로 잘 넘어왔습니다.", "Start2",
+                CreatePhase("시작이벤트2",
                     CreateChoice("다음랜덤", nextEvent: "END"),
                     CreateChoice("요구특성:신앙", requiredTrait: "굳건한 신앙", nextEvent: "END")
                 )
             ),
 
             CreateEvent("전투 이벤트", EventTag.Battle,
-                CreatePhase("전투 이벤트", "전투 발생 이벤트입니다.", "Battle1",
+                CreatePhase("전투 이벤트", 
                     CreateChoice("전투 시작", battleTrigger: true, fixedID: 1)
                 )
             ),
 
             CreateEvent("보상 이벤트", EventTag.Positive,
-                CreatePhase("보상 이벤트", "랜덤 보상 이벤트입니다.", "Bonus1",
+                CreatePhase("보상 이벤트",
                     CreateChoice("상자를 연다", nextEvent: "END")
                  )
             )
@@ -94,15 +94,17 @@ public class EventCreator
     }
 
     //이벤트 페이즈 생성 헬퍼 함수
-    private static EventPhase CreatePhase(string phaseName, string script, string imageName, params EventChoice[] choices)
+    private static EventPhase CreatePhase(string phaseName, params EventChoice[] choices)
     {
-        return new EventPhase
+        EventPhase newEventPhase = new EventPhase
         {
-            PhaseName = phaseName,
-            Script = script,
-            EventImage = LoadEventImage(imageName),
+            PhaseName = phaseName,          
             Choices = new List<EventChoice>(choices)
         };
+
+        newEventPhase.LoadEventImage();
+        newEventPhase.GetDescription();
+        return newEventPhase;
     }
 
     //선택지 생성 헬퍼 함수
@@ -126,10 +128,6 @@ public class EventCreator
         };
     }
 
-    //이벤트 이미지 로드 헬퍼 함수
-    private static Sprite LoadEventImage(string imageName)
-    {
-        return Resources.Load<Sprite>($"images/Events/{imageName}");
-    }
+  
 }
 

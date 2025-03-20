@@ -4,23 +4,10 @@ using UnityEngine.UI;
 using TMPro;
 using Unity.VisualScripting;
 
-[System.Serializable]
-public class ImageList
-{
-    public Sprite Img; // 이미지 스프라이트
-    public string Name; // 이름
-    public GodType GodName;
-    public Sprite BackgroundImg; //배경 이미지
-    [TextArea]
-    public string information; // 정보
-}
-
-     
+ 
 public class GodUI : MonoBehaviour
 {
-    [SerializeField]
-    private List<ImageList> ImgList = new List<ImageList>(); // 인스펙터에서 설정할 이미지 리스트
-
+    [SerializeField] private GodDatabase godDatabase;
     private int currentIndex = 0;
     public Image mainImage; // 가운데 메인 이미지
     public Image leftImage; // 왼쪽 이미지
@@ -37,47 +24,46 @@ public class GodUI : MonoBehaviour
 
     private void Start()
     {
-        if (ImgList.Count > 0) // 리스트가 비어 있지 않은지 확인
+        if (godDatabase == null || godDatabase.GodList.Count == 0)
         {
-            UpdateUI();
+            Debug.LogWarning("GodDatabase가 비어 있습니다! 인스펙터에서 설정하세요.");
+            return;
         }
-        else
-        {
-            Debug.LogWarning("ImgList is empty! Please add images in the inspector.");
-        }
+
+        UpdateUI();
     }
 
     public void OnNextButtonPressed()
     {
-        if (ImgList.Count == 0) return; // 리스트가 비어 있는지 확인
-        currentIndex = (currentIndex + 1) % ImgList.Count;
+        if (godDatabase.GodList.Count == 0) return;
+        currentIndex = (currentIndex + 1) % godDatabase.GodList.Count;
         UpdateUI();
     }
 
     public void OnPreviousButtonPressed()
     {
-        if (ImgList.Count == 0) return; // 리스트가 비어 있는지 확인
-        currentIndex = (currentIndex - 1 + ImgList.Count) % ImgList.Count;
+        if (godDatabase.GodList.Count == 0) return;
+        currentIndex = (currentIndex - 1 + godDatabase.GodList.Count) % godDatabase.GodList.Count;
         UpdateUI();
     }
 
     private void UpdateUI()
     {
-        if (ImgList.Count == 0) return; // 리스트가 비어 있는지 확인
+        if (godDatabase.GodList.Count == 0) return; // 리스트가 비어 있는지 확인
 
-        ImageList currentImage = ImgList[currentIndex];
+        GodData currentImage = godDatabase.GetGodByIndex(currentIndex);
 
-        mainImage.sprite = currentImage.Img;
-        nameText.text = currentImage.Name;
-        infoText.text = currentImage.information;
-        GodBackground.sprite = currentImage.BackgroundImg;
+        mainImage.sprite = currentImage.GetGodImage();
+        nameText.text = currentImage.name;
+        infoText.text = currentImage.GetDescription();
+        GodBackground.sprite = currentImage.GetBackgroundImage();
 
         // 왼쪽과 오른쪽 이미지 갱신
-        int leftIndex = (currentIndex - 1 + ImgList.Count) % ImgList.Count;
-        int rightIndex = (currentIndex + 1) % ImgList.Count;
+        int leftIndex = (currentIndex - 1 + godDatabase.GodList.Count) % godDatabase.GodList.Count;
+        int rightIndex = (currentIndex + 1) % godDatabase.GodList.Count;
 
-        leftImage.sprite = ImgList[leftIndex].Img;
-        rightImage.sprite = ImgList[rightIndex].Img;
+        leftImage.sprite = godDatabase.GetGodByIndex(leftIndex).GetGodImage();
+        rightImage.sprite = godDatabase.GetGodByIndex(rightIndex).GetGodImage();
 
         // 왼쪽과 오른쪽 이미지를 흑백으로 변환
         leftImage.color = Color.gray;
@@ -88,7 +74,7 @@ public class GodUI : MonoBehaviour
     {
         GodSelect.SetActive(false);
         CharacterSelect.SetActive(true);
-        player.God = ImgList[currentIndex].GodName;
+        player.SelectedGod = godDatabase.GetGodByIndex(currentIndex);
     }
 
     public void PreviousButton()
