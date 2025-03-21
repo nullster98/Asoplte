@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding" defaultCharsetForPropertiesFiles="UTF-8" addBOMForNewFiles="with BOM under Windows, with no BOM otherwise">
+    <file url="file://$PROJECT_DIR$/Assets/Scripts/Entities/EnemyCreator.cs" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Assets/Scripts/Entities/EnemyData.cs" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Assets/Scripts/Entities/EnemyDatabase.cs" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Assets/Scripts/Event/EventCreator.cs" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Assets/Scripts/Event/EventData.cs" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Assets/Scripts/Event/EventDatabase.cs" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Assets/Scripts/Event/EventEffect.cs" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Assets/Scripts/Event/EventHandler.cs" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Assets/Scripts/Event/EventManager.cs" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Assets/Scripts/Game/BattleManager.cs" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Assets/Scripts/Game/GameManager.cs" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Assets/Scripts/Game/StartManager.cs" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Assets/Scripts/God/GodData.cs" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Assets/Scripts/God/GodDatabase.cs" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Assets/Scripts/God/GodList.cs" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Assets/Scripts/ItemScript/InventoryManager.cs" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Assets/Scripts/ItemScript/Item.cs" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Assets/Scripts/ItemScript/ItemCreator.cs" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Assets/Scripts/ItemScript/ItemEffect.cs" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Assets/Scripts/ItemScript/ItemManager.cs" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Assets/Scripts/PlayerScript/Player.cs" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Assets/Scripts/Race/RaceDatabase.cs" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Assets/Scripts/Skill/SkillData.cs" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Assets/Scripts/Trait/TraitScript.cs" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Assets/Scripts/UI/AcquisitionUI.cs" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Assets/Scripts/UI/ButtonContainerTransform.cs" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Assets/Scripts/UI/EquipUI.cs" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Assets/Scripts/UI/GodUI.cs" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Assets/Scripts/UI/RaceUI.cs" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Assets/Scripts/UI/UIManager.cs" charset="UTF-8" />
+  </component>
+</project>

@@ -10,11 +10,11 @@ public class ButtonContainerTransform : MonoBehaviour
         RectTransform rect = GetComponent<RectTransform>();
         RectTransform parentRect = transform.parent.GetComponent<RectTransform>();
 
-        // X À§Ä¡¸¦ ºÎ¸ğ(Content)ÀÇ Áß¾ÓÀ¸·Î °­Á¦ ÀÌµ¿
+        // X ìœ„ì¹˜ë¥¼ ë¶€ëª¨(Content)ì˜ ì¤‘ì•™ìœ¼ë¡œ ê°•ì œ ì´ë™
         float parentWidth = parentRect.rect.width;
         rect.anchoredPosition = new Vector2(parentWidth / 2, rect.anchoredPosition.y);
 
-        // Width°¡ 0ÀÌ µÇ´Â ¹®Á¦ ¹æÁö
+        // Widthê°€ 0ì´ ë˜ëŠ” ë¬¸ì œ ë°©ì§€
         rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, parentWidth);
     }
 

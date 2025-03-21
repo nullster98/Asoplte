@@ -14,14 +14,14 @@ public class ItemManager : MonoBehaviour
             Destroy(gameObject);
     }
 
-    public Item GiveItemToPlayer(int itemID)
+    public ItemData GiveItemToPlayer(int itemID)
     {
-        Item item = DatabaseManager.Instance.itemDatabase.GetItemByID(itemID);
-        if (item == null)
+        ItemData itemData = DatabaseManager.Instance.itemDatabase.GetItemByID(itemID);
+        if (itemData == null)
         {
-            Debug.LogError("ÇØ´ç IDÀÇ ¾ÆÀÌÅÛÀ» Ã£À» ¼ö ¾ø½À´Ï´Ù!");
+            Debug.LogError("í•´ë‹¹ IDì˜ ì•„ì´í…œì„ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤!");
             return null;
         }
-        return item;
+        return itemData;
     }
 }

@@ -1,152 +1,155 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+using Game;
 using TMPro;
+using UnityEngine;
+using UnityEngine.Serialization;
+using UnityEngine.UI;
 
-public class EventManager : MonoBehaviour
+namespace Event
 {
-    public static EventManager Instance { get; private set; }
-
-    public int floor { get; private set; }
-
-    [Header("Main Component")]
-    [SerializeField] TMP_Text EventText;
-    [SerializeField] Image EventSprite;
-    [SerializeField] Transform ButtonContainer;
-    [SerializeField] GameObject ButtonPrefab;
-    [SerializeField] ScrollRect eventScrollView;
-
-    [Header("Event Data")]
-    private EventHandler eventHandler;
-    public BattleManager battleManger;
-    public AcquisitionUI acquisitionUI;
-
-    /*IEnumerator WaitForPlayer()
+    public class EventManager : MonoBehaviour
     {
-        //  Player.Instance°¡ nullÀÌ¸é »ı¼ºµÉ ¶§±îÁö ´ë±â
+        public static EventManager Instance { get; private set; }
+
+        public int Floor { get; private set; }
+
+        
+        [Header("Main Component")]
+        [FormerlySerializedAs("EventText")] [SerializeField] private TMP_Text eventText;
+        [FormerlySerializedAs("EventSprite")] [SerializeField] private Image eventSprite;
+        [FormerlySerializedAs("ButtonContainer")] [SerializeField] private Transform buttonContainer;
+        [FormerlySerializedAs("ButtonPrefab")] [SerializeField] private GameObject buttonPrefab;
+        [SerializeField] private ScrollRect eventScrollView;
+
+        [Header("Event Data")]
+        private EventHandler eventHandler;
+        public BattleManager battleManger;
+        public AcquisitionUI acquisitionUI;
+
+        public EventManager(int floor)
+        {
+            Floor = floor;
+        }
+
+        /*IEnumerator WaitForPlayer()
+    {
+        //  Player.Instanceê°€ nullì´ë©´ ìƒì„±ë  ë•Œê¹Œì§€ ëŒ€ê¸°
         while (Player.Instance == null)
         {
-            Debug.LogWarning("Player ÀÎ½ºÅÏ½º°¡ ¾ÆÁ÷ »ı¼ºµÇÁö ¾ÊÀ½. ´ë±â Áß...");
-            yield return null; // ÇÑ ÇÁ·¹ÀÓ ´ë±â ÈÄ ´Ù½Ã È®ÀÎ
+            Debug.LogWarning("Player ì¸ìŠ¤í„´ìŠ¤ê°€ ì•„ì§ ìƒì„±ë˜ì§€ ì•ŠìŒ. ëŒ€ê¸° ì¤‘...");
+            yield return null; // í•œ í”„ë ˆì„ ëŒ€ê¸° í›„ ë‹¤ì‹œ í™•ì¸
         }
 
     }*/
 
-    private void Awake()
-    {
-        if (Instance == null)
+        private void Awake()
         {
-            Instance = this;           
-
-            if (DatabaseManager.Instance.eventDatabase == null)
+            if (Instance == null)
             {
-                Debug.LogError("EventDatabase°¡ ¿¬°áµÇÁö ¾Ê¾Ò½À´Ï´Ù!");
+                Instance = this;           
+
+                if (DatabaseManager.Instance.eventDatabase == null)
+                {
+                    Debug.LogError("EventDatabaseê°€ ì—°ê²°ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤!");
+                    return;
+                }
+                ResetEventDatabase();
+                Debug.Log("ì´ë²¤íŠ¸ ìƒì„± ì‹¤í–‰");
+                EventCreator.GenerateEvents();
+
+                eventHandler = new EventHandler(battleManger, acquisitionUI); //eventHandler ì´ˆê¸°í™”
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+        }
+
+        public void Start()
+        {
+            if (eventHandler == null)
+            {
+                Debug.LogError("EventHandlerê°€ ì´ˆê¸°í™”ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤!");
                 return;
             }
-            ResetEventDatabase();
-            Debug.Log("ÀÌº¥Æ® »ı¼º ½ÇÇà");
-            EventCreator.GenerateEvents();
 
-            eventHandler = new EventHandler(battleManger, acquisitionUI); //eventHandler ÃÊ±âÈ­
+            eventHandler.StartEvent("ì‹œì‘ì´ë²¤íŠ¸");
         }
-        else
+        
+        public void UpdateEventUI(string eventDescription, List<EventChoice> choices, Sprite eventUISprite)
         {
-            Destroy(gameObject);
-        }
-    }
+            eventText.text = eventDescription;
+            this.eventSprite.sprite = eventUISprite;
 
-    public void Start()
-    {
-        if (eventHandler == null)
-        {
-            Debug.LogError("EventHandler°¡ ÃÊ±âÈ­µÇÁö ¾Ê¾Ò½À´Ï´Ù!");
-            return;
-        }
-
-        eventHandler.StartEvent("½ÃÀÛÀÌº¥Æ®");
-    }
-
-    public void Update()
-    {
-
-    }
-
-
-
-    public void UpdateEventUI(string eventDescription, List<EventChoice> choices, Sprite eventSprite)
-    {
-        EventText.text = eventDescription;
-        EventSprite.sprite = eventSprite;
-
-        // 2. ±âÁ¸ ¹öÆ° »èÁ¦ (¾ÈÀüÇÑ ¹æ½ÄÀ¸·Î Á¦°Å)
-        List<GameObject> buttonsToDestroy = new List<GameObject>();
-        foreach (Transform child in ButtonContainer)
-        {
-            buttonsToDestroy.Add(child.gameObject);
-        }
-        foreach (GameObject button in buttonsToDestroy)
-        {
-            Destroy(button);
-        }
-
-        // 3. »õ·Î¿î ¹öÆ° »ı¼º (¾ÈÀüÇÑ ¹æ½ÄÀ¸·Î ÀÎµ¦½º¸¦ Àü´Ş)
-        for (int i = 0; i < choices.Count; i++)
-        {
-            EventChoice choice = choices[i];
-
-            GameObject newButton = Instantiate(ButtonPrefab, ButtonContainer);
-            TMP_Text buttonText = newButton.GetComponentInChildren<TMP_Text>();
-
-            if (buttonText != null)
+            // 2. ê¸°ì¡´ ë²„íŠ¼ ì‚­ì œ (ì•ˆì „í•œ ë°©ì‹ìœ¼ë¡œ ì œê±°)
+            List<GameObject> buttonsToDestroy = new List<GameObject>();
+            foreach (Transform child in buttonContainer)
             {
-                buttonText.text = choice.ChoiceName;
+                buttonsToDestroy.Add(child.gameObject);
+            }
+            foreach (GameObject button in buttonsToDestroy)
+            {
+                Destroy(button);
+            }
+
+            // 3. ìƒˆë¡œìš´ ë²„íŠ¼ ìƒì„± (ì•ˆì „í•œ ë°©ì‹ìœ¼ë¡œ ì¸ë±ìŠ¤ë¥¼ ì „ë‹¬)
+            for (int i = 0; i < choices.Count; i++)
+            {
+                EventChoice choice = choices[i];
+
+                GameObject newButton = Instantiate(buttonPrefab, buttonContainer);
+                TMP_Text buttonText = newButton.GetComponentInChildren<TMP_Text>();
+
+                if (buttonText != null)
+                {
+                    buttonText.text = choice.choiceName;
+                }
+                else
+                {
+                    Debug.LogError("ButtonPrefabì— TMP_Textê°€ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤!");
+                }
+
+                Button buttonComponent = newButton.GetComponent<Button>();
+
+                if (buttonComponent != null)
+                {
+                    int choiceIndex = i; // ì¸ë±ìŠ¤ë¥¼ ì•ˆì „í•˜ê²Œ ì „ë‹¬
+                    buttonComponent.onClick.AddListener(() => eventHandler.OnChoiceSelected(choiceIndex));
+                }
+                else
+                {
+                    Debug.LogError("ButtonPrefabì— Button ì»´í¬ë„ŒíŠ¸ê°€ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤!");
+                }
+            }
+
+            // 4. ìŠ¤í¬ë¡¤ ë·°ì˜ ìœ„ì¹˜ë¥¼ ìµœìƒë‹¨ìœ¼ë¡œ ì´ë™
+            if (eventScrollView != null)
+            {
+                eventScrollView.verticalNormalizedPosition = 1f;
             }
             else
             {
-                Debug.LogError("ButtonPrefab¿¡ TMP_Text°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù!");
+                Debug.LogWarning("eventScrollViewê°€ ì„¤ì •ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤!");
             }
+        }
 
-            Button buttonComponent = newButton.GetComponent<Button>();
+        public void OnChoiceSelected(int choiceIndex)
+        {
+            eventHandler.OnChoiceSelected(choiceIndex); // í”Œë ˆì´ì–´ê°€ ì„ íƒí•œ ì´ë²¤íŠ¸ ì§„í–‰
+        }
 
-            if (buttonComponent != null)
+        private void ResetEventDatabase()
+        {
+            if (DatabaseManager.Instance.eventDatabase != null)
             {
-                int choiceIndex = i; // ÀÎµ¦½º¸¦ ¾ÈÀüÇÏ°Ô Àü´Ş
-                buttonComponent.onClick.AddListener(() => eventHandler.OnChoiceSelected(choiceIndex));
+                DatabaseManager.Instance.eventDatabase.ResetDatabase();
+                Debug.Log("ê²Œì„ ì‹œì‘ ì‹œ EventDatabase ì´ˆê¸°í™” ì™„ë£Œ!");
             }
             else
             {
-                Debug.LogError("ButtonPrefab¿¡ Button ÄÄÆ÷³ÍÆ®°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù!");
+                Debug.LogError("EventDatabaseë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤!");
             }
         }
 
-        // 4. ½ºÅ©·Ñ ºäÀÇ À§Ä¡¸¦ ÃÖ»ó´ÜÀ¸·Î ÀÌµ¿
-        if (eventScrollView != null)
-        {
-            eventScrollView.verticalNormalizedPosition = 1f;
-        }
-        else
-        {
-            Debug.LogWarning("eventScrollView°¡ ¼³Á¤µÇÁö ¾Ê¾Ò½À´Ï´Ù!");
-        }
     }
-
-    public void OnChoiceSelected(int choiceIndex)
-    {
-        eventHandler.OnChoiceSelected(choiceIndex); // ÇÃ·¹ÀÌ¾î°¡ ¼±ÅÃÇÑ ÀÌº¥Æ® ÁøÇà
-    }
-
-    private void ResetEventDatabase()
-    {
-        if (DatabaseManager.Instance.eventDatabase != null)
-        {
-            DatabaseManager.Instance.eventDatabase.ResetDatabase();
-            Debug.Log("°ÔÀÓ ½ÃÀÛ ½Ã EventDatabase ÃÊ±âÈ­ ¿Ï·á!");
-        }
-        else
-        {
-            Debug.LogError("EventDatabase¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù!");
-        }
-    }
-
 }

@@ -1,47 +1,49 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-public interface IEventEffect
+namespace Event
 {
-    void ApplyEffect();
-}
-
-[System.Serializable]
-public class BattleEffect : IEventEffect
-{
-    public int EnemyLevel;
-
-    public void ApplyEffect()
+    public interface IEventEffect
     {
-        Debug.Log("¿¸≈ı πﬂª˝. ¿˝ ∑π∫ß : {EnemyLevel}");
+        void ApplyEffect();
     }
-}
 
-[System.Serializable]
-public class ItemGainEffect : IEventEffect
-{
-    public string ItemName;
+    [System.Serializable]
+    public class BattleEffect : IEventEffect
+    {
+        [FormerlySerializedAs("EnemyLevel")] public int enemyLevel;
 
-    public void ApplyEffect()
+        public void ApplyEffect()
+        {
+            Debug.Log("Ï†ÑÌà¨ Î∞úÏÉù. Ï†à Î†àÎ≤® : {EnemyLevel}");
+        }
+    }
+
+    [System.Serializable]
+    public class ItemGainEffect : IEventEffect
+    {
+        [FormerlySerializedAs("ItemName")] public string itemName;
+
+        public void ApplyEffect()
+        {
+
+        }
+    }
+
+    [System.Serializable]
+    public class StatChangeEffect : IEventEffect
+    {
+        [FormerlySerializedAs("StatName")] public string statName;
+        [FormerlySerializedAs("Amount")] public int amount;
+
+        public void ApplyEffect()
+        {
+
+        }
+    }
+
+    public class EventEffect : MonoBehaviour
     {
 
     }
-}
-
-[System.Serializable]
-public class StatChangeEffect : IEventEffect
-{
-    public string StatName;
-    public int Amount;
-
-    public void ApplyEffect()
-    {
-
-    }
-}
-
-public class EventEffect : MonoBehaviour
-{
-
 }

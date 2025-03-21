@@ -7,75 +7,75 @@ using UnityEngine.UI;
 
 public class InventoryManager : MonoBehaviour
 {
-    private Item[] inventory = new Item[4]; // 4Ä­ °íÁ¤ ÀÎº¥Åä¸®
-    [SerializeField] private GameObject InventoryContainer; // ÀÎº¥Åä¸® UI ÆĞ³Î
-    [SerializeField] private GameObject EquipContainer; // ÀÎº¥Åä¸® UI ÆĞ³Î
-    [SerializeField] private Transform InventoryContainerTransform; // ¾ÆÀÌÅÛ UI À§Ä¡
-    [SerializeField] private GameObject ItemPrefab; // ¾ÆÀÌÅÛ ÇÁ¸®ÆÕ
+    private ItemData[] inventory = new ItemData[4]; // 4ì¹¸ ê³ ì • ì¸ë²¤í† ë¦¬
+    [SerializeField] private GameObject InventoryContainer; // ì¸ë²¤í† ë¦¬ UI íŒ¨ë„
+    [SerializeField] private GameObject EquipContainer; // ì¸ë²¤í† ë¦¬ UI íŒ¨ë„
+    [SerializeField] private Transform InventoryContainerTransform; // ì•„ì´í…œ UI ìœ„ì¹˜
+    [SerializeField] private GameObject ItemPrefab; // ì•„ì´í…œ í”„ë¦¬íŒ¹
     [SerializeField] private Sprite defaultSlotImage;
 
-    private List<GameObject> itemUIList = new List<GameObject>(); // UI ¾ÆÀÌÅÛ ¸®½ºÆ®
+    private List<GameObject> itemUIList = new List<GameObject>(); // UI ì•„ì´í…œ ë¦¬ìŠ¤íŠ¸
 
     public void AddItem(int slot, int itemID)
     {
         if (slot < 0 || slot >= inventory.Length)
         {
-            Debug.Log("Àß¸øµÈ ½½·Ô");
+            Debug.Log("ì˜ëª»ëœ ìŠ¬ë¡¯");
             return;
         }
 
         if (inventory[slot] != null)
         {
-            Debug.Log("½½·Ô ²ËÂü");
+            Debug.Log("ìŠ¬ë¡¯ ê½‰ì°¸");
             return;
         }
 
-        Item itemInfo = DatabaseManager.Instance.itemDatabase.GetItemByID(itemID);
-        if (itemInfo == null)
+        ItemData itemDataInfo = DatabaseManager.Instance.itemDatabase.GetItemByID(itemID);
+        if (itemDataInfo == null)
         {
-            Debug.Log("¾ÆÀÌÅÛ Á¤º¸ ¾øÀ½");
+            Debug.Log("ì•„ì´í…œ ì •ë³´ ì—†ìŒ");
             return;
         }
 
-        if (itemInfo is Equipment)
+        if (itemDataInfo is Equipment)
         {
-            Debug.Log("Àåºñ ¾ÆÀÌÅÛÀº ÀÎº¥Åä¸®¿¡ Ãß°¡ÇÒ ¼ö ¾ø½À´Ï´Ù.");
+            Debug.Log("ì¥ë¹„ ì•„ì´í…œì€ ì¸ë²¤í† ë¦¬ì— ì¶”ê°€í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
             return;
         }
 
-        Item newItem = null;
+        ItemData newItemData = null;
 
-        // ¼Ò¸ğÇ° (`Consumable`) Ã³¸®
-        if (itemInfo is Consumable consumable)
+        // ì†Œëª¨í’ˆ (`Consumable`) ì²˜ë¦¬
+        if (itemDataInfo is Consumable consumable)
         {
-            newItem = new Consumable(consumable.ItemID, consumable.ItemName,
+            newItemData = new Consumable(consumable.ItemID, consumable.ItemName,
                 consumable.PurchasePrice, consumable.SalePrice, consumable.HealAmount,
                 consumable.ManaRestore, consumable.Target, consumable.Effects);
         }
-        // ÅäÅÛ (`Totem`) Ã³¸®
-        else if (itemInfo is Totem totem)
+        // í† í…œ (`Totem`) ì²˜ë¦¬
+        else if (itemDataInfo is Totem totem)
         {
-            newItem = new Totem(totem.ItemID, totem.ItemName,
+            newItemData = new Totem(totem.ItemID, totem.ItemName,
                 totem.PurchasePrice, totem.SalePrice, totem.AttackPoint, totem.DefensePoint, totem.Effects);
         }
-        // ±ÍÁßÇ° (`Valuable`) Ã³¸®
-        else if (itemInfo is Valuable valuable)
+        // ê·€ì¤‘í’ˆ (`Valuable`) ì²˜ë¦¬
+        else if (itemDataInfo is Valuable valuable)
         {
-            newItem = new Valuable(valuable.ItemID, valuable.ItemName,
+            newItemData = new Valuable(valuable.ItemID, valuable.ItemName,
                 valuable.PurchasePrice, valuable.SalePrice, valuable.Effects);
         }
 
-        if (newItem == null)
+        if (newItemData == null)
         {
-            Debug.LogError("¾ÆÀÌÅÛ Å¸ÀÔÀ» È®ÀÎÇÒ ¼ö ¾øÀ½!");
+            Debug.LogError("ì•„ì´í…œ íƒ€ì…ì„ í™•ì¸í•  ìˆ˜ ì—†ìŒ!");
             return;
         }
 
-        //  ÀÎº¥Åä¸®¿¡ ¾ÆÀÌÅÛ Ãß°¡
-        inventory[slot] = newItem;
-        Debug.Log($"{slot} ½½·Ô¿¡ {newItem.ItemName}ÀÌ Ãß°¡µÊ");
+        //  ì¸ë²¤í† ë¦¬ì— ì•„ì´í…œ ì¶”ê°€
+        inventory[slot] = newItemData;
+        Debug.Log($"{slot} ìŠ¬ë¡¯ì— {newItemData.ItemName}ì´ ì¶”ê°€ë¨");
 
-        // UI °»½Å
+        // UI ê°±ì‹ 
         UpdateInventoryUI();
     }
 
@@ -83,16 +83,16 @@ public class InventoryManager : MonoBehaviour
     {
         if (slot < 0 || slot >= inventory.Length || inventory[slot] == null)
         {
-            Debug.Log("ºó ½½·Ô ¾øÀ½, ÀÎµ¦½º ¿À·ù");
+            Debug.Log("ë¹ˆ ìŠ¬ë¡¯ ì—†ìŒ, ì¸ë±ìŠ¤ ì˜¤ë¥˜");
             return;
         }
 
-        Debug.Log($"{slot}½½·Ô¿¡¼­ {inventory[slot].ItemName}ÀÌ Á¦°ÅµÊ");
+        Debug.Log($"{slot}ìŠ¬ë¡¯ì—ì„œ {inventory[slot].ItemName}ì´ ì œê±°ë¨");
 
-        // ÀÎº¥Åä¸®¿¡¼­ ¾ÆÀÌÅÛ Á¦°Å
+        // ì¸ë²¤í† ë¦¬ì—ì„œ ì•„ì´í…œ ì œê±°
         inventory[slot] = null;
 
-        // UI °»½Å
+        // UI ê°±ì‹ 
         UpdateInventoryUI();
     }
 
@@ -100,8 +100,8 @@ public class InventoryManager : MonoBehaviour
     {
         for (int i = 0; i < inventory.Length; i++)
         {
-            string itemName = inventory[i] != null ? inventory[i].ItemName : "ºó ½½·Ô";
-            Debug.Log($"½½·Ô {i}: {itemName}");
+            string itemName = inventory[i] != null ? inventory[i].ItemName : "ë¹ˆ ìŠ¬ë¡¯";
+            Debug.Log($"ìŠ¬ë¡¯ {i}: {itemName}");
         }
     }
 
@@ -115,27 +115,27 @@ public class InventoryManager : MonoBehaviour
         EquipContainer.SetActive(!EquipContainer.activeSelf);
     }
 
-    //  ¾ÆÀÌÅÛ UI ÀÚµ¿ »ı¼º ¹× Á¦°Å
+    //  ì•„ì´í…œ UI ìë™ ìƒì„± ë° ì œê±°
     private void UpdateInventoryUI()
     {
         for (int i = 0; i < inventory.Length; i++)
         {
-            if (i >= itemUIList.Count)  // ±âÁ¸ UI°¡ ºÎÁ·ÇÏ¸é »õ·Î¿î ½½·Ô Ãß°¡
+            if (i >= itemUIList.Count)  // ê¸°ì¡´ UIê°€ ë¶€ì¡±í•˜ë©´ ìƒˆë¡œìš´ ìŠ¬ë¡¯ ì¶”ê°€
             {
                 GameObject newItemUI = Instantiate(ItemPrefab, InventoryContainerTransform);
                 itemUIList.Add(newItemUI);
             }
 
-            Image itemImage = itemUIList[i].GetComponentInChildren<Image>();  // UI¿¡¼­ ÀÌ¹ÌÁö °¡Á®¿À±â
+            Image itemImage = itemUIList[i].GetComponentInChildren<Image>();  // UIì—ì„œ ì´ë¯¸ì§€ ê°€ì ¸ì˜¤ê¸°
 
             if (inventory[i] != null)
             {
-                itemImage.sprite = inventory[i].ItemImg;  // ¾ÆÀÌÅÛÀÌ ÀÖÀ¸¸é ÀÌ¹ÌÁö Àû¿ë
+                itemImage.sprite = inventory[i].ItemImg;  // ì•„ì´í…œì´ ìˆìœ¼ë©´ ì´ë¯¸ì§€ ì ìš©
                 itemImage.enabled = true;
             }
             else
             {
-                itemImage.sprite = defaultSlotImage;  // ºó ½½·ÔÀÌ¸é ±âº» ÀÌ¹ÌÁö À¯Áö
+                itemImage.sprite = defaultSlotImage;  // ë¹ˆ ìŠ¬ë¡¯ì´ë©´ ê¸°ë³¸ ì´ë¯¸ì§€ ìœ ì§€
                 itemImage.enabled = true;
             }
         }
@@ -155,7 +155,7 @@ public class InventoryManager : MonoBehaviour
         {
             inventory[i] = null;
         }
-        UpdateInventoryUI(); // ½ÃÀÛÇÒ ¶§ ÀÎº¥Åä¸® UI ÃÊ±âÈ­
+        UpdateInventoryUI(); // ì‹œì‘í•  ë•Œ ì¸ë²¤í† ë¦¬ UI ì´ˆê¸°í™”
         ResetItemDatabase();
         InitializeItemDatabse();
     }
@@ -169,22 +169,22 @@ public class InventoryManager : MonoBehaviour
     {
         if (DatabaseManager.Instance.itemDatabase == null)
         {
-            Debug.LogError("ItemDatabase¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù! Æú´õÈ®ÀÎ");
+            Debug.LogError("ItemDatabaseë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤! í´ë”í™•ì¸");
             return;
         }
 
         DatabaseManager.Instance.itemDatabase.ItemList.RemoveAll(item => item == null);
 
-        Debug.Log($"ÇöÀç µ¥ÀÌÅÍº£ÀÌ½º¿¡ µî·ÏµÈ ¾ÆÀÌÅÛ °¹¼ö : {DatabaseManager.Instance.itemDatabase.ItemList.Count}");
+        Debug.Log($"í˜„ì¬ ë°ì´í„°ë² ì´ìŠ¤ì— ë“±ë¡ëœ ì•„ì´í…œ ê°¯ìˆ˜ : {DatabaseManager.Instance.itemDatabase.ItemList.Count}");
 
         if (DatabaseManager.Instance.itemDatabase.ItemList.Count == 0)
         {
-            Debug.Log("¾ÆÀÌÅÛ µ¥ÀÌÅÍº£ÀÌ½º°¡ ºñ¾î ÀÖÀ½. ¸ğµç ¾ÆÀÌÅÛÀ» »ı¼ºÇÕ´Ï´Ù.");
+            Debug.Log("ì•„ì´í…œ ë°ì´í„°ë² ì´ìŠ¤ê°€ ë¹„ì–´ ìˆìŒ. ëª¨ë“  ì•„ì´í…œì„ ìƒì„±í•©ë‹ˆë‹¤.");
             ItemCreator.CreateAllItems();
         }
         else
         {
-            Debug.Log("¾ÆÀÌÅÛ µ¥ÀÌÅÍº£ÀÌ½º°¡ ÀÌ¹Ì ÃÊ±âÈ­µÇ¾î ÀÖ½À´Ï´Ù.");
+            Debug.Log("ì•„ì´í…œ ë°ì´í„°ë² ì´ìŠ¤ê°€ ì´ë¯¸ ì´ˆê¸°í™”ë˜ì–´ ìˆìŠµë‹ˆë‹¤.");
         }
 
         EditorUtility.SetDirty(DatabaseManager.Instance.itemDatabase);
@@ -195,11 +195,11 @@ public class InventoryManager : MonoBehaviour
         if (DatabaseManager.Instance.itemDatabase != null)
         {
             DatabaseManager.Instance.itemDatabase.ResetDatabase();
-            Debug.Log("°ÔÀÓ ½ÃÀÛ ½Ã ItemDatabase ÃÊ±âÈ­ ¿Ï·á!");
+            Debug.Log("ê²Œì„ ì‹œì‘ ì‹œ ItemDatabase ì´ˆê¸°í™” ì™„ë£Œ!");
         }
         else
         {
-            Debug.LogError("ItemDatabase¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù!");
+            Debug.LogError("ItemDatabaseë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤!");
         }
     }
 }

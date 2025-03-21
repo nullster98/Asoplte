@@ -1,160 +1,154 @@
 using System.Collections;
-using System.Collections.Generic;
+using Event;
 using TMPro;
 using UnityEngine;
-using UnityEngine.LowLevel;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-public class BattleManager : MonoBehaviour
+namespace Game
 {
-    private EnemyData enemy;
-
-    [SerializeField] GameObject BattleWindow;
-    [SerializeField] Slider MonsterHP;
-    [SerializeField] TMP_Text MonsterHP_Text;
-    [SerializeField] TMP_Text PlayerHP_Text;
-    [SerializeField] Slider PlayerHP;
-    [SerializeField] Image MonsterSprite;
-    [SerializeField] TMP_Text BattleLogs;
-
-    [SerializeField] GameObject BattleBtns;
-    [SerializeField] GameObject SkillPage;
-
-    private void Awake()
+    public class BattleManager : MonoBehaviour
     {
-        if(DatabaseManager.Instance.enemyDatabase == null)
+        private EnemyData enemy;
+
+        [FormerlySerializedAs("BattleWindow")] [SerializeField] GameObject battleWindow;
+        [FormerlySerializedAs("MonsterHP")] [SerializeField] private Slider monsterHp;
+        [FormerlySerializedAs("MonsterHP_Text")] [SerializeField] private TMP_Text monsterHpText;
+        [FormerlySerializedAs("PlayerHP_Text")] [SerializeField] private TMP_Text playerHpText;
+        [FormerlySerializedAs("PlayerHP")] [SerializeField] private Slider playerHp;
+        [FormerlySerializedAs("MonsterSprite")] [SerializeField] private Image monsterSprite;
+        [FormerlySerializedAs("BattleLogs")] [SerializeField] private TMP_Text battleLogs;
+
+        [FormerlySerializedAs("BattleBtns")] [SerializeField] private GameObject battleBtns;
+        [FormerlySerializedAs("SkillPage")] [SerializeField] private GameObject skillPage;
+
+        private void Awake()
         {
-            Debug.LogError("EnemyDatabse missing by.BattleManager");
-            return;
+            if(DatabaseManager.Instance.enemyDatabase == null)
+            {
+                Debug.LogError("EnemyDatabse missing by.BattleManager");
+                return;
+            }
+
+            EnemyCreator.InitializeEnemies(EventManager.Instance.Floor);
+            battleWindow.SetActive(false);
         }
 
-        EnemyCreator.InitializeEnemies(EventManager.Instance.floor);
-        BattleWindow.SetActive(false);
-    }
+        public void StartBattle(EventChoice selectedChoice)
+        { 
+            battleWindow.SetActive(true);      
 
-    public void StartBattle(EventChoice selectedChoice)
-    { 
-        BattleWindow.SetActive(true);      
+            int? enemyId = selectedChoice.FixedID;
 
-        int? enemyId = selectedChoice.FixedID;
+            enemy = enemyId == 0 ? EnemyCreator.StartBattle(EventManager.Instance.Floor) : DatabaseManager.Instance.enemyDatabase.GetEnemyByID(enemyId);
 
-        if(enemyId == 0 )
-        {
-            enemy = EnemyCreator.StartBattle(EventManager.Instance.floor);
+            if(enemy == null )
+            {
+                Debug.LogError($"Ï†Å Ï†ïÎ≥¥Î•º Ï∞æÏùÑÏàò ÏóÜÏäµÎãàÎã§");
+                return;
+            }
+
+            InitializeBattleUI();
+            battleLogs.text = $"{enemy.Name} Ï∂úÌòÑ!";
         }
 
-        else
-            enemy = DatabaseManager.Instance.enemyDatabase.GetEnemyByID(enemyId);
-
-        if(enemy == null )
+        private void InitializeBattleUI()
         {
-            Debug.LogError($"¿˚ ¡§∫∏∏¶ √£¿ªºˆ æ¯Ω¿¥œ¥Ÿ");
-            return;
+            monsterSprite.sprite = enemy.EnemySprite;
+            monsterHp.maxValue = enemy.MaxHp;
+            monsterHp.value = enemy.CurrentHp;
+            monsterHpText.text = $"{enemy.CurrentHp} / {enemy.MaxHp}";
+
+            playerHp.maxValue = Player.Instance.GetStat("HP");
+            playerHp.value = Player.Instance.GetStat("HP");
+            playerHpText.text = $"{(float)Player.Instance.GetStat("CurrentHP")} / {(float)Player.Instance.GetStat("HP")}";
         }
 
-        InitializeBattleUI();
-        BattleLogs.text = $"{enemy.Name} √‚«ˆ!";
-    }
-
-    public void InitializeBattleUI()
-    {
-        MonsterSprite.sprite = enemy.EnemySprite;
-        MonsterHP.maxValue = enemy.MaxHP;
-        MonsterHP.value = enemy.CurrentHP;
-        MonsterHP_Text.text = $"{enemy.CurrentHP} / {enemy.MaxHP}";
-
-        PlayerHP.maxValue = Player.Instance.GetStat("HP");
-        PlayerHP.value = Player.Instance.GetStat("HP");
-        PlayerHP_Text.text = $"{(float)Player.Instance.GetStat("CurrentHP")} / {(float)Player.Instance.GetStat("HP")}";
-    }
-
-    public void UpdateBattleUI()
-    {
-        MonsterHP.value = enemy.CurrentHP;
-        PlayerHP.value = Player.Instance.GetStat("CurrentHP");
-
-        MonsterHP_Text.text = $"{enemy.CurrentHP} / {enemy.MaxHP}";
-        PlayerHP_Text.text = $"{(float)Player.Instance.GetStat("CurrentHP")} / {(float)Player.Instance.GetStat("HP")}";
-    }
-
-    IEnumerator EnemyCounterAttack()
-    {
-        yield return new WaitForSeconds(0.5f);
-
-        float enemyDamage = enemy.Attack;
-
-        // «√∑π¿ÃæÓ √º∑¬ ∞®º“
-        Player.Instance.ChangeStat("CurrentHP", -enemyDamage);
-        BattleLogs.text += $"\n{enemy.Name}¿∫ {enemyDamage}¿« µ•πÃ¡ˆ∏¶ ¡÷æ˙¥Ÿ!";
-
-        UpdateBattleUI();
-
-        if (Player.Instance.GetStat("CurrentHP") <= 0)
+        private void UpdateBattleUI()
         {
-            BattleLogs.text += "\n«√∑π¿ÃæÓ∞° ∆–πË«œø¥Ω¿¥œ¥Ÿ!";
-            EndBattle();
+            monsterHp.value = enemy.CurrentHp;
+            playerHp.value = Player.Instance.GetStat("CurrentHP");
+
+            monsterHpText.text = $"{enemy.CurrentHp} / {enemy.MaxHp}";
+            playerHpText.text =
+                $"{(float)Player.Instance.GetStat("CurrentHP")} / {(float)Player.Instance.GetStat("HP")}";
         }
-    }
 
-    public void EndBattle()
-    {
-        if(enemy.CurrentHP <= 0)
-        BattleWindow.SetActive(false);
-    }
-
-    public void Damage()
-    {
-        float playerAtk = Player.Instance.GetStat("Atk");
-        float playerHP = Player.Instance.GetStat("CurrentHP");
-
-        // «√∑π¿ÃæÓ∞° ¿˚¿ª ∞¯∞›
-        enemy.CurrentHP -= playerAtk;
-        BattleLogs.text += $"\n{Player.Instance.name}¿∫ {playerAtk}∏∏≈≠¿« µ•πÃ¡ˆ∏¶ {enemy.Name}ø°∞‘ ¡÷æ˙¥Ÿ!";
-
-        UpdateBattleUI();
-
-        // ¿˚¿Ã ªÏæ∆¿÷¥Ÿ∏È 0.5√  »ƒ π›∞›
-        if (enemy.CurrentHP > 0)
+        // ReSharper disable Unity.PerformanceAnalysis
+        IEnumerator EnemyCounterAttack()
         {
-            StartCoroutine(EnemyCounterAttack());
+            yield return new WaitForSeconds(0.5f);
+
+            int enemyDamage = enemy.Attack;
+
+            // ÌîåÎ†àÏù¥Ïñ¥ Ï≤¥Î†• Í∞êÏÜå
+            Player.Instance.ChangeStat("CurrentHP", -enemyDamage);
+            battleLogs.text += $"\n{enemy.Name}ÏùÄ {enemyDamage}Ïùò Îç∞ÎØ∏ÏßÄÎ•º Ï£ºÏóàÎã§!";
+
+            UpdateBattleUI();
+
+            if (Player.Instance.GetStat("CurrentHP") <= 0)
+            {
+                battleLogs.text += "\nÌîåÎ†àÏù¥Ïñ¥Í∞Ä Ìå®Î∞∞ÌïòÏòÄÏäµÎãàÎã§!";
+                EndBattle();
+            }
         }
-        else
+
+        private void EndBattle()
         {
-            EndBattle();
+            if(enemy.CurrentHp <= 0)
+                battleWindow.SetActive(false);
         }
-    }
 
-    public void AtkBtn()
-    {
-        Damage();
-        UpdateBattleUI();
-    }
+        private void Damage()
+        {
+            int playerAtk = Player.Instance.GetStat("Atk");
+           
+            // ÌîåÎ†àÏù¥Ïñ¥Í∞Ä Ï†ÅÏùÑ Í≥µÍ≤©
+            enemy.TakeDamage(playerAtk);
+            battleLogs.text += $"\n{Player.Instance.name}ÏùÄ {playerAtk}ÎßåÌÅºÏùò Îç∞ÎØ∏ÏßÄÎ•º {enemy.Name}ÏóêÍ≤å Ï£ºÏóàÎã§!";
 
-    public void SkillBtn()
-    {
-        SkillPage.SetActive(true);
-        BattleBtns.SetActive(false);
-    }
+            UpdateBattleUI();
 
-    public void BacktoBattleBtns()
-    {
-        SkillPage.SetActive(false);
-        BattleBtns.SetActive(true);
-    }
+            // Ï†ÅÏù¥ ÏÇ¥ÏïÑÏûàÎã§Î©¥ 0.5Ï¥à ÌõÑ Î∞òÍ≤©
+            if (enemy.CurrentHp > 0)
+            {
+                StartCoroutine(EnemyCounterAttack());
+            }
+            else
+            {
+                EndBattle();
+            }
+        }
+
+        public void AtkBtn()
+        {
+            Damage();
+            UpdateBattleUI();
+        }
+
+        public void SkillBtn()
+        {
+            skillPage.SetActive(true);
+            battleBtns.SetActive(false);
+        }
+
+        public void BacktoBattleBtns()
+        {
+            skillPage.SetActive(false);
+            battleBtns.SetActive(true);
+        }
     
-    public void ItemBtn()
-    {
+        public void ItemBtn()
+        {
 
-    }   
+        }   
     
-    public void RunBtn()
-    {
+        public void RunBtn()
+        {
 
-    }
-
-    private void Update()
-    {
+        }
         
-    }
 
+    }
 }

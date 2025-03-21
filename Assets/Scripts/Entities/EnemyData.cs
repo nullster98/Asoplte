@@ -4,69 +4,66 @@ using System.Collections.Generic;
 using System.Xml.Linq;
 using UnityEngine;
 
-public enum Enemy
+public enum EnemyType
 {
     None,
     Monster,
     Boss,
-    NPC
+    Npc
 }
 [System.Serializable]
 public class EnemyData
 {
-    public float EnemyID;
-    public Enemy NPCType;
-    public string Name;
-    public string Description;
-    public Sprite EnemySprite;
-    public float Level;
-    public float MaxHP;
-    public float CurrentHP;
-    public float MaxMP;
-    public float Attack;
-    public float Defense;
+    public int EnemyID { get; private set; }
+    public EnemyType NpcType { get; private set; }
+    public string Name { get; private set; }
+    public string Description { get; private set; }
+    public Sprite EnemySprite { get; private set; }
+    public int Level { get; private set; }
+    public int MaxHp { get; private set; }
+    public int CurrentHp { get; private set; }
+    public int MaxMp { get; private set; }
+    public int Attack { get; private set; }
+    public int Defense { get; private set; }
     //public List<string> Abilities;
 
     public void LoadEnemySprite()
     {
-        string folderPath = NPCType switch
+        string folderPath = NpcType switch
         {
-            Enemy.NPC => "Entitie/NPC/Images",
-            Enemy.Monster => "Entitie/Monster/Images",
-            Enemy.Boss => "Entitie/Boss/Images",
-            _ => "Entite/Default"
+            EnemyType.Npc => "Entities/NPC/Images",
+            EnemyType.Monster => "Entities/Monster/Images",
+            EnemyType.Boss => "Entities/Boss/Images",
+            _ => "Entities/Default"
         };
 
-       EnemySprite = Resources.Load<Sprite>($"{folderPath}/{Name}");
-        if (EnemySprite == null)
-        {
-            EnemySprite = Resources.Load<Sprite>("Entitie/default");
-        }
+        EnemySprite = Resources.Load<Sprite>($"{folderPath}/{Name}") ?? Resources.Load<Sprite>("Entities/default");
+        
     }
 
     public void GetDescription()
     {
-        string folderPath = NPCType switch
+        string folderPath = NpcType switch
         {
-            Enemy.NPC => "Entitie/NPC/Descriptions",
-            Enemy.Monster => "Entitie/Monster/Descriptions",
-            Enemy.Boss => "Entitie/Boss/Descriptions",
-            _ => "Entite/Default"
+            EnemyType.Npc => "Entitie/NPC/Descriptions",
+            EnemyType.Monster => "Entitie/Monster/Descriptions",
+            EnemyType.Boss => "Entitie/Boss/Descriptions",
+            _ => "Entitie/Default"
         };
 
         TextAsset textAsset = Resources.Load<TextAsset>($"{folderPath}/{Name}");
-        Description = textAsset != null ? textAsset.text : "Ό³Έν Ύψΐ½";
+        Description = textAsset != null ? textAsset.text : "μ„¤λª… μ—†μ";
     }
 
-    public EnemyData(float id, string name, Enemy type, float level, float maxHP, float maxMP, float attack, float defense)
+    public EnemyData(int id, string name, EnemyType type, int level, int maxHp, int maxMp, int attack, int defense)
     {
         EnemyID = id;
         Name = name;
-        NPCType = type;
+        NpcType = type;
         Level = level;
-        MaxHP = maxHP;
-        CurrentHP = maxHP;
-        MaxMP = maxMP;
+        MaxHp = maxHp;
+        CurrentHp = maxHp;
+        MaxMp = maxMp;
         Attack = attack;
         Defense = defense;
 
@@ -77,13 +74,13 @@ public class EnemyData
 
     public void TakeDamage(int damage)
     {
-        CurrentHP -= damage;
-        if(CurrentHP < 0) CurrentHP = 0;
+        CurrentHp -= damage;
+        if(CurrentHp < 0) CurrentHp = 0;
     }    
 
     public void Heal(int amount)
     {
-        CurrentHP += amount;
-        if(CurrentHP > MaxHP) CurrentHP = MaxHP;
+        CurrentHp += amount;
+        if(CurrentHp > MaxHp) CurrentHp = MaxHp;
     }
 }

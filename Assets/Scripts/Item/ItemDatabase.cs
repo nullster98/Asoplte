@@ -6,9 +6,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "ItemDatabase", menuName = "Game/Item Database")]
 public class ItemDatabase : ScriptableObject
 {
-    public List<Item> ItemList = new List<Item>();
+    public List<ItemData> ItemList = new List<ItemData>();
 
-    public Item GetItemByID(int itemID)
+    public ItemData GetItemByID(int itemID)
     {
         return ItemList.Find(item => item.ItemID == itemID);
     }

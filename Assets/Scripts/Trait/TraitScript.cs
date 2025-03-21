@@ -21,15 +21,15 @@ public enum TraitAnP
 }
 
 [System.Serializable]
-public class Trait // Æ¯¼º Å¬·¡½º
+public class Trait // íŠ¹ì„± í´ë˜ìŠ¤
 {
-    public string TraitName; //Æ¯¼º ÀÌ¸§
-    public TraitPnN PnN; //±àÁ¤ ¹× ºÎÁ¤ ±¸ºĞ
-    public TraitAnP AnP; //ÆĞ½Ãºê ¹× ¾×Æ¼ºê ±¸ºĞ
-    public Sprite TraitImg; //Æ¯¼º ÀÌ¹ÌÁö
+    public string TraitName; //íŠ¹ì„± ì´ë¦„
+    public TraitPnN PnN; //ê¸ì • ë° ë¶€ì • êµ¬ë¶„
+    public TraitAnP AnP; //íŒ¨ì‹œë¸Œ ë° ì•¡í‹°ë¸Œ êµ¬ë¶„
+    public Sprite TraitImg; //íŠ¹ì„± ì´ë¯¸ì§€
     [TextArea]
-    public string TraitDescription; //Æ¯¼º ¼³¸í
-    public int Cost; // Æ¯¼º ÄÚ½ºÆ®
+    public string TraitDescription; //íŠ¹ì„± ì„¤ëª…
+    public int Cost; // íŠ¹ì„± ì½”ìŠ¤íŠ¸
 
 }
 
@@ -44,30 +44,30 @@ public class TraitScript : MonoBehaviour
 
     [Header("TraitControll")]
     [SerializeField] List<Trait> TraitsList = new List<Trait>();
-    [SerializeField] private Transform PbuttonContainer; // Scroll ViewÀÇ Content
-    [SerializeField] private Transform NbuttonContainer; // Scroll ViewÀÇ Content
-    [SerializeField] Button ButtonPrefab; //¹öÆ° ÇÁ¸®ÆÕ
-    [SerializeField] TMP_Text DescriptionArea; // Æ¯¼º ¼³¸íÃ¢
-    [SerializeField] TMP_Text CostArea; //ÄÚ½ºÆ® Ç¥±âÃ¢
+    [SerializeField] private Transform PbuttonContainer; // Scroll Viewì˜ Content
+    [SerializeField] private Transform NbuttonContainer; // Scroll Viewì˜ Content
+    [SerializeField] Button ButtonPrefab; //ë²„íŠ¼ í”„ë¦¬íŒ¹
+    [SerializeField] TMP_Text DescriptionArea; // íŠ¹ì„± ì„¤ëª…ì°½
+    [SerializeField] TMP_Text CostArea; //ì½”ìŠ¤íŠ¸ í‘œê¸°ì°½
 
     [Header("SelectControll")]
     [SerializeField] Button SelectButtonPrefab;
     [SerializeField] Transform SelectContainer;
     [SerializeField] int TotalCost;
     [SerializeField] int MaxCost;
-    private List<Button> selectButtonList = new List<Button>(); // ¼±ÅÃµÈ ¹öÆ°µéÀ» °ü¸®ÇÒ ¸®½ºÆ®
-    //private int nextSelectIndex = 0; // ¼±ÅÃµÈ ¹öÆ°ÀÇ ´ÙÀ½ ºó ÀÚ¸® ÀÎµ¦½º
+    private List<Button> selectButtonList = new List<Button>(); // ì„ íƒëœ ë²„íŠ¼ë“¤ì„ ê´€ë¦¬í•  ë¦¬ìŠ¤íŠ¸
+    //private int nextSelectIndex = 0; // ì„ íƒëœ ë²„íŠ¼ì˜ ë‹¤ìŒ ë¹ˆ ìë¦¬ ì¸ë±ìŠ¤
     private Sprite originalSelectedSprite;
-    private List<Trait> selectedTraits = new List<Trait>(); // ¼±ÅÃµÈ Æ¯¼ºµéÀ» °ü¸®ÇÏ´Â ¸®½ºÆ®
+    private List<Trait> selectedTraits = new List<Trait>(); // ì„ íƒëœ íŠ¹ì„±ë“¤ì„ ê´€ë¦¬í•˜ëŠ” ë¦¬ìŠ¤íŠ¸
 
     // Start is called before the first frame update
     void Start()
     {
 
         originalSelectedSprite = SelectButtonPrefab.image.sprite;
-        // ÃÊ±â ¼³Á¤ - ½ÃÀÛ ½Ã µÎ ¹öÆ° ¸ğµÎ ±âº» ¼³Á¤À¸·Î
-        //SetButtonColors(PostiveBtn, Color.black, Color.white); // Positive ¹öÆ°À» Èò»ö ¹è°æ, °ËÀº»ö ±ÛÀÚ·Î ¼³Á¤
-        //SetButtonColors(NegavieBtn, Color.white, Color.black); // Negative ¹öÆ°À» Èò»ö ¹è°æ, °ËÀº»ö ±ÛÀÚ·Î ¼³Á¤
+        // ì´ˆê¸° ì„¤ì • - ì‹œì‘ ì‹œ ë‘ ë²„íŠ¼ ëª¨ë‘ ê¸°ë³¸ ì„¤ì •ìœ¼ë¡œ
+        //SetButtonColors(PostiveBtn, Color.black, Color.white); // Positive ë²„íŠ¼ì„ í°ìƒ‰ ë°°ê²½, ê²€ì€ìƒ‰ ê¸€ìë¡œ ì„¤ì •
+        //SetButtonColors(NegavieBtn, Color.white, Color.black); // Negative ë²„íŠ¼ì„ í°ìƒ‰ ë°°ê²½, ê²€ì€ìƒ‰ ê¸€ìë¡œ ì„¤ì •
 
         TraitsList = TraitsList.OrderBy(t => t.Cost).ToList();
         CreateTraitButtons();
@@ -82,12 +82,12 @@ public class TraitScript : MonoBehaviour
         CostArea.text = "Cost : " + TotalCost.ToString() + " / " + Player.Instance.MaxCost;
     }
 
-    public void PostiveBtnAction() //Positive ¹öÆ°À» ´­·¶À» ¶§
+    public void PostiveBtnAction() //Positive ë²„íŠ¼ì„ ëˆŒë €ì„ ë•Œ
     {
-        // Positive ¹öÆ° »ö»ó: °ËÀº ¹è°æ, Èò ±ÛÀÚ
+        // Positive ë²„íŠ¼ ìƒ‰ìƒ: ê²€ì€ ë°°ê²½, í° ê¸€ì
         //SetButtonColors(PostiveBtn, Color.black, Color.white);
 
-        // Negative ¹öÆ° »ö»ó: Èò ¹è°æ, °ËÀº ±ÛÀÚ
+        // Negative ë²„íŠ¼ ìƒ‰ìƒ: í° ë°°ê²½, ê²€ì€ ê¸€ì
         //SetButtonColors(NegavieBtn, Color.white, Color.black);
 
         PostivePannel.SetActive(true);
@@ -97,12 +97,12 @@ public class TraitScript : MonoBehaviour
 
     }
 
-    public void NegativeBtnAction() //Negative ¹öÆ°À» ´­·¶À» ¶§
+    public void NegativeBtnAction() //Negative ë²„íŠ¼ì„ ëˆŒë €ì„ ë•Œ
     {
-        // Negative ¹öÆ° »ö»ó: °ËÀº ¹è°æ, Èò ±ÛÀÚ
+        // Negative ë²„íŠ¼ ìƒ‰ìƒ: ê²€ì€ ë°°ê²½, í° ê¸€ì
         //SetButtonColors(NegavieBtn, Color.black, Color.white);
 
-        // Positive ¹öÆ° »ö»ó: Èò ¹è°æ, °ËÀº ±ÛÀÚ
+        // Positive ë²„íŠ¼ ìƒ‰ìƒ: í° ë°°ê²½, ê²€ì€ ê¸€ì
         //SetButtonColors(PostiveBtn, Color.white, Color.black);
 
         PostivePannel.SetActive(false);
@@ -115,7 +115,7 @@ public class TraitScript : MonoBehaviour
 
     /*private void SetButtonColors(Button button, Color backgroundColor, Color textColor)
     {
-        // ¹öÆ°ÀÇ ¹è°æ ÀÌ¹ÌÁö »ö»ó ¼³Á¤
+        // ë²„íŠ¼ì˜ ë°°ê²½ ì´ë¯¸ì§€ ìƒ‰ìƒ ì„¤ì •
         Image buttonImage = button.GetComponent<Image>();
         if (buttonImage != null)
         {
@@ -123,10 +123,10 @@ public class TraitScript : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("Button¿¡ Image ÄÄÆ÷³ÍÆ®°¡ ¾ø½À´Ï´Ù.");
+            Debug.LogWarning("Buttonì— Image ì»´í¬ë„ŒíŠ¸ê°€ ì—†ìŠµë‹ˆë‹¤.");
         }
 
-        // ¹öÆ°ÀÇ ÀÚ½Ä ¿ÀºêÁ§Æ®¿¡ ÀÖ´Â TMP_Text ÄÄÆ÷³ÍÆ®ÀÇ »ö»ó ¼³Á¤
+        // ë²„íŠ¼ì˜ ìì‹ ì˜¤ë¸Œì íŠ¸ì— ìˆëŠ” TMP_Text ì»´í¬ë„ŒíŠ¸ì˜ ìƒ‰ìƒ ì„¤ì •
         TMP_Text buttonText = button.GetComponentInChildren<TMP_Text>();
         if (buttonText != null)
         {
@@ -134,15 +134,15 @@ public class TraitScript : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("Button¿¡ TMP_Text ÄÄÆ÷³ÍÆ®°¡ ¾ø½À´Ï´Ù.");
+            Debug.LogWarning("Buttonì— TMP_Text ì»´í¬ë„ŒíŠ¸ê°€ ì—†ìŠµë‹ˆë‹¤.");
         }
     }*/
 
 
-    // Æ¯¼º ¹öÆ° »ı¼º ¹× ÃÊ±âÈ­
+    // íŠ¹ì„± ë²„íŠ¼ ìƒì„± ë° ì´ˆê¸°í™”
     private void CreateTraitButtons()
     {
-        // ¸®½ºÆ®°¡ ºñ¾î ÀÖ´ÂÁö Ã¼Å©
+        // ë¦¬ìŠ¤íŠ¸ê°€ ë¹„ì–´ ìˆëŠ”ì§€ ì²´í¬
         if (TraitsList == null || TraitsList.Count == 0)
         {
             Debug.LogWarning("Race list is empty!");
@@ -151,17 +151,17 @@ public class TraitScript : MonoBehaviour
 
         for (int i = 0; i < TraitsList.Count; i++)
         {
-            // Positive¿Í Negative¿¡ µû¶ó ´Ù¸¥ Container¿¡ Ãß°¡
+            // Positiveì™€ Negativeì— ë”°ë¼ ë‹¤ë¥¸ Containerì— ì¶”ê°€
             Transform targetContainer = TraitsList[i].PnN == TraitPnN.Positive ? PbuttonContainer : NbuttonContainer;
 
-            // ¹öÆ° ÇÁ¸®ÆÕÀ» Content¿¡ Ãß°¡
+            // ë²„íŠ¼ í”„ë¦¬íŒ¹ì„ Contentì— ì¶”ê°€
             Button button = Instantiate(ButtonPrefab, targetContainer);
 
-            // ¹öÆ°ÀÇ ÀÌ¹ÌÁö ÄÄÆ÷³ÍÆ®¿¡ Æ¯¼º ÀÌ¹ÌÁö ¼³Á¤
+            // ë²„íŠ¼ì˜ ì´ë¯¸ì§€ ì»´í¬ë„ŒíŠ¸ì— íŠ¹ì„± ì´ë¯¸ì§€ ì„¤ì •
             Image buttonImage = button.GetComponent<Image>();
             buttonImage.sprite = TraitsList[i].TraitImg;
 
-            // ¹öÆ° Å¬¸¯ ÀÌº¥Æ® ¿¬°á (±âÁ¸ ¸®½º³Ê Á¦°Å ÈÄ Ãß°¡)
+            // ë²„íŠ¼ í´ë¦­ ì´ë²¤íŠ¸ ì—°ê²° (ê¸°ì¡´ ë¦¬ìŠ¤ë„ˆ ì œê±° í›„ ì¶”ê°€)
             int index = i;
             button.onClick.RemoveAllListeners();
             button.onClick.AddListener(() => PushTrait(TraitsList[index]));
@@ -169,26 +169,26 @@ public class TraitScript : MonoBehaviour
 
     }
 
-    // Select ¹öÆ°À» »ı¼ºÇÏ°í ¿ø·¡ ÀÌ¹ÌÁö·Î º¹±¸ÇÒ ¼ö ÀÖµµ·Ï ¼³Á¤
+    // Select ë²„íŠ¼ì„ ìƒì„±í•˜ê³  ì›ë˜ ì´ë¯¸ì§€ë¡œ ë³µêµ¬í•  ìˆ˜ ìˆë„ë¡ ì„¤ì •
     private void CreateSelectButtons()
     {
         for (int i = 0; i < 10; i++)
         {
-            // Select ¹öÆ°À» »ı¼º
+            // Select ë²„íŠ¼ì„ ìƒì„±
             Button button = Instantiate(SelectButtonPrefab, SelectContainer);
-            selectButtonList.Add(button); // ¸®½ºÆ®¿¡ Ãß°¡
+            selectButtonList.Add(button); // ë¦¬ìŠ¤íŠ¸ì— ì¶”ê°€
 
-            // Å¬¸¯ ½Ã ¿ø·¡ ÀÌ¹ÌÁö·Î º¹±¸ÇÏ´Â ±â´É Ãß°¡
-            int index = i; // ÀÎµ¦½º¸¦ ÀúÀå
+            // í´ë¦­ ì‹œ ì›ë˜ ì´ë¯¸ì§€ë¡œ ë³µêµ¬í•˜ëŠ” ê¸°ëŠ¥ ì¶”ê°€
+            int index = i; // ì¸ë±ìŠ¤ë¥¼ ì €ì¥
             button.onClick.RemoveAllListeners();
-            button.onClick.AddListener(() => RemoveTrait(index)); // ¼±ÅÃ Ãë¼Ò
+            button.onClick.AddListener(() => RemoveTrait(index)); // ì„ íƒ ì·¨ì†Œ
         }
     }
 
-    // Å¬¸¯ÇÑ SelectButtonÀ» ¿ø·¡ ÀÌ¹ÌÁö·Î º¹±¸ÇÏ´Â ¸Ş¼­µå
+    // í´ë¦­í•œ SelectButtonì„ ì›ë˜ ì´ë¯¸ì§€ë¡œ ë³µêµ¬í•˜ëŠ” ë©”ì„œë“œ
     private void RestoreOriginalImage(Button selectButton)
     {
-        selectButton.image.sprite = originalSelectedSprite; // ¿ø·¡ ÀÌ¹ÌÁö·Î º¹±¸
+        selectButton.image.sprite = originalSelectedSprite; // ì›ë˜ ì´ë¯¸ì§€ë¡œ ë³µêµ¬
     }
 
     private void RemoveTrait(int index)
@@ -198,7 +198,7 @@ public class TraitScript : MonoBehaviour
             Trait trait = selectedTraits[index];
 
             int traitCost = selectedTraits[index].Cost;
-            // ¼±ÅÃ Ãë¼Ò
+            // ì„ íƒ ì·¨ì†Œ
             selectedTraits.RemoveAt(index);
             if (trait.PnN == TraitPnN.Positive)
             {
@@ -209,21 +209,21 @@ public class TraitScript : MonoBehaviour
                 TotalCost += traitCost;
             }
 
-            // ¹öÆ°À» ¿ø·¡ ÀÌ¹ÌÁö·Î º¹±¸
+            // ë²„íŠ¼ì„ ì›ë˜ ì´ë¯¸ì§€ë¡œ ë³µêµ¬
             ReorganizeSelectButtons();
         }
     }
 
-    // ¼±ÅÃµÈ TraitµéÀ» ¾Õ¿¡¼­ºÎÅÍ ´Ù½Ã Á¤¸®
+    // ì„ íƒëœ Traitë“¤ì„ ì•ì—ì„œë¶€í„° ë‹¤ì‹œ ì •ë¦¬
     private void ReorganizeSelectButtons()
     {
-        // ¸ğµç SelectButtonÀÇ ÀÌ¹ÌÁö¸¦ ¿ø·¡ ÀÌ¹ÌÁö·Î º¹±¸
+        // ëª¨ë“  SelectButtonì˜ ì´ë¯¸ì§€ë¥¼ ì›ë˜ ì´ë¯¸ì§€ë¡œ ë³µêµ¬
         foreach (var button in selectButtonList)
         {
             button.image.sprite = originalSelectedSprite;
         }
 
-        // ¼±ÅÃµÈ Æ¯¼ºµéÀ» ´Ù½Ã ¾Õ¿¡¼­ºÎÅÍ Â÷·Ê´ë·Î ¹èÄ¡
+        // ì„ íƒëœ íŠ¹ì„±ë“¤ì„ ë‹¤ì‹œ ì•ì—ì„œë¶€í„° ì°¨ë¡€ëŒ€ë¡œ ë°°ì¹˜
         for (int i = 0; i < selectedTraits.Count; i++)
         {
             Button selectButton = selectButtonList[i];
@@ -233,29 +233,29 @@ public class TraitScript : MonoBehaviour
 
     private void PushTrait(Trait selectedTrait)
     {
-        // Æ¯¼º ¼³¸í ¾÷µ¥ÀÌÆ®
+        // íŠ¹ì„± ì„¤ëª… ì—…ë°ì´íŠ¸
         DescriptionArea.text = $"{selectedTrait.TraitName}\n[Cost: {selectedTrait.Cost}]\n\n{selectedTrait.TraitDescription}";
-        //Áßº¹ ¼±ÅÃ È®ÀÎ
+        //ì¤‘ë³µ ì„ íƒ í™•ì¸
         for (int i = 0; i < selectButtonList.Count; i++)
         {
             if (selectedTraits.Contains(selectedTrait))
             {
-                Debug.Log("Áßº¹¼±ÅÃ");
+                Debug.Log("ì¤‘ë³µì„ íƒ");
                 return;
             }
         }
-        // ¼±ÅÃ °¡´ÉÇÑ ºó ÀÚ¸®°¡ ÀÖ´ÂÁö È®ÀÎ
+        // ì„ íƒ ê°€ëŠ¥í•œ ë¹ˆ ìë¦¬ê°€ ìˆëŠ”ì§€ í™•ì¸
         if (selectedTraits.Count < selectButtonList.Count)
         {
             if (Player.Instance.MaxCost < TotalCost + selectedTrait.Cost)
             {
-                Debug.Log("ÄÚ½ºÆ® ºÎÁ·");
+                Debug.Log("ì½”ìŠ¤íŠ¸ ë¶€ì¡±");
                 return;
             }
-            // Æ¯¼ºÀ» ¼±ÅÃ ¸®½ºÆ®¿¡ Ãß°¡ (Àû¿ëÀº ³ªÁß¿¡)
+            // íŠ¹ì„±ì„ ì„ íƒ ë¦¬ìŠ¤íŠ¸ì— ì¶”ê°€ (ì ìš©ì€ ë‚˜ì¤‘ì—)
             selectedTraits.Add(selectedTrait);
 
-            // Æ¯¼º ºñ¿ëÀ» TotalCost¿¡ Ãß°¡
+            // íŠ¹ì„± ë¹„ìš©ì„ TotalCostì— ì¶”ê°€
             if (selectedTrait.PnN == TraitPnN.Positive)
             {
                 TotalCost += selectedTrait.Cost;
@@ -265,19 +265,19 @@ public class TraitScript : MonoBehaviour
             {
                 TotalCost -= selectedTrait.Cost;
             }
-            // ¼±ÅÃµÈ Æ¯¼ºÀÇ ÀÌ¹ÌÁö¸¦ ÇÏ´Ü ¹öÆ°¿¡ ¹İ¿µ
+            // ì„ íƒëœ íŠ¹ì„±ì˜ ì´ë¯¸ì§€ë¥¼ í•˜ë‹¨ ë²„íŠ¼ì— ë°˜ì˜
             for (int i = 0; i < selectedTraits.Count; i++)
             {
                 Button selectButton = selectButtonList[i];
-                selectButton.image.sprite = selectedTraits[i].TraitImg; // ¼±ÅÃµÈ Æ¯¼º ÀÌ¹ÌÁö ¼³Á¤
+                selectButton.image.sprite = selectedTraits[i].TraitImg; // ì„ íƒëœ íŠ¹ì„± ì´ë¯¸ì§€ ì„¤ì •
             }
 
-            // ÇÏ´Ü ¹öÆ°À» ¼±ÅÃµÈ Æ¯¼ºÀÇ ÀÌ¹ÌÁö·Î ¾÷µ¥ÀÌÆ® ÈÄ, ³ª¸ÓÁö´Â ¿ø·¡ »óÅÂ·Î º¹±¸
+            // í•˜ë‹¨ ë²„íŠ¼ì„ ì„ íƒëœ íŠ¹ì„±ì˜ ì´ë¯¸ì§€ë¡œ ì—…ë°ì´íŠ¸ í›„, ë‚˜ë¨¸ì§€ëŠ” ì›ë˜ ìƒíƒœë¡œ ë³µêµ¬
             ReorganizeSelectButtons();
         }
         else
         {
-            Debug.Log("´õ ÀÌ»ó ¼±ÅÃÇÒ ¼ö ÀÖ´Â ¹öÆ°ÀÌ ¾ø½À´Ï´Ù.");
+            Debug.Log("ë” ì´ìƒ ì„ íƒí•  ìˆ˜ ìˆëŠ” ë²„íŠ¼ì´ ì—†ìŠµë‹ˆë‹¤.");
         }
 
 
@@ -285,11 +285,11 @@ public class TraitScript : MonoBehaviour
 
     public void OnNextButtonPressed()
     {
-        // ¼±ÅÃµÈ Æ¯¼ºµéÀ» ÇÃ·¹ÀÌ¾î¿¡°Ô Àû¿ë
+        // ì„ íƒëœ íŠ¹ì„±ë“¤ì„ í”Œë ˆì´ì–´ì—ê²Œ ì ìš©
         Player.Instance.ApplySelectedTraits(selectedTraits);
 
 
-        // ´ÙÀ½ È­¸éÀ¸·Î ÀüÈ¯ (¿¹: Æ¯¼º ¼±ÅÃÀÌ ³¡³­ ÈÄ Ä³¸¯ÅÍ »ı¼º È­¸é)
+        // ë‹¤ìŒ í™”ë©´ìœ¼ë¡œ ì „í™˜ (ì˜ˆ: íŠ¹ì„± ì„ íƒì´ ëë‚œ í›„ ìºë¦­í„° ìƒì„± í™”ë©´)
        SceneManager.LoadScene("GameScene");
     }
 

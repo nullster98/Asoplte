@@ -1,65 +1,65 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 using TMPro;
+using UnityEngine;
+using UnityEngine.Serialization;
 
-public class GameManager : MonoBehaviour
+namespace Game
 {
-    [Header("Component")]
-    [SerializeField] private GameObject menu;
-    [SerializeField] private GameObject gameMenu;
-    [SerializeField] private GameObject GodSelect;
-    [SerializeField] private GameObject CharacterSelect;
-    [SerializeField] private GameObject SpeciesSelect;
-    [SerializeField] private GameObject TraitSelect;
-    [SerializeField] private TMP_Text FaithPoint;
-
-    public void Start()
+    public class GameManager : MonoBehaviour
     {
-        menu.SetActive(true);
-        StartGame();
+        [Header("Component")]
+        [SerializeField] private GameObject menu;
+        [SerializeField] private GameObject gameMenu;
+        [FormerlySerializedAs("GodSelect")] [SerializeField] private GameObject godSelect;
+        [FormerlySerializedAs("CharacterSelect")] [SerializeField] private GameObject characterSelect;
+        [FormerlySerializedAs("SpeciesSelect")] [SerializeField] private GameObject speciesSelect;
+        [FormerlySerializedAs("TraitSelect")] [SerializeField] private GameObject traitSelect;
+        [FormerlySerializedAs("FaithPoint")] [SerializeField] private TMP_Text faithPoint;
 
-        if (Player.Instance == null)
+        public void Start()
         {
-            Debug.LogWarning("Player.Instance°¡ ¾ø¾î¼­ »õ·Î¿î ÇÃ·¹ÀÌ¾î °´Ã¼¸¦ »ı¼ºÇÕ´Ï´Ù.");
-            GameObject playerObj = new GameObject("Player");
-            Player player = playerObj.AddComponent<Player>();
+            menu.SetActive(true);
+            StartGame();
+
+            if (Player.Instance == null)
+            {
+                Debug.LogWarning("Player.Instanceê°€ ì—†ì–´ì„œ ìƒˆë¡œìš´ í”Œë ˆì´ì–´ ê°ì²´ë¥¼ ìƒì„±í•©ë‹ˆë‹¤.");
+                GameObject playerObj = new GameObject("Player");
+                playerObj.AddComponent<Player>();
+            }
         }
-    }
 
-    public void Update()
-    {
-        FaithPoint.text = "½Å¾Ó Æ÷ÀÎÆ® : " + Player.Instance.GetFatihString();
-    }
+        public void Update()
+        {
+            faithPoint.text = "ì‹ ì•™ í¬ì¸íŠ¸ : " + Player.Instance.GetFatihString();
+        }
 
-    /*public void Load() //½ÃÀÛ¾À -> ¸ŞÀÎ¾À
+        /*public void Load() //ì‹œì‘ì”¬ -> ë©”ì¸ì”¬
     {
         SceneManager.LoadScene("MainScene");
     }
     */
 
 
-    public void GameStart()//¸ŞÀÎ ¾À¿¡¼­ °ÔÀÓ ½ÃÀÛÀ» ´©¸¦½Ã
-    {
-        menu.SetActive(false);
+        public void GameStart()//ë©”ì¸ ì”¬ì—ì„œ ê²Œì„ ì‹œì‘ì„ ëˆ„ë¥¼ì‹œ
+        {
+            menu.SetActive(false);
 
-        gameMenu.SetActive(true);
-        GodSelect.SetActive(true);
-    }
+            gameMenu.SetActive(true);
+            godSelect.SetActive(true);
+        }
 
-    public void StartGame()
-    {
-        gameMenu.SetActive(false);
-        GodSelect.SetActive(false);
-        CharacterSelect.SetActive(false);
-        SpeciesSelect.SetActive(false);
-        TraitSelect.SetActive(false);
-    }
+        private void StartGame()
+        {
+            gameMenu.SetActive(false);
+            godSelect.SetActive(false);
+            characterSelect.SetActive(false);
+            speciesSelect.SetActive(false);
+            traitSelect.SetActive(false);
+        }
 
-    public void ChangeSpeciesOn()
-    {
-        SpeciesSelect.SetActive(true);
+        public void ChangeSpeciesOn()
+        {
+            speciesSelect.SetActive(true);
+        }
     }
 }

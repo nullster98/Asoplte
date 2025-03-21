@@ -8,10 +8,10 @@ using UnityEngine.UI;
 
 public enum AcquisitionType
 {
-    Item,   // ¾ÆÀÌÅÛ
-    Equipment,  // Àåºñ
-    Trait,  // Æ¯¼º
-    Skill   // ½ºÅ³
+    Item,   // ì•„ì´í…œ
+    Equipment,  // ì¥ë¹„
+    Trait,  // íŠ¹ì„±
+    Skill   // ìŠ¤í‚¬
 }
 
 public class AcquisitionUI : MonoBehaviour
@@ -20,11 +20,11 @@ public class AcquisitionUI : MonoBehaviour
     [SerializeField] Image GetImage;
     [SerializeField] TMP_Text GetName;
     [SerializeField] TMP_Text GetDescription;
-    [SerializeField] Button confirmButton; // È®ÀÎ ¹öÆ° (¿¹: ÀåÂø, »ç¿ë, ½Àµæ)
-    [SerializeField] Button cancelButton; // Ãë¼Ò ¹öÆ°
+    [SerializeField] Button confirmButton; // í™•ì¸ ë²„íŠ¼ (ì˜ˆ: ì¥ì°©, ì‚¬ìš©, ìŠµë“)
+    [SerializeField] Button cancelButton; // ì·¨ì†Œ ë²„íŠ¼
 
-    private AcquisitionType currentType; // ÇöÀç UI¿¡ Ç¥½ÃµÈ Å¸ÀÔ
-    private object currentObject; // ÇöÀç UI¿¡ Ç¥½ÃµÈ µ¥ÀÌÅÍ (Item, Trait, Skill µî)
+    private AcquisitionType currentType; // í˜„ì¬ UIì— í‘œì‹œëœ íƒ€ì…
+    private object currentObject; // í˜„ì¬ UIì— í‘œì‹œëœ ë°ì´í„° (Item, Trait, Skill ë“±)
 
     private void Start()
     {
@@ -51,14 +51,14 @@ public class AcquisitionUI : MonoBehaviour
         currentType = type;
         currentObject = data;
 
-        // µ¥ÀÌÅÍ Å¸ÀÔº° UI ¾÷µ¥ÀÌÆ®
+        // ë°ì´í„° íƒ€ì…ë³„ UI ì—…ë°ì´íŠ¸
         switch (type)
         {
             case AcquisitionType.Item:
-                UpdateItemUI((Item)data);
+                UpdateItemUI((ItemData)data);
                 break;
             case AcquisitionType.Equipment:
-                UpdateItemUI((Item)data);
+                UpdateItemUI((ItemData)data);
                 break;
             /*case AcquisitionType.Trait:
                 UpdateTraitUI((Trait)data);
@@ -70,24 +70,24 @@ public class AcquisitionUI : MonoBehaviour
     }
 
 
-    private void UpdateItemUI(Item item)
+    private void UpdateItemUI(ItemData itemData)
     {
-        GetImage.sprite = item.ItemImg;
-        GetName.text = item.ItemName;
-        GetDescription.text = item.ItemDescription;
+        GetImage.sprite = itemData.ItemImg;
+        GetName.text = itemData.ItemName;
+        GetDescription.text = itemData.ItemDescription;
 
         confirmButton.onClick.RemoveAllListeners();
         confirmButton.onClick.AddListener(() =>
         {
-            if (item is Equipment equipment)  //  `item`ÀÌ `Equipment` Å¸ÀÔÀÎÁö È®ÀÎ
+            if (itemData is Equipment equipment)  //  `item`ì´ `Equipment` íƒ€ì…ì¸ì§€ í™•ì¸
             {
-                Player.Instance.EquipItem(equipment); // Ä³½ºÆÃ ÈÄ Àåºñ ÀåÂø
+                Player.Instance.EquipItem(equipment); // ìºìŠ¤íŒ… í›„ ì¥ë¹„ ì¥ì°©
    
                 
             }
-            else if (item is Consumable consumable)  //  `item`ÀÌ `Consumable` Å¸ÀÔÀÎÁö È®ÀÎ
+            else if (itemData is Consumable consumable)  //  `item`ì´ `Consumable` íƒ€ì…ì¸ì§€ í™•ì¸
             {
-                //Player.Instance.UseItem(consumable); //  Ä³½ºÆÃ ÈÄ ¾ÆÀÌÅÛ »ç¿ë
+                //Player.Instance.UseItem(consumable); //  ìºìŠ¤íŒ… í›„ ì•„ì´í…œ ì‚¬ìš©
             }
 
             CloseUI();
@@ -136,8 +136,8 @@ public class AcquisitionUI : MonoBehaviour
     public void GetTestSword()
     {
             
-            Item testItem = DatabaseManager.Instance.itemDatabase.GetItemByID(1001);
-            UpdateItemUI(testItem);
+            ItemData testItemData = DatabaseManager.Instance.itemDatabase.GetItemByID(1001);
+            UpdateItemUI(testItemData);
         
     }
 }

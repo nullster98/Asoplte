@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Item;
 using UnityEngine;
 using UnityEditor;
 
@@ -9,48 +10,48 @@ public class ItemCreator : MonoBehaviour
     [MenuItem("Game/Create All Items")]
     public static void CreateAllItems()
     {
-        Debug.Log("¸ğµç ¾ÆÀÌÅÛ »ı¼º ½ÃÀÛ...");
+        Debug.Log("ëª¨ë“  ì•„ì´í…œ ìƒì„± ì‹œì‘...");
 
-        // Àåºñ ¾ÆÀÌÅÛ (ÇÑ¼Õ°Ë)
-        CreateEquipment(1001, "ÇÑ¼Õ°Ë",  1500, 800, EquipmentType.LeftHand,
+        // ì¥ë¹„ ì•„ì´í…œ (í•œì†ê²€)
+        CreateEquipment(1001, "í•œì†ê²€",  1500, 800, EquipmentType.LeftHand,
             new List<ItemEffect>(),10,0);           
 
-        // Àåºñ ¾ÆÀÌÅÛ (ºÒÀÇ °Ë)
-        CreateEquipment(1002, "ºÒÀÇ °Ë", 2000, 1200, EquipmentType.LeftHand,
+        // ì¥ë¹„ ì•„ì´í…œ (ë¶ˆì˜ ê²€)
+        CreateEquipment(1002, "ë¶ˆì˜ ê²€", 2000, 1200, EquipmentType.LeftHand,
             new List<ItemEffect>
             {
-                new PoisonEffect(4, 3) // ¸Å ÅÏ 4 µ¥¹ÌÁö, 3ÅÏ Áö¼Ó
+                new PoisonEffect(4, 3) // ë§¤ í„´ 4 ë°ë¯¸ì§€, 3í„´ ì§€ì†
             }, 7, 0);
 
-        // ¼Ò¸ğÇ° ¾ÆÀÌÅÛ (HP Æ÷¼Ç)
-        CreateConsumable(2001, "HP Æ÷¼Ç",  500, 250,
+        // ì†Œëª¨í’ˆ ì•„ì´í…œ (HP í¬ì…˜)
+        CreateConsumable(2001, "HP í¬ì…˜",  500, 250,
             new List<ItemEffect>(), 50, 0, ItemTraget.Player);
 
-        // ¼Ò¸ğÇ° ¾ÆÀÌÅÛ (µ¶ Æ÷¼Ç - Àû¿ë)
-        CreateConsumable(2002, "µ¶ Æ÷¼Ç", 800, 400,
+        // ì†Œëª¨í’ˆ ì•„ì´í…œ (ë… í¬ì…˜ - ì ìš©)
+        CreateConsumable(2002, "ë… í¬ì…˜", 800, 400,
             new List<ItemEffect>
             {
                 new PoisonEffect(5, 3)
             }, 0, 0, ItemTraget.Enemy);
 
-        Debug.Log("¸ğµç ¾ÆÀÌÅÛÀÌ »ı¼ºµÇ¾ú½À´Ï´Ù.");
+        Debug.Log("ëª¨ë“  ì•„ì´í…œì´ ìƒì„±ë˜ì—ˆìŠµë‹ˆë‹¤.");
     }
 
-    // Àåºñ ¾ÆÀÌÅÛ »ı¼º ÇÔ¼ö
+    // ì¥ë¹„ ì•„ì´í…œ ìƒì„± í•¨ìˆ˜
     private static void CreateEquipment(int id, string name, int purchasePrice, int salePrice,
-        EquipmentType slot, List<ItemEffect> effects, float attack, float defense)
+        EquipmentType slot, List<ItemEffect> effects, int attack, int defense)
     {
-        Debug.Log($"Àåºñ ¾ÆÀÌÅÛ »ı¼º: {name}");
+        Debug.Log($"ì¥ë¹„ ì•„ì´í…œ ìƒì„±: {name}");
 
         Equipment newItem = new Equipment(id, name, purchasePrice, salePrice, slot, attack, defense, effects);
         AddItemToDatabase(newItem);
     }
 
-    // ¼Ò¸ğÇ° ¾ÆÀÌÅÛ »ı¼º ÇÔ¼ö
+    // ì†Œëª¨í’ˆ ì•„ì´í…œ ìƒì„± í•¨ìˆ˜
     private static void CreateConsumable(int id, string name, int purchasePrice, int salePrice,
          List<ItemEffect> effects, float healAmount, float manaRestore, ItemTraget target)
     {
-        Debug.Log($"¼Ò¸ğÇ° ¾ÆÀÌÅÛ »ı¼º: {name}");
+        Debug.Log($"ì†Œëª¨í’ˆ ì•„ì´í…œ ìƒì„±: {name}");
 
 
         Consumable newItem = new Consumable(id, name, purchasePrice, salePrice, healAmount, manaRestore, target, effects);
@@ -58,19 +59,19 @@ public class ItemCreator : MonoBehaviour
     }
 
 
-    // ¾ÆÀÌÅÛÀ» µ¥ÀÌÅÍº£ÀÌ½º¿¡ Ãß°¡ÇÏ´Â ÇÔ¼ö
-    private static void AddItemToDatabase(Item item)
+    // ì•„ì´í…œì„ ë°ì´í„°ë² ì´ìŠ¤ì— ì¶”ê°€í•˜ëŠ” í•¨ìˆ˜
+    private static void AddItemToDatabase(ItemData itemData)
     {
         if (DatabaseManager.Instance.itemDatabase != null)
         {
-            DatabaseManager.Instance.itemDatabase.ItemList.Add(item);
+            DatabaseManager.Instance.itemDatabase.ItemList.Add(itemData);
             EditorUtility.SetDirty(DatabaseManager.Instance.itemDatabase);
             AssetDatabase.SaveAssets();
-            Debug.Log($"{item.ItemName}ÀÌ(°¡) µ¥ÀÌÅÍº£ÀÌ½º¿¡ Ãß°¡µÇ¾ú½À´Ï´Ù!");
+            Debug.Log($"{itemData.ItemName}ì´(ê°€) ë°ì´í„°ë² ì´ìŠ¤ì— ì¶”ê°€ë˜ì—ˆìŠµë‹ˆë‹¤!");
         }
         else
         {
-            Debug.LogError("ItemDatabase¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù! Resources Æú´õ ³» °æ·Î¸¦ È®ÀÎÇÏ¼¼¿ä.");
+            Debug.LogError("ItemDatabaseë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤! Resources í´ë” ë‚´ ê²½ë¡œë¥¼ í™•ì¸í•˜ì„¸ìš”.");
         }
     }
 }

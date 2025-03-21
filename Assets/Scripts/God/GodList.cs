@@ -9,28 +9,28 @@ public class GodList : MonoBehaviour
     [MenuItem("Game/Create Default Gods")]
     public static void CreateGodDatabase()
     {
-        // ±âÁ¸ GodDatabase.assetÀ» Ã£±â
+        // ê¸°ì¡´ GodDatabase.assetì„ ì°¾ê¸°
         GodDatabase database = Resources.Load<GodDatabase>("Database/GodDatabase");
 
-        // ¸¸¾à ¾øÀ¸¸é »õ·Î »ı¼º
+        // ë§Œì•½ ì—†ìœ¼ë©´ ìƒˆë¡œ ìƒì„±
         if (database == null)
         {
             database = ScriptableObject.CreateInstance<GodDatabase>();
 
-            // °æ·Î¿¡ »õ·Î¿î µ¥ÀÌÅÍº£ÀÌ½º ÀúÀå
+            // ê²½ë¡œì— ìƒˆë¡œìš´ ë°ì´í„°ë² ì´ìŠ¤ ì €ì¥
             AssetDatabase.CreateAsset(database, "Assets/Resources/Database/GodDatabase.asset");
             AssetDatabase.SaveAssets();
 
-            Debug.Log("»õ·Î¿î GodDatabase.assetÀ» »ı¼ºÇß½À´Ï´Ù!");
+            Debug.Log("ìƒˆë¡œìš´ GodDatabase.assetì„ ìƒì„±í–ˆìŠµë‹ˆë‹¤!");
         }
 
-        // ½Å µ¥ÀÌÅÍ Ãß°¡
+        // ì‹  ë°ì´í„° ì¶”ê°€
 
-        // º¯°æ »çÇ× ÀúÀå
+        // ë³€ê²½ ì‚¬í•­ ì €ì¥
         EditorUtility.SetDirty(database);
         AssetDatabase.SaveAssets();
 
-        Debug.Log("±âº» ½Å µ¥ÀÌÅÍ¸¦ Ãß°¡Çß½À´Ï´Ù!");
+        Debug.Log("ê¸°ë³¸ ì‹  ë°ì´í„°ë¥¼ ì¶”ê°€í–ˆìŠµë‹ˆë‹¤!");
     }
 
     public static void CreateGod(int id, string name)

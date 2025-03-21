@@ -1,50 +1,43 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "EnemyDatabase", menuName = "Game/Enemy Database")]
 public class EnemyDatabase : ScriptableObject
 {
-    public List<EnemyData> EnemyList = new List<EnemyData>();
+    [SerializeField] private List<EnemyData> enemyList = new List<EnemyData>();
+
+    public ReadOnlyCollection<EnemyData> EnemyList => enemyList.AsReadOnly();
 
     public EnemyData GetEnemyByID(int? enemyID)
     {
-        return EnemyList.Find(enemy => enemy.EnemyID == enemyID);
+        if (!enemyID.HasValue) return null;
+        return enemyList.Find(enemy => enemy.EnemyID == enemyID);
     }
 
     public void AddEnemy(EnemyData enemy)
     {
         if (enemy == null)
         {
-            Debug.LogError("EnemyDatabase: Ãß°¡ÇÏ·Á´Â EnemyData°¡ nullÀÔ´Ï´Ù!");
+            Debug.LogError("EnemyDatabase: ì¶”ê°€í•˜ë ¤ëŠ” EnemyDataê°€ nullì…ë‹ˆë‹¤!");
             return;
         }
 
-        if (!(enemy is EnemyData))
-        {
-            Debug.LogError("EnemyDatabase: Ãß°¡ÇÏ·Á´Â µ¥ÀÌÅÍ°¡ EnemyData Å¸ÀÔÀÌ ¾Æ´Õ´Ï´Ù! ÇöÀç Å¸ÀÔ: " + enemy.GetType());
-            return;
-        }
-
-        EnemyList.Add(enemy);
-        Debug.Log($"Àû Ãß°¡ ¿Ï·á: {enemy.Name} (ID: {enemy.EnemyID})");
+        enemyList.Add(enemy);
+        Debug.Log($"ì  ì¶”ê°€ ì™„ë£Œ: {enemy.Name} (ID: {enemy.EnemyID})");
     }
 
-    public void ResetEnemyData()
-    {
-        EnemyList.Clear();
-    }
+    public void ResetEnemyData() => enemyList.Clear();
 
     public EnemyData GetRandomEnemy()
     {
-        if(EnemyList.Count == 0)
+        if (enemyList.Count == 0)
         {
-            Debug.LogError("µ¥ÀÌÅÍº£ÀÌ½º¿¡ ÀûÀÌ ¾øÀ½");
+            Debug.LogError("ë°ì´í„°ë² ì´ìŠ¤ì— ì ì´ ì—†ìŒ");
             return null;
         }
 
-        int randomIndex = Random.Range(0, EnemyList.Count);
-        return EnemyList[randomIndex];
+        return enemyList[Random.Range(0, enemyList.Count)];
     }
-
 }

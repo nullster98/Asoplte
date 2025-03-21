@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
-    //½Ì±ÛÅæ
+    //ì‹±ê¸€í†¤
     public static Player _instance;
     public static Player Instance
     {
@@ -27,19 +27,19 @@ public class Player : MonoBehaviour
         }
     }
 
-    //ÇÃ·¹ÀÌ¾î ±âº» ½ºÅİ
-    private Dictionary<string, float> stats = new Dictionary<string, float>()
+    //í”Œë ˆì´ì–´ ê¸°ë³¸ ìŠ¤í…Ÿ
+    private Dictionary<string, int> stats = new Dictionary<string, int>()
     {
-    { "Atk", 0 },          // °ø°İ·Â
-    { "Def", 0 },          // ¹æ¾î·Â
-    { "HP", 0 },          // ÃÖ´ë Ã¼·Â
-    { "MP", 0 },          // ÃÖ´ë ¸¶³ª
-    { "CurrentHP", 0 },   // ÇöÀç Ã¼·Â
-    { "CurrentMP", 0 },   // ÇöÀç ¸¶³ª
-    { "MentalStat", 0 },  // Á¤½Å·Â
-    { "CurrentMentalStat", 0 }, // ÇöÀç Á¤½Å·Â
-    { "FaithStat", 0 },   // ½Å¾Ó½É
-    { "Gold", 1000f }        // °ñµå
+    { "Atk", 0 },          // ê³µê²©ë ¥
+    { "Def", 0 },          // ë°©ì–´ë ¥
+    { "HP", 0 },          // ìµœëŒ€ ì²´ë ¥
+    { "MP", 0 },          // ìµœëŒ€ ë§ˆë‚˜
+    { "CurrentHP", 0 },   // í˜„ì¬ ì²´ë ¥
+    { "CurrentMP", 0 },   // í˜„ì¬ ë§ˆë‚˜
+    { "MentalStat", 0 },  // ì •ì‹ ë ¥
+    { "CurrentMentalStat", 0 }, // í˜„ì¬ ì •ì‹ ë ¥
+    { "FaithStat", 0 },   // ì‹ ì•™ì‹¬
+    { "Gold", 1000 }        // ê³¨ë“œ
 
     };
 
@@ -47,12 +47,12 @@ public class Player : MonoBehaviour
     private EquipUI equipUI;
 
 
-    public int MaxCost { get; set; } // ÄÚ½ºÆ®
-    public Sprite PlayerImg; //ÇÃ·¹ÀÌ¾î ÀÌ¹ÌÁö
+    public int MaxCost { get; set; } // ì½”ìŠ¤íŠ¸
+    [SerializeField] public Sprite PlayerImg; //í”Œë ˆì´ì–´ ì´ë¯¸ì§€
 
     public List<Trait> selectedTraits = new List<Trait>();
 
-    private float FaithPoint { get; set; } = 500f;//½Å¾ÓÆ÷ÀÎÆ®
+    private float FaithPoint { get; set; } = 500f;//ì‹ ì•™í¬ì¸íŠ¸
     private GodData selectedGod;
     //private RaceData selectedRace;
 
@@ -70,17 +70,17 @@ public class Player : MonoBehaviour
 
     private void Awake()
     {
-        // ½Ì±ÛÅæ ÆĞÅÏ ±¸Çö
+        // ì‹±ê¸€í†¤ íŒ¨í„´ êµ¬í˜„
         if (_instance == null)
         {
             _instance = this;
             DontDestroyOnLoad(gameObject);
-            Debug.Log("ÇÃ·¹ÀÌ¾î µ¥ÀÌÅÍ »ı¼º");
+            Debug.Log("í”Œë ˆì´ì–´ ë°ì´í„° ìƒì„±");
 
         }
         else
         {
-            Debug.Log("µ¥ÀÌÅÍ°¡ ÀÌ¹Ì Á¸ÀçÇÔ");
+            Debug.Log("ë°ì´í„°ê°€ ì´ë¯¸ ì¡´ì¬í•¨");
             Destroy(gameObject);
         }
 
@@ -92,27 +92,27 @@ public class Player : MonoBehaviour
     }
 
 
-    // Æ¯¼ºµéÀ» ÇÑ²¨¹ø¿¡ Àû¿ë
+    // íŠ¹ì„±ë“¤ì„ í•œêº¼ë²ˆì— ì ìš©
     public void ApplySelectedTraits(List<Trait> traits)
     {
         foreach (var trait in traits)
         {
             ApplyTraitEffect(trait);
-            selectedTraits.Add(trait); // ¼±ÅÃµÈ Æ¯¼º ¸®½ºÆ®¿¡ Ãß°¡
+            selectedTraits.Add(trait); // ì„ íƒëœ íŠ¹ì„± ë¦¬ìŠ¤íŠ¸ì— ì¶”ê°€
         }
     }
 
-    // Æ¯¼ºÀÇ È¿°ú¸¦ Àû¿ëÇÏ´Â ¸Ş¼­µå
+    // íŠ¹ì„±ì˜ íš¨ê³¼ë¥¼ ì ìš©í•˜ëŠ” ë©”ì„œë“œ
     private void ApplyTraitEffect(Trait trait)
     {
         switch (trait.TraitName)
         {
-            case "ºÒÅ¸´Â ¸¶·Â":
-                ChangeStat("Atk", GetStat("MP") * 0.1f);
+            case "ë¶ˆíƒ€ëŠ” ë§ˆë ¥":
+                // ChangeStat("Atk", GetStat("MP") * 0.1f);
                 break;
 
-            case "»ı¸íÀüÈ¯":
-                float excessHP = GetStat("CurrentHP") - GetStat("HP");
+            case "ìƒëª…ì „í™˜":
+                int excessHP = GetStat("CurrentHP") - GetStat("HP");
                 if (excessHP > 0)
                 {
                     ChangeStat("MP", excessHP);
@@ -120,17 +120,17 @@ public class Player : MonoBehaviour
                 }
                 break;
 
-            case "¾îµÎ¿î ½Ã¾ß":
-                // ÀûÀÇ Ã¼·ÂÀÌ º¸ÀÌÁö ¾Êµµ·Ï ¼³Á¤ (UI »óÅÂ ¾÷µ¥ÀÌÆ® ÇÊ¿ä)
+            case "ì–´ë‘ìš´ ì‹œì•¼":
+                // ì ì˜ ì²´ë ¥ì´ ë³´ì´ì§€ ì•Šë„ë¡ ì„¤ì • (UI ìƒíƒœ ì—…ë°ì´íŠ¸ í•„ìš”)
                 break;
 
-            case "¸¶³ªÀÇ ¿ª·ù":
-                // ¸¶³ª¸¦ »ç¿ëÇÏ´Â ½ºÅ³ÀÌ Ã¼·ÂÀ» ¼Ò¸ğÇÏ°Ô ÇÔ (½ºÅ³ ¹ßµ¿ ·ÎÁ÷ ¹İ¿µ ÇÊ¿ä)
+            case "ë§ˆë‚˜ì˜ ì—­ë¥˜":
+                // ë§ˆë‚˜ë¥¼ ì‚¬ìš©í•˜ëŠ” ìŠ¤í‚¬ì´ ì²´ë ¥ì„ ì†Œëª¨í•˜ê²Œ í•¨ (ìŠ¤í‚¬ ë°œë™ ë¡œì§ ë°˜ì˜ í•„ìš”)
                 break;
         }
     }
 
-    // ¼±ÅÃµÈ Æ¯¼ºÀÇ È¿°ú¸¦ Á¦°ÅÇÏ´Â ¸Ş¼­µåµµ ÇÊ¿äÇÒ °æ¿ì ±¸Çö °¡´É
+    // ì„ íƒëœ íŠ¹ì„±ì˜ íš¨ê³¼ë¥¼ ì œê±°í•˜ëŠ” ë©”ì„œë“œë„ í•„ìš”í•  ê²½ìš° êµ¬í˜„ ê°€ëŠ¥
 
 
     void Start()
@@ -177,7 +177,7 @@ public class Player : MonoBehaviour
     }
     #endregion
 
-    private void ApplyGodBonuses(GodData selectedGod) //½Å¾Ó ¼±ÅÃ¿¡ µû¸¥ Ãß°¡È¿°ú
+    private void ApplyGodBonuses(GodData selectedGod) //ì‹ ì•™ ì„ íƒì— ë”°ë¥¸ ì¶”ê°€íš¨ê³¼
     {
         foreach(var effect in selectedGod.GodStats)
         {
@@ -187,12 +187,12 @@ public class Player : MonoBehaviour
         selectedGod.SpecialEffect?.ApplyEffect(this);
     }
 
-    private void ApplyRaceBonuses() //Á¾Á· ¼±ÅÃ¿¡ µû¸¥ Ãß°¡È¿°ú
+    private void ApplyRaceBonuses() //ì¢…ì¡± ì„ íƒì— ë”°ë¥¸ ì¶”ê°€íš¨ê³¼
     {
         
     }
 
-    void StartStat() //ÃÊ±âÇÃ·¹ÀÌ¾î ½ºÅİ
+    void StartStat() //ì´ˆê¸°í”Œë ˆì´ì–´ ìŠ¤í…Ÿ
     {
         ChangeStat("Atk", 10);
         ChangeStat("Def", 10);
@@ -205,29 +205,29 @@ public class Player : MonoBehaviour
     }
 
 
-    public void ChangeStat(string statName, float value)
+    public void ChangeStat(string statName, int value)
     {
         if (stats.ContainsKey(statName))
         {
             stats[statName] += value;
-            Debug.Log($"{statName}ÀÌ(°¡) {value} ¸¸Å­ º¯°æµÊ. ÇöÀç °ª: {stats[statName]}");
+            Debug.Log($"{statName}ì´(ê°€) {value} ë§Œí¼ ë³€ê²½ë¨. í˜„ì¬ ê°’: {stats[statName]}");
         }
         else
         {
-            Debug.LogWarning($"{statName} ½ºÅÈÀÌ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù!");
+            Debug.LogWarning($"{statName} ìŠ¤íƒ¯ì´ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤!");
         }
     }
 
-    public float GetStat(string statName)
+    public int GetStat(string statName)
     {
         return stats.ContainsKey(statName) ? stats[statName] : 0;
     }
 
-    #region Àåºñ°ü·ÃÇÔ¼ö
-    //  Æ¯Á¤ ½½·ÔÀÇ ÀåÂøµÈ Àåºñ¸¦ °¡Á®¿À´Â ÇÔ¼ö
+    #region ì¥ë¹„ê´€ë ¨í•¨ìˆ˜
+    //  íŠ¹ì • ìŠ¬ë¡¯ì˜ ì¥ì°©ëœ ì¥ë¹„ë¥¼ ê°€ì ¸ì˜¤ëŠ” í•¨ìˆ˜
     public Equipment GetEquippedItem(EquipmentType slot)
     {
-        return equippedItem[(int)slot]; // ¹è¿­ ÀÎµ¦½º·Î Á÷Á¢ Á¢±Ù
+        return equippedItem[(int)slot]; // ë°°ì—´ ì¸ë±ìŠ¤ë¡œ ì§ì ‘ ì ‘ê·¼
     }
 
     public bool EquipItem(Equipment equipItem)
@@ -237,9 +237,9 @@ public class Player : MonoBehaviour
 
         RemoveEquip(equipItem);
 
-        //Àåºñ ÀåÂø
+        //ì¥ë¹„ ì¥ì°©
         equippedItem[slotIndex] = equipItem;
-        Debug.Log($"{equipItem.ItemName}À» {equipItem.EquipmentType}Ä­¿¡ ÀåÂøÇß½À´Ï´Ù.");
+        Debug.Log($"{equipItem.ItemName}ì„ {equipItem.EquipmentType}ì¹¸ì— ì¥ì°©í–ˆìŠµë‹ˆë‹¤.");
 
         ChangeStat("Atk", equipItem.AttackPoint);
         ChangeStat("Def", equipItem.DefensePoint);
@@ -252,10 +252,10 @@ public class Player : MonoBehaviour
     public void RemoveEquip(Equipment equipitem)
     {
         int slotIndex = ( int)equipitem.EquipmentType;
-        // Àåºñ Á¦°Å
+        // ì¥ë¹„ ì œê±°
         if (equippedItem[slotIndex] != null)
         {
-            Debug.Log($"±âÁ¸ Àåºñ {equippedItem[slotIndex].ItemName}À» ÇØÁ¦ÇÕ´Ï´Ù.");
+            Debug.Log($"ê¸°ì¡´ ì¥ë¹„ {equippedItem[slotIndex].ItemName}ì„ í•´ì œí•©ë‹ˆë‹¤.");
 
             ChangeStat("Atk", -equippedItem[slotIndex].AttackPoint);
             ChangeStat("Def", -equippedItem[slotIndex].DefensePoint);
@@ -270,7 +270,7 @@ public class Player : MonoBehaviour
     {
         foreach (var effect in equipItem.Effects)
         {
-            effect.ApplyEffect(this); // ÇÃ·¹ÀÌ¾î¿¡°Ô È¿°ú Àû¿ë
+            effect.ApplyEffect(this); // í”Œë ˆì´ì–´ì—ê²Œ íš¨ê³¼ ì ìš©
         }
     }
 
@@ -278,7 +278,7 @@ public class Player : MonoBehaviour
     {
         foreach (var effect in equipItem.Effects)
         {
-            effect.RemoveEffect(this); // ÇÃ·¹ÀÌ¾î¿¡°Ô Àû¿ëµÈ È¿°ú Á¦°Å
+            effect.RemoveEffect(this); // í”Œë ˆì´ì–´ì—ê²Œ ì ìš©ëœ íš¨ê³¼ ì œê±°
         }
     }*/
 

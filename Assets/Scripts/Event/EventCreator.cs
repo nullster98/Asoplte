@@ -1,133 +1,135 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EventCreator
+namespace Event
 {
-    public static void HandleNextEvent(EventHandler eventManager, string nextEventName)
+    public abstract class EventCreator
     {
-        if (!string.IsNullOrEmpty(nextEventName))
+        public static void HandleNextEvent(EventHandler eventManager, string nextEventName)
         {
-            eventManager.StartEvent(nextEventName);
-        }
-        else
-        {
-            EventData randomEvent = eventManager.GetRandomEvent();
-            if (randomEvent != null)
+            if (!string.IsNullOrEmpty(nextEventName))
             {
-                Debug.Log($"·£´ı ÀÌº¥Æ® ½ÇÇà : {randomEvent.EventName}");
-                eventManager.StartEvent(randomEvent.EventName);
+                eventManager.StartEvent(nextEventName);
             }
             else
             {
-                Debug.Log("´õ ÀÌ»ó »ç¿ë °¡´ÉÇÑ ÀÌº¥Æ®°¡ ¾ø½À´Ï´Ù");
+                EventData randomEvent = eventManager.GetRandomEvent();
+                if (randomEvent != null)
+                {
+                    Debug.Log($"ëœë¤ ì´ë²¤íŠ¸ ì‹¤í–‰ : {randomEvent.eventName}");
+                    eventManager.StartEvent(randomEvent.eventName);
+                }
+                else
+                {
+                    Debug.Log("ë” ì´ìƒ ì‚¬ìš© ê°€ëŠ¥í•œ ì´ë²¤íŠ¸ê°€ ì—†ìŠµë‹ˆë‹¤");
+                }
             }
         }
-    }
 
-    public static void GenerateEvents()
-    {
-        if (DatabaseManager.Instance.eventDatabase == null)
+        public static void GenerateEvents()
         {
-            Debug.LogError("EventDatabase°¡ ºñ¾îÀÖ½À´Ï´Ù.");
-            return;
-        }
-
-        Debug.Log("ÀÌº¥Æ® »ı¼º ½ÃÀÛ");
-
-        List<EventData> newEvents = new List<EventData>
-        {
-             CreateEvent("½ÃÀÛÀÌº¥Æ®", EventTag.None,
-                CreatePhase("½ÃÀÛÀÌº¥Æ®", 
-                    CreateChoice("´ÙÀ½·£´ı", nextEvent: "END"),
-                    CreateChoice("´ÙÀ½ÆäÀÌÁî", nextPhaseIndex: 1)
-                ),
-                CreatePhase("½ÃÀÛÀÌº¥Æ®2",
-                    CreateChoice("´ÙÀ½·£´ı", nextEvent: "END"),
-                    CreateChoice("¿ä±¸Æ¯¼º:½Å¾Ó", requiredTrait: "±»°ÇÇÑ ½Å¾Ó", nextEvent: "END")
-                )
-            ),
-
-            CreateEvent("ÀüÅõ ÀÌº¥Æ®", EventTag.Battle,
-                CreatePhase("ÀüÅõ ÀÌº¥Æ®", 
-                    CreateChoice("ÀüÅõ ½ÃÀÛ", battleTrigger: true, fixedID: 1)
-                )
-            ),
-
-            CreateEvent("º¸»ó ÀÌº¥Æ®", EventTag.Positive,
-                CreatePhase("º¸»ó ÀÌº¥Æ®",
-                    CreateChoice("»óÀÚ¸¦ ¿¬´Ù", nextEvent: "END")
-                 )
-            )
-        };
-
-
-        foreach (var newEvent in newEvents)
-        {
-            if (!DatabaseManager.Instance.eventDatabase.events.Exists(e => e.EventName == newEvent.EventName))
+            if (DatabaseManager.Instance.eventDatabase == null)
             {
-                DatabaseManager.Instance.eventDatabase.events.Add(newEvent);
-                Debug.Log($"»õ·Î¿î ÀÌº¥Æ® Ãß°¡µÊ: {newEvent.EventName}");
+                Debug.LogError("EventDatabaseê°€ ë¹„ì–´ìˆìŠµë‹ˆë‹¤.");
+                return;
             }
+
+            Debug.Log("ì´ë²¤íŠ¸ ìƒì„± ì‹œì‘");
+
+            List<EventData> newEvents = new List<EventData>
+            {
+                CreateEvent("ì‹œì‘ì´ë²¤íŠ¸", EventTag.None,
+                    CreatePhase("ì‹œì‘ì´ë²¤íŠ¸", 
+                        CreateChoice("ë‹¤ìŒëœë¤", nextEvent: "END"),
+                        CreateChoice("ë‹¤ìŒí˜ì´ì¦ˆ", nextPhaseIndex: 1)
+                    ),
+                    CreatePhase("ì‹œì‘ì´ë²¤íŠ¸2",
+                        CreateChoice("ë‹¤ìŒëœë¤", nextEvent: "END"),
+                        CreateChoice("ìš”êµ¬íŠ¹ì„±:ì‹ ì•™", requiredTrait: "êµ³ê±´í•œ ì‹ ì•™", nextEvent: "END")
+                    )
+                ),
+
+                CreateEvent("ì „íˆ¬ ì´ë²¤íŠ¸", EventTag.Battle,
+                    CreatePhase("ì „íˆ¬ ì´ë²¤íŠ¸", 
+                        CreateChoice("ì „íˆ¬ ì‹œì‘", battleTrigger: true, fixedID: 1)
+                    )
+                ),
+
+                CreateEvent("ë³´ìƒ ì´ë²¤íŠ¸", EventTag.Positive,
+                    CreatePhase("ë³´ìƒ ì´ë²¤íŠ¸",
+                        CreateChoice("ìƒìë¥¼ ì—°ë‹¤", nextEvent: "END")
+                    )
+                )
+            };
+
+
+            foreach (var newEvent in newEvents)
+            {
+                if (!DatabaseManager.Instance.eventDatabase.events.Exists(e => e.eventName == newEvent.eventName))
+                {
+                    DatabaseManager.Instance.eventDatabase.events.Add(newEvent);
+                    Debug.Log($"ìƒˆë¡œìš´ ì´ë²¤íŠ¸ ì¶”ê°€ë¨: {newEvent.eventName}");
+                }
+            }
+
+            SaveEventDatabase();
+        }
+        private static void SaveEventDatabase()
+        {
+            Debug.Log("EventDatabase ì €ì¥ ì¤‘...");
+            UnityEditor.EditorUtility.SetDirty(DatabaseManager.Instance.eventDatabase);
+            UnityEditor.AssetDatabase.SaveAssets();
+            UnityEditor.AssetDatabase.Refresh();
+            Debug.Log("EventDatabase ì €ì¥ ì™„ë£Œ!");
         }
 
-        SaveEventDatabase();
-    }
-    private static void SaveEventDatabase()
-    {
-        Debug.Log("EventDatabase ÀúÀå Áß...");
-        UnityEditor.EditorUtility.SetDirty(DatabaseManager.Instance.eventDatabase);
-        UnityEditor.AssetDatabase.SaveAssets();
-        UnityEditor.AssetDatabase.Refresh();
-        Debug.Log("EventDatabase ÀúÀå ¿Ï·á!");
-    }
-
-    //ÀÌº¥Æ® »ı¼º ÇïÆÛ ÇÔ¼ö
-    private static EventData CreateEvent(string name, EventTag type, params EventPhase[] phases)
-    {
-        return new EventData
+        //ì´ë²¤íŠ¸ ìƒì„± í—¬í¼ í•¨ìˆ˜
+        private static EventData CreateEvent(string name, EventTag type, params EventPhase[] phases)
         {
-            EventName = name,
-            EventType = type,
-            Phases = new List<EventPhase>(phases)
-        };
-    }
+            return new EventData
+            {
+                eventName = name,
+                eventType = type,
+                phases = new List<EventPhase>(phases)
+            };
+        }
 
-    //ÀÌº¥Æ® ÆäÀÌÁî »ı¼º ÇïÆÛ ÇÔ¼ö
-    private static EventPhase CreatePhase(string phaseName, params EventChoice[] choices)
-    {
-        EventPhase newEventPhase = new EventPhase
+        //ì´ë²¤íŠ¸ í˜ì´ì¦ˆ ìƒì„± í—¬í¼ í•¨ìˆ˜
+        private static EventPhase CreatePhase(string phaseName, params EventChoice[] choices)
         {
-            PhaseName = phaseName,          
-            Choices = new List<EventChoice>(choices)
-        };
+            EventPhase newEventPhase = new EventPhase
+            {
+                phaseName = phaseName,          
+                choices = new List<EventChoice>(choices)
+            };
 
-        newEventPhase.LoadEventImage();
-        newEventPhase.GetDescription();
-        return newEventPhase;
-    }
+            newEventPhase.LoadEventImage();
+            newEventPhase.GetDescription();
+            return newEventPhase;
+        }
 
-    //¼±ÅÃÁö »ı¼º ÇïÆÛ ÇÔ¼ö
-    private static EventChoice CreateChoice(
-        string choiceName, string nextEvent = null, int? nextPhaseIndex = null,
-        string requiredTrait = null, bool battleTrigger = false, int? fixedID = null,
-        bool acquisitionTrigger = false, AcquisitionType? acqType = null, int? acqID = null)
-    {
-        return new EventChoice
+        //ì„ íƒì§€ ìƒì„± í—¬í¼ í•¨ìˆ˜
+        private static EventChoice CreateChoice(
+            string choiceName, string nextEvent = null, int? nextPhaseIndex = null,
+            string requiredTrait = null, bool battleTrigger = false, int? fixedID = null,
+            bool acquisitionTrigger = false, AcquisitionType? acqType = null, int? acqID = null)
         {
-            ChoiceName = choiceName,
-            NextEventName = nextEvent,
-            NextPhaseIndex = (int)nextPhaseIndex,
-            RequiredTraits = requiredTrait,
-            BattleTrigger = battleTrigger,
-            FixedID = fixedID,
-            AcquisitionTrigger = acquisitionTrigger,
-            AcqType = acqType,
-            AcqID = acqID
+            return new EventChoice
+            {
+                choiceName = choiceName,
+                nextEventName = nextEvent,
+                nextPhaseIndex = (int)nextPhaseIndex,
+                requiredTraits = requiredTrait,
+                battleTrigger = battleTrigger,
+                FixedID = fixedID,
+                acquisitionTrigger = acquisitionTrigger,
+                AcqType = acqType,
+                AcqID = acqID
 
-        };
-    }
+            };
+        }
 
   
+    }
 }
 

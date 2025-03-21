@@ -9,11 +9,11 @@ public class GodUI : MonoBehaviour
 {
     [SerializeField] private GodDatabase godDatabase;
     private int currentIndex = 0;
-    public Image mainImage; // °¡¿îµ¥ ¸ŞÀÎ ÀÌ¹ÌÁö
-    public Image leftImage; // ¿ŞÂÊ ÀÌ¹ÌÁö
-    public Image rightImage; // ¿À¸¥ÂÊ ÀÌ¹ÌÁö
-    public TMP_Text nameText; // ÀÌ¸§ ÅØ½ºÆ®
-    public TMP_Text infoText; // Á¤º¸ ÅØ½ºÆ®
+    public Image mainImage; // ê°€ìš´ë° ë©”ì¸ ì´ë¯¸ì§€
+    public Image leftImage; // ì™¼ìª½ ì´ë¯¸ì§€
+    public Image rightImage; // ì˜¤ë¥¸ìª½ ì´ë¯¸ì§€
+    public TMP_Text nameText; // ì´ë¦„ í…ìŠ¤íŠ¸
+    public TMP_Text infoText; // ì •ë³´ í…ìŠ¤íŠ¸
     public Player player;
 
     [SerializeField] private GameObject GodSelect;
@@ -26,7 +26,7 @@ public class GodUI : MonoBehaviour
     {
         if (godDatabase == null || godDatabase.GodList.Count == 0)
         {
-            Debug.LogWarning("GodDatabase°¡ ºñ¾î ÀÖ½À´Ï´Ù! ÀÎ½ºÆåÅÍ¿¡¼­ ¼³Á¤ÇÏ¼¼¿ä.");
+            Debug.LogWarning("GodDatabaseê°€ ë¹„ì–´ ìˆìŠµë‹ˆë‹¤! ì¸ìŠ¤í™í„°ì—ì„œ ì„¤ì •í•˜ì„¸ìš”.");
             return;
         }
 
@@ -49,7 +49,7 @@ public class GodUI : MonoBehaviour
 
     private void UpdateUI()
     {
-        if (godDatabase.GodList.Count == 0) return; // ¸®½ºÆ®°¡ ºñ¾î ÀÖ´ÂÁö È®ÀÎ
+        if (godDatabase.GodList.Count == 0) return; // ë¦¬ìŠ¤íŠ¸ê°€ ë¹„ì–´ ìˆëŠ”ì§€ í™•ì¸
 
         GodData currentImage = godDatabase.GetGodByIndex(currentIndex);
 
@@ -58,19 +58,19 @@ public class GodUI : MonoBehaviour
         infoText.text = currentImage.GetDescription();
         GodBackground.sprite = currentImage.GetBackgroundImage();
 
-        // ¿ŞÂÊ°ú ¿À¸¥ÂÊ ÀÌ¹ÌÁö °»½Å
+        // ì™¼ìª½ê³¼ ì˜¤ë¥¸ìª½ ì´ë¯¸ì§€ ê°±ì‹ 
         int leftIndex = (currentIndex - 1 + godDatabase.GodList.Count) % godDatabase.GodList.Count;
         int rightIndex = (currentIndex + 1) % godDatabase.GodList.Count;
 
         leftImage.sprite = godDatabase.GetGodByIndex(leftIndex).GetGodImage();
         rightImage.sprite = godDatabase.GetGodByIndex(rightIndex).GetGodImage();
 
-        // ¿ŞÂÊ°ú ¿À¸¥ÂÊ ÀÌ¹ÌÁö¸¦ Èæ¹éÀ¸·Î º¯È¯
+        // ì™¼ìª½ê³¼ ì˜¤ë¥¸ìª½ ì´ë¯¸ì§€ë¥¼ í‘ë°±ìœ¼ë¡œ ë³€í™˜
         leftImage.color = Color.gray;
         rightImage.color = Color.gray;
     }
 
-    public void GodSelectToCharacterSelect()//½Å¾Ó¼±ÅÃ¿¡¼­ Á¾Á·¼±ÅÃÀ¸·Î ³Ñ¾î°¡´Â ¹öÆ°
+    public void GodSelectToCharacterSelect()//ì‹ ì•™ì„ íƒì—ì„œ ì¢…ì¡±ì„ íƒìœ¼ë¡œ ë„˜ì–´ê°€ëŠ” ë²„íŠ¼
     {
         GodSelect.SetActive(false);
         CharacterSelect.SetActive(true);

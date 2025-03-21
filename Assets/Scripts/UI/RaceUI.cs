@@ -19,8 +19,8 @@ public class DerivedCharacter
 
     [TextArea]
     public string UnlockHint;
-    public float RequireFaith; // ÇØ±İ ºñ¿ë
-    public bool IsUnlocked = false; // È°¼ºÈ­ »óÅÂ
+    public float RequireFaith; // í•´ê¸ˆ ë¹„ìš©
+    public bool IsUnlocked = false; // í™œì„±í™” ìƒíƒœ
 }
 
 [System.Serializable]
@@ -30,29 +30,29 @@ public class Tribe
     public Sprite OffRaceImg;
     public string RaceName;
     //public Race race;
-    public float RequireFaith; // ÇØ±İ ºñ¿ë
+    public float RequireFaith; // í•´ê¸ˆ ë¹„ìš©
 
-    // ÆÄ»ı Ä³¸¯ÅÍ ¸®½ºÆ® Ãß°¡
+    // íŒŒìƒ ìºë¦­í„° ë¦¬ìŠ¤íŠ¸ ì¶”ê°€
     public List<DerivedCharacter> DerivedCharacters;
 
-    public bool IsUnlocked = false; // È°¼ºÈ­ »óÅÂ
+    public bool IsUnlocked = false; // í™œì„±í™” ìƒíƒœ
 }
 
 public class RaceUI : MonoBehaviour
 {
-    [SerializeField] private Image MainImg; // ¼±ÅÃµÈ Á¾Á·ÀÇ ¸ŞÀÎ ÀÌ¹ÌÁö
-    [SerializeField] private TMP_Text NameArea; // ¼±ÅÃµÈ Á¾Á· ÀÌ¸§
-    [SerializeField] private TMP_Text DescriptionArea; // Á¾Á· ¼³¸í
-    [SerializeField] private List<Tribe> raceList = new List<Tribe>(); // Á¾Á· ¸®½ºÆ®
-    [SerializeField] private GameObject RaceCollection; // Á¾Á· ¼±ÅÃ Ã¢
-    [SerializeField] private Transform buttonContainer; // Scroll ViewÀÇ Content
-    [SerializeField] private Button raceButtonPrefab; // ¹öÆ° ÇÁ¸®ÆÕ
+    [SerializeField] private Image MainImg; // ì„ íƒëœ ì¢…ì¡±ì˜ ë©”ì¸ ì´ë¯¸ì§€
+    [SerializeField] private TMP_Text NameArea; // ì„ íƒëœ ì¢…ì¡± ì´ë¦„
+    [SerializeField] private TMP_Text DescriptionArea; // ì¢…ì¡± ì„¤ëª…
+    [SerializeField] private List<Tribe> raceList = new List<Tribe>(); // ì¢…ì¡± ë¦¬ìŠ¤íŠ¸
+    [SerializeField] private GameObject RaceCollection; // ì¢…ì¡± ì„ íƒ ì°½
+    [SerializeField] private Transform buttonContainer; // Scroll Viewì˜ Content
+    [SerializeField] private Button raceButtonPrefab; // ë²„íŠ¼ í”„ë¦¬íŒ¹
     [SerializeField] private GameObject TratiSelect;
     [SerializeField] private GameObject GodSelect;
-    [SerializeField] private Button unlockButton; // ÇØ±İ ¹öÆ°
+    [SerializeField] private Button unlockButton; // í•´ê¸ˆ ë²„íŠ¼
 
-    private int currentRaceIndex = 0; // ¼±ÅÃµÈ Á¾Á·ÀÇ ÀÎµ¦½º
-    private int currentCharacterIndex = 0; // ¼±ÅÃµÈ ÆÄ»ı Ä³¸¯ÅÍÀÇ ÀÎµ¦½º
+    private int currentRaceIndex = 0; // ì„ íƒëœ ì¢…ì¡±ì˜ ì¸ë±ìŠ¤
+    private int currentCharacterIndex = 0; // ì„ íƒëœ íŒŒìƒ ìºë¦­í„°ì˜ ì¸ë±ìŠ¤
     [SerializeField] private Sprite QuestionImg;
     [SerializeField] private Image LeftImg;
     [SerializeField] private Image RightImg;
@@ -67,7 +67,7 @@ public class RaceUI : MonoBehaviour
         HideDerivation();
     }
 
-    // Á¾Á· ¹öÆ° »ı¼º ¹× ÃÊ±âÈ­
+    // ì¢…ì¡± ë²„íŠ¼ ìƒì„± ë° ì´ˆê¸°í™”
     private void CreateRaceButtons()
     {
         if (raceList == null || raceList.Count == 0)
@@ -87,11 +87,11 @@ public class RaceUI : MonoBehaviour
         }
     }
 
-    // Á¾Á· ¼±ÅÃ ¸Ş¼­µå
+    // ì¢…ì¡± ì„ íƒ ë©”ì„œë“œ
     private void SelectRace(int raceIndex)
     {
         currentRaceIndex = raceIndex;
-        currentCharacterIndex = 0; // Ç×»ó Ã¹ ¹øÂ° ÆÄ»ı Ä³¸¯ÅÍ¸¦ º¸¿©ÁÜ
+        currentCharacterIndex = 0; // í•­ìƒ ì²« ë²ˆì§¸ íŒŒìƒ ìºë¦­í„°ë¥¼ ë³´ì—¬ì¤Œ
 
         Tribe selectedRace = raceList[currentRaceIndex];
         MainImg.sprite = selectedRace.RaceImg;
@@ -101,7 +101,7 @@ public class RaceUI : MonoBehaviour
 
         EnsureMinimumCharacters(selectedRace);
 
-        // Ã¹ ¹øÂ° ÆÄ»ı Ä³¸¯ÅÍ UI ¾÷µ¥ÀÌÆ®
+        // ì²« ë²ˆì§¸ íŒŒìƒ ìºë¦­í„° UI ì—…ë°ì´íŠ¸
         if (selectedRace.DerivedCharacters.Count > 0)
         {
             SelectDerivedCharacter(0);
@@ -110,7 +110,7 @@ public class RaceUI : MonoBehaviour
 
     private void EnsureMinimumCharacters(Tribe tribe)
     {
-        // ÆÄ»ı Ä³¸¯ÅÍ°¡ 3°³ ¹Ì¸¸ÀÌ¸é ÀÚµ¿À¸·Î Ãß°¡
+        // íŒŒìƒ ìºë¦­í„°ê°€ 3ê°œ ë¯¸ë§Œì´ë©´ ìë™ìœ¼ë¡œ ì¶”ê°€
         while (tribe.DerivedCharacters.Count < 3)
         {
             DerivedCharacter placeholderCharacter = new DerivedCharacter
@@ -119,10 +119,10 @@ public class RaceUI : MonoBehaviour
                 CharacterImg = QuestionImg,
                 OnImg = QuestionImg,
                 OffImg = QuestionImg,
-                RequireFaith = 0f, // ±âº»°ª ¼³Á¤
+                RequireFaith = 0f, // ê¸°ë³¸ê°’ ì„¤ì •
                 CharacterDescription = "???",
                 CharacterStat = "???",
-                UnlockHint = "ÁØºñÁß ÀÔ´Ï´Ù."
+                UnlockHint = "ì¤€ë¹„ì¤‘ ì…ë‹ˆë‹¤."
             };
 
             tribe.DerivedCharacters.Add(placeholderCharacter);
@@ -138,7 +138,7 @@ public class RaceUI : MonoBehaviour
             return;
 
         DerivedCharacter selectedCharacter = currentTribe.DerivedCharacters[currentCharacterIndex];
-        // Ä³¸¯ÅÍ°¡ ÇØ±İµÇ¾ú´ÂÁö ¿©ºÎ¿¡ µû¶ó ´Ù¸¥ Á¤º¸¸¦ Ç¥½Ã
+        // ìºë¦­í„°ê°€ í•´ê¸ˆë˜ì—ˆëŠ”ì§€ ì—¬ë¶€ì— ë”°ë¼ ë‹¤ë¥¸ ì •ë³´ë¥¼ í‘œì‹œ
 
         bool isUnknown = selectedCharacter.CharacterName == "Unknown";
 
@@ -146,7 +146,7 @@ public class RaceUI : MonoBehaviour
         {
             MainImg.sprite = QuestionImg;
             NameArea.text = "???";
-            DescriptionArea.text = "ÁØºñÁßÀÎ Ä³¸¯ÅÍÀÔ´Ï´Ù.";
+            DescriptionArea.text = "ì¤€ë¹„ì¤‘ì¸ ìºë¦­í„°ì…ë‹ˆë‹¤.";
             ConfigureButton(false, 0f, true);
         }
 
@@ -156,16 +156,16 @@ public class RaceUI : MonoBehaviour
             NameArea.text = selectedCharacter.CharacterName;
             DescriptionArea.text = $"{selectedCharacter.CharacterName} <sprite=0>\n\n{selectedCharacter.CharacterDescription}\n\n{selectedCharacter.CharacterStat}";
 
-            // ¹öÆ°À» '´ÙÀ½ ´Ü°è'·Î ¼³Á¤
+            // ë²„íŠ¼ì„ 'ë‹¤ìŒ ë‹¨ê³„'ë¡œ ì„¤ì •
             ConfigureButton(false);
         }
         else
         {
-            MainImg.sprite = selectedCharacter.OffImg; // ÇØ±İµÇÁö ¾ÊÀº °æ¿ì OffImg »ç¿ë
+            MainImg.sprite = selectedCharacter.OffImg; // í•´ê¸ˆë˜ì§€ ì•Šì€ ê²½ìš° OffImg ì‚¬ìš©
             NameArea.text = "???";
-            DescriptionArea.text = $"{selectedCharacter.UnlockHint}\n\nÇØ±İ ºñ¿ë: {selectedCharacter.RequireFaith} ½Å¾Ó ÀçÈ­";
+            DescriptionArea.text = $"{selectedCharacter.UnlockHint}\n\ní•´ê¸ˆ ë¹„ìš©: {selectedCharacter.RequireFaith} ì‹ ì•™ ì¬í™”";
 
-            // ¹öÆ°À» 'ÇØ±İÇÏ±â'·Î ¼³Á¤
+            // ë²„íŠ¼ì„ 'í•´ê¸ˆí•˜ê¸°'ë¡œ ì„¤ì •
             ConfigureButton(true, selectedCharacter.RequireFaith);
         }
 
@@ -176,29 +176,29 @@ public class RaceUI : MonoBehaviour
     {
         if (isUnavailable)
         {
-            //¼±ÅÃ ºÒ°¡ ¹öÆ°À¸·Î º¯°æ
-            unlockButton.GetComponentInChildren<TMP_Text>().text = "¼±ÅÃºÒ°¡";
+            //ì„ íƒ ë¶ˆê°€ ë²„íŠ¼ìœ¼ë¡œ ë³€ê²½
+            unlockButton.GetComponentInChildren<TMP_Text>().text = "ì„ íƒë¶ˆê°€";
             unlockButton.onClick.RemoveAllListeners();
             unlockButton.interactable = false;
         }
 
         else if (isUnlock)
         {
-            // ÇØ±İÇÏ±â ¹öÆ° ¼³Á¤
-            unlockButton.GetComponentInChildren<TMP_Text>().text = "ÇØ±İÇÏ±â";
+            // í•´ê¸ˆí•˜ê¸° ë²„íŠ¼ ì„¤ì •
+            unlockButton.GetComponentInChildren<TMP_Text>().text = "í•´ê¸ˆí•˜ê¸°";
             unlockButton.onClick.RemoveAllListeners();
             unlockButton.onClick.AddListener(UnlockCharacter);
 
-            // ½Å¾Ó Æ÷ÀÎÆ®°¡ ÃæºĞÇÑÁö È®ÀÎÇÏ¿© ¹öÆ° È°¼ºÈ­/ºñÈ°¼ºÈ­
+            // ì‹ ì•™ í¬ì¸íŠ¸ê°€ ì¶©ë¶„í•œì§€ í™•ì¸í•˜ì—¬ ë²„íŠ¼ í™œì„±í™”/ë¹„í™œì„±í™”
             unlockButton.interactable = Player.Instance.GetFaithPoint() >= cost;
         }
         else
         {
-            // ´ÙÀ½ ´Ü°è ¹öÆ° ¼³Á¤
-            unlockButton.GetComponentInChildren<TMP_Text>().text = "´ÙÀ½´Ü°è";
+            // ë‹¤ìŒ ë‹¨ê³„ ë²„íŠ¼ ì„¤ì •
+            unlockButton.GetComponentInChildren<TMP_Text>().text = "ë‹¤ìŒë‹¨ê³„";
             unlockButton.onClick.RemoveAllListeners();
             unlockButton.onClick.AddListener(ChcToTrait);
-            unlockButton.interactable = true; // Ç×»ó È°¼ºÈ­
+            unlockButton.interactable = true; // í•­ìƒ í™œì„±í™”
         }
 
         unlockButton.gameObject.SetActive(true);
@@ -211,14 +211,14 @@ public class RaceUI : MonoBehaviour
         if (!selectedCharacter.IsUnlocked && Player.Instance.SpendFaith(selectedCharacter.RequireFaith))
         {
             selectedCharacter.IsUnlocked = true;
-            Debug.Log($"{selectedCharacter.CharacterName}ÀÌ(°¡) ÇØ±İµÇ¾ú½À´Ï´Ù!");
+            Debug.Log($"{selectedCharacter.CharacterName}ì´(ê°€) í•´ê¸ˆë˜ì—ˆìŠµë‹ˆë‹¤!");
 
-            // UI ¾÷µ¥ÀÌÆ®
+            // UI ì—…ë°ì´íŠ¸
             SelectDerivedCharacter(currentCharacterIndex);
         }
         else
         {
-            Debug.Log("½Å¾Ó ÀçÈ­°¡ ºÎÁ·ÇÕ´Ï´Ù.");
+            Debug.Log("ì‹ ì•™ ì¬í™”ê°€ ë¶€ì¡±í•©ë‹ˆë‹¤.");
             return;
         }
     }
@@ -284,7 +284,7 @@ public class RaceUI : MonoBehaviour
         }
     }
 
-    #region ÀÌµ¿¹öÆ°
+    #region ì´ë™ë²„íŠ¼
     public void MainToSelect()
     {
         RaceCollection.SetActive(true);
@@ -293,9 +293,9 @@ public class RaceUI : MonoBehaviour
     public void ChcToTrait()
     {
         Player.Instance.PlayerImg = MainImg.sprite;
-        Debug.Log($"PlayerImg º¯°æµÊ: {Player.Instance.PlayerImg}"); // µğ¹ö±ë ÄÚµå Ãß°¡
+        Debug.Log($"PlayerImg ë³€ê²½ë¨: {Player.Instance.PlayerImg}"); // ë””ë²„ê¹… ì½”ë“œ ì¶”ê°€
 
-        //FindObjectOfType<PlayerUIManager>().UpdatePlayerUI(Player.Instance); // UI ¾÷µ¥ÀÌÆ®
+        //FindObjectOfType<PlayerUIManager>().UpdatePlayerUI(Player.Instance); // UI ì—…ë°ì´íŠ¸
         this.gameObject.SetActive(false);
         TratiSelect.SetActive(true);
     }

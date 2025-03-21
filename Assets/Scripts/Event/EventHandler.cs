@@ -1,160 +1,164 @@
-using System.Collections;
 using System.Collections.Generic;
+using Game;
 using UnityEngine;
 
-public class EventHandler
+namespace Event
 {
-
-    public EventChoice SelectedChoice { get; private set; }
-    private EventData currentEvent;
-    private int currentPhaseIndex = 0;
-
-    private BattleManager battleManager;
-    private AcquisitionUI acquisitionUI;
-
-    public EventHandler(BattleManager battlemanager, AcquisitionUI acquisitionUI)
+    public class EventHandler
     {
-        this.battleManager = battlemanager;
-        this.acquisitionUI = acquisitionUI;
-    }
+        private EventChoice SelectedChoice { get; set; }
+        private EventData currentEvent;
+        private int currentPhaseIndex;
 
-    public void StartEvent(string eventName)
-    {
-        if (DatabaseManager.Instance.eventDatabase == null)
+        private readonly BattleManager battleManager;
+        private readonly AcquisitionUI acquisitionUI;
+
+        public EventHandler(BattleManager battlemanager, AcquisitionUI acquisitionUI)
         {
-            Debug.LogError("ÀÌº¥Æ® µ¥ÀÌÅÍº£ÀÌ½º°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù!");
-            return;
+            this.battleManager = battlemanager;
+            this.acquisitionUI = acquisitionUI;
         }
 
-        currentEvent = DatabaseManager.Instance.eventDatabase.GetEventByName(eventName);
-
-        if (currentEvent == null)
+        public void StartEvent(string eventName)
         {
-            Debug.LogError($"ÀÌº¥Æ® '{eventName}'À» Ã£À» ¼ö ¾ø½À´Ï´Ù!");
-            return;
-        }
-
-        Debug.Log($"ÀÌº¥Æ® ½ÃÀÛ: {eventName}");
-
-        currentPhaseIndex = 0;
-        ProcessPhase();
-    }
-
-    private void ProcessPhase()
-    {
-        if (currentEvent == null || currentEvent.Phases == null || currentEvent.Phases.Count == 0)
-        {
-            Debug.LogWarning("ÀÌº¥Æ®¿¡ À¯È¿ÇÑ ÆäÀÌÁî°¡ ¾ø½À´Ï´Ù! ÀÌº¥Æ® Á¾·á.");
-            HandleEventEnd();
-            return;
-        }
-
-        if (currentPhaseIndex >= currentEvent.Phases.Count)
-        {
-            Debug.Log("ÀÌº¥Æ® Á¾·á");
-            HandleEventEnd();
-            return;
-        }
-
-        EventPhase phase = currentEvent.Phases[currentPhaseIndex];
-
-        Debug.Log($"ÀÌº¥Æ® ÁøÇà Áß: {phase.PhaseName}");
-
-        List<EventChoice> availableChoices = new List<EventChoice>();
-
-        foreach (var choice in phase.Choices)
-        {
-            if (choice.CanPlayerSelect(Player.Instance.selectedTraits))
+            if (DatabaseManager.Instance.eventDatabase == null)
             {
-                availableChoices.Add(choice);
+                Debug.LogError("ì´ë²¤íŠ¸ ë°ì´í„°ë² ì´ìŠ¤ê°€ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤!");
+                return;
+            }
+
+            currentEvent = DatabaseManager.Instance.eventDatabase.GetEventByName(eventName);
+
+            if (currentEvent == null)
+            {
+                Debug.LogError($"ì´ë²¤íŠ¸ '{eventName}'ì„ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤!");
+                return;
+            }
+
+            Debug.Log($"ì´ë²¤íŠ¸ ì‹œì‘: {eventName}");
+
+            currentPhaseIndex = 0;
+            ProcessPhase();
+        }
+
+        private void ProcessPhase()
+        {
+            if (currentEvent == null || currentEvent.phases == null || currentEvent.phases.Count == 0)
+            {
+                Debug.LogWarning("ì´ë²¤íŠ¸ì— ìœ íš¨í•œ í˜ì´ì¦ˆê°€ ì—†ìŠµë‹ˆë‹¤! ì´ë²¤íŠ¸ ì¢…ë£Œ.");
+                HandleEventEnd();
+                return;
+            }
+
+            if (currentPhaseIndex >= currentEvent.phases.Count)
+            {
+                Debug.Log("ì´ë²¤íŠ¸ ì¢…ë£Œ");
+                HandleEventEnd();
+                return;
+            }
+
+            EventPhase phase = currentEvent.phases[currentPhaseIndex];
+
+            Debug.Log($"ì´ë²¤íŠ¸ ì§„í–‰ ì¤‘: {phase.phaseName}");
+
+            List<EventChoice> availableChoices = new List<EventChoice>();
+
+            foreach (var choice in phase.choices)
+            {
+                if (choice.CanPlayerSelect(Player.Instance.selectedTraits))
+                {
+                    availableChoices.Add(choice);
+                }
+            }
+
+            Debug.Log("UI ì—…ë°ì´íŠ¸ í˜¸ì¶œ");
+            EventManager.Instance.UpdateEventUI(phase.EventDescription, availableChoices, phase.eventImage);
+
+            currentPhaseIndex++;
+        }
+
+        public EventData GetRandomEvent()
+        {
+            if (DatabaseManager.Instance.eventDatabase == null || DatabaseManager.Instance.eventDatabase.events.Count == 0)
+            {
+                Debug.LogWarning("ì´ë²¤íŠ¸ ë°ì´í„°ë² ì´ìŠ¤ê°€ ë¹„ì–´ ìˆìŠµë‹ˆë‹¤!");
+                return null;
+            }
+
+            int randomIndex = Random.Range(0, DatabaseManager.Instance.eventDatabase.events.Count);
+            return DatabaseManager.Instance.eventDatabase.events[randomIndex]; // ì¤‘ë³µ ì—¬ë¶€ ìƒê´€ì—†ì´ ë¬´ì‘ìœ„ ì´ë²¤íŠ¸ ì„ íƒ
+        }
+
+        public void OnChoiceSelected(int choiceIndex)
+        {
+            EventPhase currentPhase = currentEvent.phases[currentPhaseIndex - 1];
+            SelectedChoice = currentPhase.choices[choiceIndex];
+
+            if (SelectedChoice.acquisitionTrigger)
+            {
+                Debug.Log("íšë“ UI í™œì„±í™”!");
+                if (SelectedChoice.AcqType != null)
+                    if (SelectedChoice.AcqID != null)
+                        acquisitionUI.OpenAcquisitionUI(SelectedChoice.AcqType.Value, SelectedChoice.AcqID.Value);
+                return;
+            }
+
+            if (SelectedChoice.battleTrigger)
+            {
+                Debug.Log("ì „íˆ¬ ì‹œì‘!");
+                // ì „íˆ¬ ì‹œì‘
+                battleManager.StartBattle(SelectedChoice);
+                return;
+            }
+
+            if (SelectedChoice.nextPhaseIndex != -1) //  íŠ¹ì • í˜ì´ì¦ˆë¡œ ì´ë™í•  ê²½ìš°
+            {
+                MoveToNextPhase(SelectedChoice.nextPhaseIndex); // ê¸°ì¡´ `StartEvent()` ëŒ€ì‹  `MoveToNextPhase()` ì‚¬ìš©
+                return;
+            }
+
+            if (SelectedChoice.IsEventEnd())
+            {
+                HandleEventEnd();
+            }
+            else
+            {
+                StartEvent(SelectedChoice.nextEventName);
             }
         }
 
-        Debug.Log("UI ¾÷µ¥ÀÌÆ® È£Ãâ");
-        EventManager.Instance.UpdateEventUI(phase.EventDescription, availableChoices, phase.EventImage);
-
-        currentPhaseIndex++;
-    }
-
-    public EventData GetRandomEvent()
-    {
-        if (DatabaseManager.Instance.eventDatabase == null || DatabaseManager.Instance.eventDatabase.events.Count == 0)
+        private void HandleEventEnd()
         {
-            Debug.LogWarning("ÀÌº¥Æ® µ¥ÀÌÅÍº£ÀÌ½º°¡ ºñ¾î ÀÖ½À´Ï´Ù!");
-            return null;
+            Debug.Log("ì´ë²¤íŠ¸ê°€ ì¢…ë£Œë˜ì—ˆìŠµë‹ˆë‹¤. ëœë¤ ì´ë²¤íŠ¸ ì‹¤í–‰!");
+
+            EventData randomEvent = GetRandomEvent();
+            if (randomEvent != null)
+            {
+                StartEvent(randomEvent.eventName);
+            }
+            else
+            {
+                Debug.Log("ì‚¬ìš© ê°€ëŠ¥í•œ ëœë¤ ì´ë²¤íŠ¸ê°€ ì—†ìŠµë‹ˆë‹¤!");
+            }
         }
 
-        int randomIndex = Random.Range(0, DatabaseManager.Instance.eventDatabase.events.Count);
-        return DatabaseManager.Instance.eventDatabase.events[randomIndex]; // Áßº¹ ¿©ºÎ »ó°ü¾øÀÌ ¹«ÀÛÀ§ ÀÌº¥Æ® ¼±ÅÃ
-    }
-
-    public void OnChoiceSelected(int choiceIndex)
-    {
-        EventPhase currentPhase = currentEvent.Phases[currentPhaseIndex - 1];
-        SelectedChoice = currentPhase.Choices[choiceIndex];
-
-        if (SelectedChoice.AcquisitionTrigger)
+        private void MoveToNextPhase(int nextPhaseIndex)
         {
-            Debug.Log("È¹µæ UI È°¼ºÈ­!");
-            acquisitionUI.OpenAcquisitionUI(SelectedChoice.AcqType.Value, SelectedChoice.AcqID.Value);
-            return;
-        }
+            if (currentEvent == null)
+            {
+                Debug.LogError("í˜„ì¬ ì§„í–‰ ì¤‘ì¸ ì´ë²¤íŠ¸ê°€ ì—†ìŠµë‹ˆë‹¤!");
+                return;
+            }
 
-        if (SelectedChoice.BattleTrigger)
-        {
-            Debug.Log("ÀüÅõ ½ÃÀÛ!");
-            // ÀüÅõ ½ÃÀÛ
-            battleManager.StartBattle(SelectedChoice);
-            return;
-        }
+            if (nextPhaseIndex < 0 || nextPhaseIndex >= currentEvent.phases.Count)
+            {
+                Debug.LogError($"ì˜ëª»ëœ í˜ì´ì¦ˆ ì¸ë±ìŠ¤: {nextPhaseIndex} (ì´ í˜ì´ì¦ˆ ê°œìˆ˜: {currentEvent.phases.Count})");
+                return;
+            }
 
-        if (SelectedChoice.NextPhaseIndex != -1) //  Æ¯Á¤ ÆäÀÌÁî·Î ÀÌµ¿ÇÒ °æ¿ì
-        {
-            MoveToNextPhase(SelectedChoice.NextPhaseIndex); // ±âÁ¸ `StartEvent()` ´ë½Å `MoveToNextPhase()` »ç¿ë
-            return;
+            Debug.Log($"í˜ì´ì¦ˆ ì´ë™: {currentPhaseIndex} â†’ {nextPhaseIndex}");
+            currentPhaseIndex = nextPhaseIndex; // í˜ì´ì¦ˆ ì¸ë±ìŠ¤ë¥¼ ì§ì ‘ ì„¤ì •
+            ProcessPhase(); // ë‹¤ìŒ í˜ì´ì¦ˆ ì‹¤í–‰
         }
-
-        if (SelectedChoice.IsEventEnd())
-        {
-            HandleEventEnd();
-        }
-        else
-        {
-            StartEvent(SelectedChoice.NextEventName);
-        }
-    }
-
-    private void HandleEventEnd()
-    {
-        Debug.Log("ÀÌº¥Æ®°¡ Á¾·áµÇ¾ú½À´Ï´Ù. ·£´ı ÀÌº¥Æ® ½ÇÇà!");
-
-        EventData randomEvent = GetRandomEvent();
-        if (randomEvent != null)
-        {
-            StartEvent(randomEvent.EventName);
-        }
-        else
-        {
-            Debug.Log("»ç¿ë °¡´ÉÇÑ ·£´ı ÀÌº¥Æ®°¡ ¾ø½À´Ï´Ù!");
-        }
-    }
-
-    public void MoveToNextPhase(int nextPhaseIndex)
-    {
-        if (currentEvent == null)
-        {
-            Debug.LogError("ÇöÀç ÁøÇà ÁßÀÎ ÀÌº¥Æ®°¡ ¾ø½À´Ï´Ù!");
-            return;
-        }
-
-        if (nextPhaseIndex < 0 || nextPhaseIndex >= currentEvent.Phases.Count)
-        {
-            Debug.LogError($"Àß¸øµÈ ÆäÀÌÁî ÀÎµ¦½º: {nextPhaseIndex} (ÃÑ ÆäÀÌÁî °³¼ö: {currentEvent.Phases.Count})");
-            return;
-        }
-
-        Debug.Log($"ÆäÀÌÁî ÀÌµ¿: {currentPhaseIndex} ¡æ {nextPhaseIndex}");
-        currentPhaseIndex = nextPhaseIndex; // ÆäÀÌÁî ÀÎµ¦½º¸¦ Á÷Á¢ ¼³Á¤
-        ProcessPhase(); // ´ÙÀ½ ÆäÀÌÁî ½ÇÇà
     }
 }

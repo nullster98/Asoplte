@@ -18,15 +18,15 @@ public class SkillData : MonoBehaviour
     {
         if (player.GetStat("CurrentMP") < ManaCost)
         {
-            Debug.Log($"{SkillName} »ç¿ë ºÒ°¡! (¸¶³ª ºÎÁ·)");
+            Debug.Log($"{SkillName} ì‚¬ìš© ë¶ˆê°€! (ë§ˆë‚˜ ë¶€ì¡±)");
             return;
         }
 
-        // ¸¶³ª ¼Ò¸ð
+        // ë§ˆë‚˜ ì†Œëª¨
         player.ChangeStat("CurrentMP", -ManaCost);
-        Debug.Log($"{SkillName} ½ºÅ³ »ç¿ë! ¸¶³ª {ManaCost} ¼Ò¸ð.");
+        Debug.Log($"{SkillName} ìŠ¤í‚¬ ì‚¬ìš©! ë§ˆë‚˜ {ManaCost} ì†Œëª¨.");
 
-        // È¿°ú Àû¿ë
+        // íš¨ê³¼ ì ìš©
         foreach (var effect in Effects)
         {
             effect.ApplyEffect(player);

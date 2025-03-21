@@ -24,7 +24,7 @@ public class EquipUI : MonoBehaviour
     [SerializeField] TMP_Text equipDetailDescription;
     [SerializeField] Button TrashButton;
 
-    private Player player; // ÇÃ·¹ÀÌ¾î ÂüÁ¶
+    private Player player; // í”Œë ˆì´ì–´ ì°¸ì¡°
 
     private void Start()
     {
@@ -32,7 +32,7 @@ public class EquipUI : MonoBehaviour
         player = Player.Instance;
         if(player == null )
         {
-            Debug.LogError("ÇÃ·¹ÀÌ¾î¸¦ Ã£À»¼ö ¾ø½À´Ï´Ù. by.Equipinfo");
+            Debug.LogError("í”Œë ˆì´ì–´ë¥¼ ì°¾ì„ìˆ˜ ì—†ìŠµë‹ˆë‹¤. by.Equipinfo");
             return;
         }
 
@@ -40,16 +40,16 @@ public class EquipUI : MonoBehaviour
 
         for (int i = 0; i < equipinfo.Length; i++)
         {
-            int slotIndex = i; // ¶÷´Ù Ç¥Çö½Ä¿¡¼­ ¾ÈÀüÇÑ ½½·Ô ÀúÀå
+            int slotIndex = i; // ëŒë‹¤ í‘œí˜„ì‹ì—ì„œ ì•ˆì „í•œ ìŠ¬ë¡¯ ì €ì¥
             equipinfo[i].equipmentButtons.onClick.AddListener(() => OpenEquipDetailUI((EquipmentType)slotIndex));
         }
 
-        UpdateEquipmentUI(); // ÀåºñÃ¢ UI ÃÊ±â ¾÷µ¥ÀÌÆ®
-        Debug.Log("ÀåºñÃ¢ ÃÊ±âUI¾÷µ¥ÀÌÆ® ¿Ï·á");
+        UpdateEquipmentUI(); // ì¥ë¹„ì°½ UI ì´ˆê¸° ì—…ë°ì´íŠ¸
+        Debug.Log("ì¥ë¹„ì°½ ì´ˆê¸°UIì—…ë°ì´íŠ¸ ì™„ë£Œ");
 
     }
 
-    // ÀåºñÃ¢ UI ¾÷µ¥ÀÌÆ® ÇÔ¼ö
+    // ì¥ë¹„ì°½ UI ì—…ë°ì´íŠ¸ í•¨ìˆ˜
     public void UpdateEquipmentUI()
     {
         foreach (EquipmentType slot in System.Enum.GetValues(typeof(EquipmentType)))
@@ -59,7 +59,7 @@ public class EquipUI : MonoBehaviour
         }
     }
 
-    // Æ¯Á¤ ½½·ÔÀÇ Àåºñ µ¥ÀÌÅÍ¸¦ UI¿¡ ¹İ¿µÇÏ´Â ÇÔ¼ö
+    // íŠ¹ì • ìŠ¬ë¡¯ì˜ ì¥ë¹„ ë°ì´í„°ë¥¼ UIì— ë°˜ì˜í•˜ëŠ” í•¨ìˆ˜
     public void UpdateSlot(EquipmentType slot, Equipment equippedItem)
     {
         int slotIndex = (int)slot;
@@ -75,22 +75,22 @@ public class EquipUI : MonoBehaviour
 
     public void OpenEquipDetailUI(EquipmentType slot)
     {
-        Debug.Log($"OpenEquipDetailUI È£ÃâµÊ: {slot}");
+        Debug.Log($"OpenEquipDetailUI í˜¸ì¶œë¨: {slot}");
 
         if (equipDetailUI == null)
         {
-            Debug.LogError("equipDetailUI°¡ ÇÒ´çµÇÁö ¾Ê¾Ò½À´Ï´Ù! Unity¿¡¼­ È®ÀÎÇÏ¼¼¿ä.");
+            Debug.LogError("equipDetailUIê°€ í• ë‹¹ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤! Unityì—ì„œ í™•ì¸í•˜ì„¸ìš”.");
             return;
         }
 
         Equipment equippedItem = player.GetEquippedItem(slot);
         if (equippedItem == null)
         {
-            Debug.Log("ÇØ´ç ½½·Ô¿¡ ÀåÂøµÈ Àåºñ°¡ ¾ø½À´Ï´Ù.");
+            Debug.Log("í•´ë‹¹ ìŠ¬ë¡¯ì— ì¥ì°©ëœ ì¥ë¹„ê°€ ì—†ìŠµë‹ˆë‹¤.");
             return;
         }
 
-        equipDetailUI.SetActive(true); //  Àåºñ »ó¼¼ UI È°¼ºÈ­
+        equipDetailUI.SetActive(true); //  ì¥ë¹„ ìƒì„¸ UI í™œì„±í™”
         equipDetailImage.sprite = equippedItem.ItemImg;
         equipDetailText.text = equippedItem.ItemName;
         equipDetailDescription.text = equippedItem.ItemDescription;
@@ -115,7 +115,7 @@ public class EquipUI : MonoBehaviour
         Equipment equippedItem = player.GetEquippedItem(slot);
         if (equippedItem == null)
         {
-            Debug.LogWarning($"½½·Ô {slot}¿¡ ÀåÂøµÈ Àåºñ°¡ ¾ø½À´Ï´Ù.");
+            Debug.LogWarning($"ìŠ¬ë¡¯ {slot}ì— ì¥ì°©ëœ ì¥ë¹„ê°€ ì—†ìŠµë‹ˆë‹¤.");
             return;
         }
         player.RemoveEquip(equippedItem);

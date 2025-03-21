@@ -11,7 +11,7 @@ public class GodData : MonoBehaviour
 {
     public string GodName;
     public string FileName;
-    public float GodID;
+    public int GodID;
     public bool IsUnlocked = false;
     public int UnlockCost;
     public Sprite GetBackgroundImage()
@@ -38,10 +38,10 @@ public class GodData : MonoBehaviour
     public string GetDescription()
     {
         TextAsset description = Resources.Load<TextAsset>($"Descriptions/{FileName}");
-        return description != null ? description.text : "Ό³Έν Ύψΐ½";
+        return description != null ? description.text : "μ„¤λª… μ—†μ";
     }
 
-    public Dictionary<string, float> GodStats = new Dictionary<string, float>
+    public Dictionary<string, int> GodStats = new Dictionary<string, int>
     {
         {"Atk", 0},
         {"Def", 0},

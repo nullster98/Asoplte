@@ -11,7 +11,7 @@ public class GodDatabase : ScriptableObject
     {
         if (index < 0 || index >= GodList.Count)
         {
-            Debug.LogError("ÀÎµ¦½º ¹üÀ§¸¦ ÃÊ°úÇÏ¿´½À´Ï´Ù.");
+            Debug.LogError("ì¸ë±ìŠ¤ ë²”ìœ„ë¥¼ ì´ˆê³¼í•˜ì˜€ìŠµë‹ˆë‹¤.");
             return null;
         }
         return GodList[index];

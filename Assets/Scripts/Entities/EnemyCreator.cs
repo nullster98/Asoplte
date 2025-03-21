@@ -1,5 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 
 public static class EnemyCreator
@@ -7,83 +7,84 @@ public static class EnemyCreator
 
     public static void InitializeEnemies(int floor)
     {
-        if (DatabaseManager.Instance.enemyDatabase == null)
+        var enemyDatabase = DatabaseManager.Instance.enemyDatabase;
+        if (enemyDatabase == null)
         {
-            Debug.LogError("Àû µ¥ÀÌÅÍº£ÀÌ½º°¡ nullÀÔ´Ï´Ù! EnemyCreator¿¡¼­ ÃÊ±âÈ­ ½ÇÆĞ");
+            Debug.LogError("ì  ë°ì´í„°ë² ì´ìŠ¤ê°€ nullì…ë‹ˆë‹¤! EnemyCreatorì—ì„œ ì´ˆê¸°í™” ì‹¤íŒ¨");
             return;
         }
-        Debug.Log($"Àû µ¥ÀÌÅÍº£ÀÌ½º Á¤»ó È®ÀÎ (ÇöÀç Ãş: {floor})");
+        Debug.Log($"ì  ë°ì´í„°ë² ì´ìŠ¤ ì •ìƒ í™•ì¸ (í˜„ì¬ ì¸µ: {floor})");
 
-        DatabaseManager.Instance.enemyDatabase.ResetEnemyData();
-        Debug.Log($"Àû µ¥ÀÌÅÍº£ÀÌ½º ÃÊ±âÈ­ ¿Ï·á (ÇöÀç Ãş: {floor})");
+        enemyDatabase.ResetEnemyData();
+        Debug.Log($"ì  ë°ì´í„°ë² ì´ìŠ¤ ì´ˆê¸°í™” ì™„ë£Œ (í˜„ì¬ ì¸µ: {floor})");
 
-        // Ãş¸¶´Ù µîÀåÇÒ ¼ö ÀÖ´Â ¸ó½ºÅÍ Á¾·ù¸¸ µî·Ï
-        string[] availableMonsters = GetAvailableMonsters(floor);
+        // ì¸µë§ˆë‹¤ ë“±ì¥í•  ìˆ˜ ìˆëŠ” ëª¬ìŠ¤í„° ì¢…ë¥˜ë§Œ ë“±ë¡
+        List<string> availableMonsters = GetAvailableMonsters(floor);
         foreach (string enemyName in availableMonsters)
         {
             EnemyData newEnemy = new EnemyData(
-                id: Random.Range(1000, 9999), // ÀÓ½Ã ID (Áßº¹ ¹æÁö)
+                id: Random.Range(1000, 9999), // ì„ì‹œ ID (ì¤‘ë³µ ë°©ì§€)
                 name: enemyName,
-                type: Enemy.Monster,
-                level: 1, // ·¹º§Àº ÀüÅõ ½ÃÀÛ ½Ã °áÁ¤µÊ
-                maxHP: 0, // ´É·ÂÄ¡´Â ÀüÅõ ½ÃÀÛ ½Ã ¼³Á¤
-                maxMP: 0,
+                type: EnemyType.Monster,
+                level: 1, // ë ˆë²¨ì€ ì „íˆ¬ ì‹œì‘ ì‹œ ê²°ì •ë¨
+                maxHp: 0, // ëŠ¥ë ¥ì¹˜ëŠ” ì „íˆ¬ ì‹œì‘ ì‹œ ì„¤ì •
+                maxMp: 0,
                 attack: 0,
                 defense: 0
             );
-
-            newEnemy.LoadEnemySprite();   // ÀÌ¹ÌÁö ·Îµå
-            newEnemy.GetDescription();   //  ¼³¸í ·Îµå
-
-            DatabaseManager.Instance.enemyDatabase.AddEnemy(newEnemy);
+            enemyDatabase.AddEnemy(newEnemy);
         }
     }
 
-    private static string[] GetAvailableMonsters(int floor)
+    [ItemCanBeNull]
+    private static List<string> GetAvailableMonsters(int floor)
     {
-        string[] floor1Monsters = {"Skeleton" };
-        string[] floor2Monsters = {  };
-        string[] floor3Monsters = {  };
+        var floor1Monsters = new List<string> { "Skeleton" };
+        var floor2Monsters = new List<string> { "Zombie", "Ghoul" };
+        var floor3Monsters = new List<string> { "DarkKnight", "Lich" };
+
 
         return floor switch
         {
             1 => floor1Monsters,
             2 => floor2Monsters,
             3 => floor3Monsters,
-            _ => floor3Monsters // ±âº»ÀûÀ¸·Î °¡Àå °­ÇÑ Ãş ¸ó½ºÅÍ
+            _ => floor3Monsters // ê¸°ë³¸ì ìœ¼ë¡œ ê°€ì¥ ê°•í•œ ì¸µ ëª¬ìŠ¤í„°
         };
     }
 
     public static EnemyData StartBattle(int floor)
     {
-        List<EnemyData> availableEnemies = DatabaseManager.Instance.enemyDatabase.EnemyList;
-
-        if (availableEnemies.Count == 0)
+        var enemyDatabase = DatabaseManager.Instance.enemyDatabase;
+        if (enemyDatabase == null || enemyDatabase.EnemyList.Count == 0)
         {
-            Debug.LogError("Àû µ¥ÀÌÅÍº£ÀÌ½º°¡ ºñ¾î ÀÖ½À´Ï´Ù!");
+            Debug.LogError("ì  ë°ì´í„°ë² ì´ìŠ¤ê°€ ë¹„ì–´ ìˆê±°ë‚˜ nullì…ë‹ˆë‹¤!");
             return null;
         }
 
-        // ·£´ıÇÑ Àû ¼±ÅÃ
-        EnemyData baseEnemy = availableEnemies[Random.Range(0, availableEnemies.Count)];
+        // ëœë¤í•œ ì  ì„ íƒ
+        EnemyData baseEnemy = enemyDatabase.GetRandomEnemy();
 
-        // ´É·ÂÄ¡ ¼³Á¤ (Ãş¿¡ µû¶ó º¯µ¿)
+        if (baseEnemy == null)
+        {
+            Debug.LogError("ì ì„ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤!");
+            return null;
+        }
+
+        // ìƒˆë¡œìš´ ì  ê°ì²´ ìƒì„± (ê¸°ì¡´ ë°ì´í„° ìˆ˜ì • ë°©ì§€)
         int level = Random.Range(floor, floor + 4);
-        EnemyData battleEnemy = new EnemyData(
-            baseEnemy.EnemyID,
-            baseEnemy.Name,
-            baseEnemy.NPCType,
-            level,
-            30 + level * 10 + Random.Range(0, 6),  // HP Áõ°¡
-            (0 == 0) ? 0 : 0 + level * 5 + Random.Range(0, 3),  // MP (¾øÀ» ¼öµµ ÀÖÀ½)
-            5 + level * 2 + Random.Range(0, 3),  // °ø°İ·Â Áõ°¡
-            2 + Mathf.RoundToInt(level * 1.5f + Random.Range(0, 2))  // ¹æ¾î·Â Áõ°¡
+        return new EnemyData(
+            id: baseEnemy.EnemyID,
+            name: baseEnemy.Name,
+            type: baseEnemy.NpcType,
+            level: level,
+            maxHp: 30 + level * 10 + Random.Range(0, 6),
+            maxMp: 0, // MP í•„ìš” ì‹œ ì¡°ì •
+            attack: 5 + level * 2 + Random.Range(0, 3),
+            defense: 2 + Mathf.RoundToInt(level * 1.5f + Random.Range(0, 2))
         );
 
-        battleEnemy.EnemySprite = baseEnemy.EnemySprite;
-        battleEnemy.Description = baseEnemy.Description;
 
-        return battleEnemy;
     }
 
 }

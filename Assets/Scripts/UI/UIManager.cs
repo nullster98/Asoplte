@@ -9,19 +9,19 @@ using UnityEngine.UI;
 
 public class TraitHoverHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    // TraitTextBox (¿¹: ÆË¾÷ Ã¢)¿Í ±× ³»ºÎ TMP_Text ÄÄÆ÷³ÍÆ®ÀÇ ÂüÁ¶¸¦ ÀÎ½ºÆåÅÍ¿¡¼­ ÇÒ´çÇÏ°Å³ª ÄÚµå¿¡¼­ ¼³Á¤
+    // TraitTextBox (ì˜ˆ: íŒì—… ì°½)ì™€ ê·¸ ë‚´ë¶€ TMP_Text ì»´í¬ë„ŒíŠ¸ì˜ ì°¸ì¡°ë¥¼ ì¸ìŠ¤í™í„°ì—ì„œ í• ë‹¹í•˜ê±°ë‚˜ ì½”ë“œì—ì„œ ì„¤ì •
     public GameObject traitTextBox;
     public TMP_Text traitText;
 
-    // ÇØ´ç Æ¯¼ºÀÇ ¼³¸íÀ» ÀúÀåÇÕ´Ï´Ù.
+    // í•´ë‹¹ íŠ¹ì„±ì˜ ì„¤ëª…ì„ ì €ì¥í•©ë‹ˆë‹¤.
     public string traitDescription;
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (traitTextBox != null && traitText != null)
         {
-            traitText.text = traitDescription; // Æ¯¼º ¼³¸íÀ» Ç¥½Ã
-            traitTextBox.SetActive(true);        // ÅØ½ºÆ® ¹Ú½º È°¼ºÈ­
+            traitText.text = traitDescription; // íŠ¹ì„± ì„¤ëª…ì„ í‘œì‹œ
+            traitTextBox.SetActive(true);        // í…ìŠ¤íŠ¸ ë°•ìŠ¤ í™œì„±í™”
         }
     }
 
@@ -29,34 +29,34 @@ public class TraitHoverHandler : MonoBehaviour, IPointerEnterHandler, IPointerEx
     {
         if (traitTextBox != null)
         {
-            traitTextBox.SetActive(false);       // ÅØ½ºÆ® ¹Ú½º ¼û±è
+            traitTextBox.SetActive(false);       // í…ìŠ¤íŠ¸ ë°•ìŠ¤ ìˆ¨ê¹€
         }
     }
-}//Æ¯¼º ÀÌ¹ÌÁö ¸¶¿ì½º È£¹ö ±â´É
+}//íŠ¹ì„± ì´ë¯¸ì§€ ë§ˆìš°ìŠ¤ í˜¸ë²„ ê¸°ëŠ¥
 
 public class UIManager : MonoBehaviour
 {
     public static UIManager Instance { get; private set; }
 
-    [Header("ÇÃ·¹ÀÌ¾î UI")]
-    [SerializeField] private Image Hp; //HP¹Ù
-    [SerializeField] private Image MP; //Mp¹Ù
-    [SerializeField] private int currentProgress = 0; //ÁøÇàµµ
-    [SerializeField] private Slider ProgressSlider; //½½¶óÀÌ´õ
+    [Header("í”Œë ˆì´ì–´ UI")]
+    [SerializeField] private Image Hp; //HPë°”
+    [SerializeField] private Image MP; //Mpë°”
+    [SerializeField] private int currentProgress = 0; //ì§„í–‰ë„
+    [SerializeField] private Slider ProgressSlider; //ìŠ¬ë¼ì´ë”
     [SerializeField] private TMP_Text CurrentGold;
     [SerializeField] private TMP_Text CurrentFaithPoint;
     [SerializeField] private Image playerImage;
 
-    [Header("Á¤º¸Ã¢ UI")]
-    [SerializeField] private GameObject PlayerInfoBox; // ÇÃ·¹ÀÌ¾î Á¤º¸ ¹Ú½º
+    [Header("ì •ë³´ì°½ UI")]
+    [SerializeField] private GameObject PlayerInfoBox; // í”Œë ˆì´ì–´ ì •ë³´ ë°•ìŠ¤
     [SerializeField] Image InfoImg;
     [SerializeField] TMP_Text CharacterName;
     [SerializeField] TMP_Text InfoStats;
 
-    [SerializeField] private GameObject traitTextBox; // ¸¶¿ì½º ¿À¹ö ½Ã Ç¥½ÃµÉ ÅØ½ºÆ® ¹Ú½º
-    [SerializeField] private TMP_Text traitText; // Æ¯¼º ¼³¸í ÅØ½ºÆ®
+    [SerializeField] private GameObject traitTextBox; // ë§ˆìš°ìŠ¤ ì˜¤ë²„ ì‹œ í‘œì‹œë  í…ìŠ¤íŠ¸ ë°•ìŠ¤
+    [SerializeField] private TMP_Text traitText; // íŠ¹ì„± ì„¤ëª… í…ìŠ¤íŠ¸
     [SerializeField] Transform TraitContainer;
-    [SerializeField] GameObject TraitPrefab; //Æ¯¼ºÀÌ¹ÌÁö ÇÁ¸®ÆÕ
+    [SerializeField] GameObject TraitPrefab; //íŠ¹ì„±ì´ë¯¸ì§€ í”„ë¦¬íŒ¹
 
     public Action<int?> OnChoiceSelected;
 
@@ -64,10 +64,10 @@ public class UIManager : MonoBehaviour
     public void UpdatePlayerUI()
     {
         Player player = Player.Instance;
-        Debug.Log($"UI ¾÷µ¥ÀÌÆ®: {player.PlayerImg} -> {playerImage.sprite}"); // µğ¹ö±ë ÄÚµå Ãß°¡
+        Debug.Log($"UI ì—…ë°ì´íŠ¸: {player.PlayerImg} -> {playerImage.sprite}"); // ë””ë²„ê¹… ì½”ë“œ ì¶”ê°€
 
 
-        //ÇÃ·¹ÀÌ¾î µ¥ÀÌÅÍ µ¿±âÈ­
+        //í”Œë ˆì´ì–´ ë°ì´í„° ë™ê¸°í™”
         playerImage.sprite = player.PlayerImg;
         CurrentGold.text = player.GetStat("Gold").ToString();
         CurrentFaithPoint.text = player.GetStat("FaithPoint").ToString();
@@ -80,11 +80,11 @@ public class UIManager : MonoBehaviour
         InfoImg.sprite = player.PlayerImg;
         //CharacterName.text = player.Race.ToString();
         InfoStats.text = $@"
-        Ã¼·Â : {player.GetStat("CurrentHP")} / {player.GetStat("HP")}
-        ¸¶³ª : {player.GetStat("CurrentMP")} / {player.GetStat("MP")}
-        °ø°İ·Â : {player.GetStat("Atk")} ¹æ¾î·Â : {player.GetStat("Def")}
-        °ñµå : {player.GetStat("Gold")}
-        ½Å¾Ó Æ÷ÀÎÆ® : {player.GetStat("FaithStat")}";
+        ì²´ë ¥ : {player.GetStat("CurrentHP")} / {player.GetStat("HP")}
+        ë§ˆë‚˜ : {player.GetStat("CurrentMP")} / {player.GetStat("MP")}
+        ê³µê²©ë ¥ : {player.GetStat("Atk")} ë°©ì–´ë ¥ : {player.GetStat("Def")}
+        ê³¨ë“œ : {player.GetStat("Gold")}
+        ì‹ ì•™ í¬ì¸íŠ¸ : {player.GetStat("FaithStat")}";
 
         UpdateTraitsUI();
     }
@@ -99,18 +99,18 @@ public class UIManager : MonoBehaviour
     {
         List<Trait> traits = Player.Instance.selectedTraits;
 
-        foreach (Transform child in TraitContainer) // ±âÁ¸ UI »èÁ¦
+        foreach (Transform child in TraitContainer) // ê¸°ì¡´ UI ì‚­ì œ
         {
             Destroy(child.gameObject);
         }
 
         foreach (Trait trait in traits)
         {
-            GameObject traitObj = Instantiate(TraitPrefab, TraitContainer); // UI »ı¼º
+            GameObject traitObj = Instantiate(TraitPrefab, TraitContainer); // UI ìƒì„±
             Image traitImage = traitObj.GetComponent<Image>();
             traitImage.sprite = trait.TraitImg;
 
-            // ¸¶¿ì½º È£¹ö ±â´É Ãß°¡
+            // ë§ˆìš°ìŠ¤ í˜¸ë²„ ê¸°ëŠ¥ ì¶”ê°€
             TraitHoverHandler hoverHandler = traitObj.AddComponent<TraitHoverHandler>();
             hoverHandler.traitTextBox = traitTextBox;
             hoverHandler.traitText = traitText;
@@ -118,7 +118,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    //  ÇÃ·¹ÀÌ¾î Á¤º¸ ¹Ú½º¸¦ ¿­ ¶§¸¸ Æ¯¼º UI¸¦ °»½ÅÇÏµµ·Ï ¼³Á¤
+    //  í”Œë ˆì´ì–´ ì •ë³´ ë°•ìŠ¤ë¥¼ ì—´ ë•Œë§Œ íŠ¹ì„± UIë¥¼ ê°±ì‹ í•˜ë„ë¡ ì„¤ì •
     public void OpenPlayerInfoBox()
     {
         UpdatePlayerInfo();

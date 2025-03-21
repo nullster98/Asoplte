@@ -1,82 +1,84 @@
-using JetBrains.Annotations;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-[System.Flags]
-public enum EventTag //ÀÌº¥Æ® ÅÂ±×µé
+namespace Event
 {
-    None = 0,
-    Start = 1 << 0, // 1
-    Positive = 1 << 1, // 2
-    Negative = 1 << 2, // 4
-    Battle = 1 << 3, // 8
-    Chaos = 1 << 4, // 16
-    Encounter = 1 << 5, // 32
-    Rest = 1 << 6, // 64
-    Boss = 1 << 7, // 128
-
-    Sequential = 1 << 8 // ÀÌº¥Æ® ÈÄ¼Ó
-
-}
-
-[System.Serializable]
-public class EventData //ÀÌº¥Æ® ±âº» »À´ë
-{
-    public string EventName;   
-    public List<EventPhase> Phases;
-    public EventTag EventType;
-}
-
-[System.Serializable]
-public class EventPhase
-{
-    public string PhaseName;
-    public Sprite EventImage;
-    public List<EventChoice> Choices;
-    public string EventDescription {  get; set; }
-
-    public void GetDescription()
+    [Flags]
+    public enum EventTag //ì´ë²¤íŠ¸ íƒœê·¸ë“¤
     {
-        TextAsset textAsset = Resources.Load<TextAsset>($"Event/Descriptions/{PhaseName}");
-        EventDescription = textAsset != null ? textAsset.text : "¼³¸í ¾øÀ½";
+        None = 0,
+        Start = 1 << 0, // 1
+        Positive = 1 << 1, // 2
+        Negative = 1 << 2, // 4
+        Battle = 1 << 3, // 8
+        Chaos = 1 << 4, // 16
+        Encounter = 1 << 5, // 32
+        Rest = 1 << 6, // 64
+        Boss = 1 << 7, // 128
+
+        Sequential = 1 << 8 // ì´ë²¤íŠ¸ í›„ì†
+
     }
 
-    //ÀÌº¥Æ® ÀÌ¹ÌÁö ·Îµå ÇïÆÛ ÇÔ¼ö
-    public void LoadEventImage()
+    [Serializable]
+    public class EventData //ì´ë²¤íŠ¸ ê¸°ë³¸ ë¼ˆëŒ€
     {
-        EventImage = Resources.Load<Sprite>($"Event/Images/{PhaseName}");
-        if (EventImage == null)
+        [FormerlySerializedAs("EventName")] public string eventName;   
+        [FormerlySerializedAs("Phases")] public List<EventPhase> phases;
+        [FormerlySerializedAs("EventType")] public EventTag eventType;
+    }
+
+    [Serializable]
+    public class EventPhase
+    {
+        [FormerlySerializedAs("PhaseName")] public string phaseName;
+        [FormerlySerializedAs("EventImage")] public Sprite eventImage;
+        [FormerlySerializedAs("Choices")] public List<EventChoice> choices;
+        public string EventDescription {  get; set; }
+
+        public void GetDescription()
         {
-            Debug.LogWarning($"{PhaseName} ÀÌ¹ÌÁö¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù! ±âº» ÀÌ¹ÌÁö·Î ¼³Á¤.");
-            EventImage = Resources.Load<Sprite>("Event/Images/default");
+            TextAsset textAsset = Resources.Load<TextAsset>($"Event/Descriptions/{phaseName}");
+            EventDescription = textAsset != null ? textAsset.text : "ì„¤ëª… ì—†ìŒ";
+        }
+
+        //ì´ë²¤íŠ¸ ì´ë¯¸ì§€ ë¡œë“œ í—¬í¼ í•¨ìˆ˜
+        public void LoadEventImage()
+        {
+            eventImage = Resources.Load<Sprite>($"Event/Images/{phaseName}");
+            if (eventImage == null)
+            {
+                Debug.LogWarning($"{phaseName} ì´ë¯¸ì§€ë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤! ê¸°ë³¸ ì´ë¯¸ì§€ë¡œ ì„¤ì •.");
+                eventImage = Resources.Load<Sprite>("Event/Images/default");
+            }
         }
     }
-}
 
-[System.Serializable]
-public class EventChoice
-{
-    public string ChoiceName; //¼±ÅÃÁö ÀÌ¸§
-    public string RequiredTraits; //ÇÊ¿ä Æ¯¼º
-    public string NextEventName;
-    public int NextPhaseIndex = -1;
-    public bool BattleTrigger = false;
-    public int? FixedID = -1; //±âº»°ª -1(Á¶¿ì ¾øÀ½), 0(·£´ı Àû), ID(Æ¯Á¤ Á¶¿ì)
-
-    public bool AcquisitionTrigger = false; //º¸»ó Æ®¸®°Å
-    public AcquisitionType? AcqType; //È¹µæÇÏ°ÔÇÒ Å¸ÀÔ
-    public int? AcqID; //È¹µæÇÒ ¾ÆÀÌÅÛÀÇ ID
-
-    public bool CanPlayerSelect(List<Trait> playerTraits)
+    [Serializable]
+    public class EventChoice
     {
-        if (string.IsNullOrEmpty(RequiredTraits)) return true; // ÇÊ¿ä Æ¯¼ºÀÌ ¾øÀ¸¸é ¼±ÅÃ °¡´É
-        return playerTraits.Exists(trait => trait.TraitName == RequiredTraits); // ÇÃ·¹ÀÌ¾î°¡ Æ¯¼ºÀ» °¡Áö°í ÀÖÀ¸¸é ¼±ÅÃ °¡´É
-    }
+        [FormerlySerializedAs("ChoiceName")] public string choiceName; //ì„ íƒì§€ ì´ë¦„
+        [FormerlySerializedAs("RequiredTraits")] public string requiredTraits; //í•„ìš” íŠ¹ì„±
+        [FormerlySerializedAs("NextEventName")] public string nextEventName;
+        [FormerlySerializedAs("NextPhaseIndex")] public int nextPhaseIndex = -1;
+        [FormerlySerializedAs("BattleTrigger")] public bool battleTrigger;
+        public int? FixedID = -1; //ê¸°ë³¸ê°’ -1(ì¡°ìš° ì—†ìŒ), 0(ëœë¤ ì ), ID(íŠ¹ì • ì¡°ìš°)
 
-    public bool IsEventEnd()
-    {
-        return (string.IsNullOrEmpty(NextEventName) || NextEventName == "END") && NextPhaseIndex == -1;
+        [FormerlySerializedAs("AcquisitionTrigger")] public bool acquisitionTrigger; //ë³´ìƒ íŠ¸ë¦¬ê±°
+        public AcquisitionType? AcqType; //íšë“í•˜ê²Œí•  íƒ€ì…
+        public int? AcqID; //íšë“í•  ì•„ì´í…œì˜ ID
+
+        public bool CanPlayerSelect(List<Trait> playerTraits)
+        {
+            if (string.IsNullOrEmpty(requiredTraits)) return true; // í•„ìš” íŠ¹ì„±ì´ ì—†ìœ¼ë©´ ì„ íƒ ê°€ëŠ¥
+            return playerTraits.Exists(trait => trait.TraitName == requiredTraits); // í”Œë ˆì´ì–´ê°€ íŠ¹ì„±ì„ ê°€ì§€ê³  ìˆìœ¼ë©´ ì„ íƒ ê°€ëŠ¥
+        }
+
+        public bool IsEventEnd()
+        {
+            return (string.IsNullOrEmpty(nextEventName) || nextEventName == "END") && nextPhaseIndex == -1;
+        }
     }
 }

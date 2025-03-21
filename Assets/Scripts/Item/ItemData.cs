@@ -1,6 +1,7 @@
 using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
+using Item;
 using UnityEngine;
 
 public enum ItemTraget
@@ -30,7 +31,7 @@ public enum ItemType
 }
 
 [System.Serializable]
-public class Item
+public class ItemData
 {
     public int ItemID { get; private set; }
     public string ItemName { get; private set; }
@@ -49,11 +50,11 @@ public class Item
             ItemType.Consumable => "Item/Consumable/Descriptions",
             ItemType.Totem => "Item/Totem/Descriptions",
             ItemType.Valuable => "Item/Valuable/Descriptions",
-            _ => "Item/Default" // ±âº» Æú´õ
+            _ => "Item/Default" // ê¸°ë³¸ í´ë”
         };
 
         TextAsset textAsset = Resources.Load<TextAsset>($"{folderPath}/{ItemName}");
-        return textAsset != null ? textAsset.text : "¼³¸í ¾øÀ½";
+        return textAsset != null ? textAsset.text : "ì„¤ëª… ì—†ìŒ";
     }
 
     public void LoadEventImage()
@@ -64,37 +65,37 @@ public class Item
             ItemType.Consumable => "Item/Consumable/Images",
             ItemType.Totem => "Item/Totem/Images",
             ItemType.Valuable => "Item/Valuable/Images",
-            _ => "Item/Default" // ±âº» Æú´õ
+            _ => "Item/Default" // ê¸°ë³¸ í´ë”
         };
 
         ItemImg = Resources.Load<Sprite>($"{folderPath}/{ItemName}");
     }
 
-    protected Item(int id, string name, ItemType type, int purchasePrice, int salePrice, List<ItemEffect> effects)
+    protected ItemData(int id, string name, ItemType type, int purchasePrice, int salePrice, List<ItemEffect> effects)
     {
         (ItemID, ItemName, Type, PurchasePrice, SalePrice, Effects) =
         (id, name, type, purchasePrice, salePrice, effects ?? new List<ItemEffect>());
 
-        ItemDescription = GetDescription(); //  ¼³¸í ÀÚµ¿ ·Îµå
-        LoadEventImage(); //  ÀÌ¹ÌÁö ÀÚµ¿ ·Îµå
+        ItemDescription = GetDescription(); //  ì„¤ëª… ìë™ ë¡œë“œ
+        LoadEventImage(); //  ì´ë¯¸ì§€ ìë™ ë¡œë“œ
     }
 
 
 }
 
-public class Equipment : Item
+public class Equipment : ItemData
 {
-    public float AttackPoint { get; private set; }
-    public float DefensePoint { get; private set; }
+    public int AttackPoint { get; private set; }
+    public int DefensePoint { get; private set; }
     public EquipmentType EquipmentType { get; private set; }
 
     public Equipment(int id, string name, int purchasePrice, int salePrice,
-        EquipmentType equipType, float attack, float defense, List<ItemEffect> effects)
+        EquipmentType equipType, int attack, int defense, List<ItemEffect> effects)
         : base(id, name, ItemType.Equipment, purchasePrice, salePrice, effects)
         => (EquipmentType, AttackPoint, DefensePoint) = (equipType, attack, defense);
 }
 
-public class Consumable : Item
+public class Consumable : ItemData
 {
     public float HealAmount { get; private set; }
     public float ManaRestore {  get; private set; }
@@ -107,7 +108,7 @@ public class Consumable : Item
    
 }
 
-public class Totem : Item
+public class Totem : ItemData
 {
     public float AttackPoint {  get; private set; }
     public float DefensePoint {  get; private set; }
@@ -119,7 +120,7 @@ public class Totem : Item
     
 }
 
-public class Valuable : Item
+public class Valuable : ItemData
 {
     public Valuable(int id, string name, int purchasePrice, int salePrice, List<ItemEffect> effects)
         : base(id, name, ItemType.Valuable, purchasePrice, salePrice, effects) { }

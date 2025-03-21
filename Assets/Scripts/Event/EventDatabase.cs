@@ -1,27 +1,29 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "EventDatabase", menuName = "Game/Event Database")]
-public class EventDatabase : ScriptableObject
+namespace Event
 {
-   public List<EventData> events = new List<EventData>();
-
-    public EventData GetEventByName(string eventName)
+    [CreateAssetMenu(fileName = "EventDatabase", menuName = "Game/Event Database")]
+    public class EventDatabase : ScriptableObject
     {
-        
-        EventData eventData = events.Find(e => e.EventName == eventName);
+        public List<EventData> events = new List<EventData>();
 
-        if (eventData == null)
+        public EventData GetEventByName(string eventName)
         {
-            Debug.LogError($"ÀÌº¥Æ® µ¥ÀÌÅÍº£ÀÌ½º¿¡¼­ '{eventName}'À» Ã£À» ¼ö ¾ø½À´Ï´Ù!");
+        
+            EventData eventData = events.Find(e => e.eventName == eventName);
+
+            if (eventData == null)
+            {
+                Debug.LogError($"ì´ë²¤íŠ¸ ë°ì´í„°ë² ì´ìŠ¤ì—ì„œ '{eventName}'ì„ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤!");
+            }
+
+            return eventData;
         }
 
-        return eventData;
-    }
-
-    public void ResetDatabase()
-    {
-        events.Clear();
+        public void ResetDatabase()
+        {
+            events.Clear();
+        }
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class StartManager : MonoBehaviour
 {
-    public void Load() //½ÃÀÛ¾À -> ¸ŞÀÎ¾À
+    public void Load() //ì‹œì‘ì”¬ -> ë©”ì¸ì”¬
     {
         SceneManager.LoadScene("MainScene");
     }
