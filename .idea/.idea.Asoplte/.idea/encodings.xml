@@ -16,11 +16,11 @@
     <file url="file://$PROJECT_DIR$/Assets/Scripts/God/GodData.cs" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Assets/Scripts/God/GodDatabase.cs" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Assets/Scripts/God/GodList.cs" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/Assets/Scripts/ItemScript/InventoryManager.cs" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/Assets/Scripts/ItemScript/Item.cs" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/Assets/Scripts/ItemScript/ItemCreator.cs" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/Assets/Scripts/ItemScript/ItemEffect.cs" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/Assets/Scripts/ItemScript/ItemManager.cs" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Assets/Scripts/Item/InventoryManager.cs" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Assets/Scripts/Item/ItemCreator.cs" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Assets/Scripts/Item/ItemData.cs" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Assets/Scripts/Item/ItemEffect.cs" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Assets/Scripts/Item/ItemManager.cs" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Assets/Scripts/PlayerScript/Player.cs" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Assets/Scripts/Race/RaceDatabase.cs" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Assets/Scripts/Skill/SkillData.cs" charset="UTF-8" />
