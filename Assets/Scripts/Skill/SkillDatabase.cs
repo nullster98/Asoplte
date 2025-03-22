@@ -1,14 +1,16 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "SkilDatabase", menuName = "Game/Skil Database")]
-public class SkillDatabase : ScriptableObject
+namespace Skill
 {
-   public List<SkillData> SkillList = new List<SkillData>();
-
-    public void ResetSkillData()
+    [CreateAssetMenu(fileName = "SkilDatabase", menuName = "Game/Skil Database")]
+    public class SkillDatabase : ScriptableObject
     {
-        SkillList.Clear();
+        public List<SkillData> skillList = new List<SkillData>();
+
+        public void ResetSkillData()
+        {
+            skillList.Clear();
+        }
     }
 }

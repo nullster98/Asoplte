@@ -1,4 +1,6 @@
+using PlayerScript;
 using TMPro;
+using UI;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -9,12 +11,13 @@ namespace Game
         [Header("Component")]
         [SerializeField] private GameObject menu;
         [SerializeField] private GameObject gameMenu;
-        [FormerlySerializedAs("GodSelect")] [SerializeField] private GameObject godSelect;
-        [FormerlySerializedAs("CharacterSelect")] [SerializeField] private GameObject characterSelect;
-        [FormerlySerializedAs("SpeciesSelect")] [SerializeField] private GameObject speciesSelect;
-        [FormerlySerializedAs("TraitSelect")] [SerializeField] private GameObject traitSelect;
-        [FormerlySerializedAs("FaithPoint")] [SerializeField] private TMP_Text faithPoint;
-
+        [SerializeField] private GameObject godSelect;
+        [SerializeField] private GameObject characterSelect;
+        [SerializeField] private GameObject speciesSelect;
+        [SerializeField] private GameObject traitSelect;
+        [SerializeField] private TMP_Text faithPoint;
+        [SerializeField] private GodUI godUI;
+        
         public void Start()
         {
             menu.SetActive(true);
@@ -46,6 +49,8 @@ namespace Game
 
             gameMenu.SetActive(true);
             godSelect.SetActive(true);
+            
+            godUI.InitializeUI();
         }
 
         private void StartGame()

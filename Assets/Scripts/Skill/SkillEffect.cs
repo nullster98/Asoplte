@@ -1,40 +1,40 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using PlayerScript;
 
-[System.Serializable]
-public abstract class SkillEffect
+namespace Skill
 {
-    public abstract void ApplyEffect(Player player);
-}
-
-[System.Serializable]
-public class DamageEffect: SkillEffect
-{
-
-    public override void ApplyEffect(Player player)
+    [System.Serializable]
+    public abstract class SkillEffect
     {
+        public abstract void ApplyEffect(Player player);
+    }
+
+    [System.Serializable]
+    public class DamageEffect: SkillEffect
+    {
+
+        public override void ApplyEffect(Player player)
+        {
         
+        }
     }
-}
 
-[System.Serializable]
-public class HealEffect : SkillEffect
-{
-
-    public override void ApplyEffect(Player player)
+    [System.Serializable]
+    public class HealEffect : SkillEffect
     {
 
+        public override void ApplyEffect(Player player)
+        {
+
+        }
     }
-}
 
-[System.Serializable]
-public class BuffEffect : SkillEffect
-{
-
-    public override void ApplyEffect(Player player)
+    [System.Serializable]
+    public class BuffEffect : SkillEffect
     {
 
+        public override void ApplyEffect(Player player)
+        {
+
+        }
     }
 }
-

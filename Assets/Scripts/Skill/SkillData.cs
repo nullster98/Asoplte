@@ -1,35 +1,43 @@
-using System.Collections;
 using System.Collections.Generic;
+using PlayerScript;
 using UnityEngine;
 
-public class SkillData : MonoBehaviour
+namespace Skill
 {
-    public string SkillName;
-    public int SkillID;
-    public string SkillDescription;
-    public bool isCanUseCombat;
-    public float Cooldown;
-    public int ManaCost;
-    public Sprite SkillImg;
-
-    public List<SkillEffect> Effects;
-
-    public void ActivateSkill(Player player)
+    public class SkillData : MonoBehaviour
     {
-        if (player.GetStat("CurrentMP") < ManaCost)
+        public string skillName;
+        public int skillID;
+        public string skillDescription;
+        public bool isCanUseCombat;
+        public float cooldown;
+        public int manaCost;
+        public Sprite skillImg;
+
+        private readonly List<SkillEffect> Effects;
+
+        public SkillData(List<SkillEffect> effects)
         {
-            Debug.Log($"{SkillName} 사용 불가! (마나 부족)");
-            return;
+            Effects = effects;
         }
 
-        // 마나 소모
-        player.ChangeStat("CurrentMP", -ManaCost);
-        Debug.Log($"{SkillName} 스킬 사용! 마나 {ManaCost} 소모.");
-
-        // 효과 적용
-        foreach (var effect in Effects)
+        public void ActivateSkill(Player player)
         {
-            effect.ApplyEffect(player);
+            if (player.GetStat("CurrentMP") < manaCost)
+            {
+                Debug.Log($"{skillName} 사용 불가! (마나 부족)");
+                return;
+            }
+
+            // 마나 소모
+            player.ChangeStat("CurrentMP", -manaCost);
+            Debug.Log($"{skillName} 스킬 사용! 마나 {manaCost} 소모.");
+
+            // 효과 적용
+            foreach (var effect in Effects)
+            {
+                effect.ApplyEffect(player);
+            }
         }
     }
 }

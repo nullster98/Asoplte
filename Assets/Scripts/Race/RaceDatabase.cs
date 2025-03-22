@@ -1,24 +1,26 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "RaceDatabase", menuName = "Game/Race Database")]
-public class RaceDatabase : ScriptableObject
+namespace Race
 {
-    public List<RaceData> RaceList = new List<RaceData>();
-
-    public RaceData GetGodByIndex(int index)
+    [CreateAssetMenu(fileName = "RaceDatabase", menuName = "Game/Race Database")]
+    public class RaceDatabase : ScriptableObject
     {
-        if (index < 0 || index >= RaceList.Count)
+        public List<RaceData> raceList = new List<RaceData>();
+
+        public RaceData GetGodByIndex(int index)
         {
-            Debug.LogError("인덱스 범위를 초과하였습니다.");
-            return null;
+            if (index < 0 || index >= raceList.Count)
+            {
+                Debug.LogError("인덱스 범위를 초과하였습니다.");
+                return null;
+            }
+            return raceList[index];
         }
-        return RaceList[index];
-    }
 
-    public void ResetDatabase()
-    {
-        RaceList.Clear();
+        public void ResetDatabase()
+        {
+            raceList.Clear();
+        }
     }
 }

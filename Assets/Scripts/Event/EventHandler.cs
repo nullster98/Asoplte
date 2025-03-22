@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using Game;
+using PlayerScript;
+using UI;
 using UnityEngine;
 
 namespace Event
@@ -10,8 +12,8 @@ namespace Event
         private EventData currentEvent;
         private int currentPhaseIndex;
 
-        private readonly BattleManager battleManager;
-        private readonly AcquisitionUI acquisitionUI;
+        private BattleManager battleManager;
+        private AcquisitionUI acquisitionUI;
 
         public EventHandler(BattleManager battlemanager, AcquisitionUI acquisitionUI)
         {

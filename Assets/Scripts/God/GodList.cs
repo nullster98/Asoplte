@@ -1,51 +1,37 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
-using UnityEditor.iOS;
 using UnityEngine;
 
-public class GodList : MonoBehaviour
+namespace God
 {
-    [MenuItem("Game/Create Default Gods")]
-    public static void CreateGodDatabase()
+    public class GodList : MonoBehaviour
     {
-        // 기존 GodDatabase.asset을 찾기
-        GodDatabase database = Resources.Load<GodDatabase>("Database/GodDatabase");
-
-        // 만약 없으면 새로 생성
-        if (database == null)
+        [MenuItem("Game/Create Default Gods")]
+        public static void CreateGodDatabase()
         {
-            database = ScriptableObject.CreateInstance<GodDatabase>();
+            // 기존 GodDatabase.asset을 찾기
+            GodDatabase database = Resources.Load<GodDatabase>("Database/GodDatabase");
 
-            // 경로에 새로운 데이터베이스 저장
-            AssetDatabase.CreateAsset(database, "Assets/Resources/Database/GodDatabase.asset");
+            if (database == null)
+            {
+               Debug.LogError("GodDatabase를 찾을수 업습니다.By.GodList.cs");
+               return;
+            }
+
+            database.godList = new List<GodData>();
+            
+            // 신 데이터 추가
+            database.godList.Add(new GodData("자유의 신", "Liberty", 1, true, 0, new LibertyGodEffect()));
+            database.godList.Add(new GodData("복수의 신", "Revenge", 2, true, 0, new LibertyGodEffect()));
+            database.godList.Add(new GodData("쾌락의 신 ", "Furious", 3, true, 0, new LibertyGodEffect()));
+            
+            // 변경 사항 저장
+            EditorUtility.SetDirty(database);
             AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
 
-            Debug.Log("새로운 GodDatabase.asset을 생성했습니다!");
+            Debug.Log("기본 신 데이터를 추가했습니다!");
         }
-
-        // 신 데이터 추가
-
-        // 변경 사항 저장
-        EditorUtility.SetDirty(database);
-        AssetDatabase.SaveAssets();
-
-        Debug.Log("기본 신 데이터를 추가했습니다!");
-    }
-
-    public static void CreateGod(int id, string name)
-    {
-
-    }
-
-    public static Sprite LoadGodSprite(string imageName)
-    {
-        Sprite itemSprite = Resources.Load<Sprite>($"God/Images/{imageName}");
-        if(itemSprite == null)
-        {
-            itemSprite = Resources.Load<Sprite>("images/default");
-        }
-
-        return itemSprite;
+        
     }
 }

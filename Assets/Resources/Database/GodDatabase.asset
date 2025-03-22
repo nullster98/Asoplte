@@ -12,4 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8900b3cf86d06e243ab647d1d72cf053, type: 3}
   m_Name: GodDatabase
   m_EditorClassIdentifier: 
-  GodList: []
+  godList:
+  - GodName: "\uC790\uC720\uC758 \uC2E0"
+    FileName: Liberty
+    GodID: 1
+    IsUnlocked: 1
+    UnlockCost: 0
+  - GodName: "\uBCF5\uC218\uC758 \uC2E0"
+    FileName: Revenge
+    GodID: 2
+    IsUnlocked: 1
+    UnlockCost: 0
+  - GodName: "\uCF8C\uB77D\uC758 \uC2E0 "
+    FileName: Furious
+    GodID: 3
+    IsUnlocked: 1
+    UnlockCost: 0

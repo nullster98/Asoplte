@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Game;
 using TMPro;
+using UI;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -15,16 +16,16 @@ namespace Event
 
         
         [Header("Main Component")]
-        [FormerlySerializedAs("EventText")] [SerializeField] private TMP_Text eventText;
-        [FormerlySerializedAs("EventSprite")] [SerializeField] private Image eventSprite;
-        [FormerlySerializedAs("ButtonContainer")] [SerializeField] private Transform buttonContainer;
-        [FormerlySerializedAs("ButtonPrefab")] [SerializeField] private GameObject buttonPrefab;
+        [SerializeField] private TMP_Text eventText;
+        [SerializeField] private Image eventSprite;
+        [SerializeField] private Transform buttonContainer;
+        [SerializeField] private GameObject buttonPrefab;
         [SerializeField] private ScrollRect eventScrollView;
 
         [Header("Event Data")]
         private EventHandler eventHandler;
-        public BattleManager battleManger;
-        public AcquisitionUI acquisitionUI;
+        [SerializeField] private BattleManager battleManger;
+        [SerializeField] private AcquisitionUI acquisitionUI;
 
         public EventManager(int floor)
         {

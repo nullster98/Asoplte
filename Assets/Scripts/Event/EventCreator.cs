@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using Game;
+using UI;
 using UnityEngine;
 
 namespace Event

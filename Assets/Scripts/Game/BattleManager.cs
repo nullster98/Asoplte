@@ -1,5 +1,7 @@
 using System.Collections;
+using Entities;
 using Event;
+using PlayerScript;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -11,16 +13,16 @@ namespace Game
     {
         private EnemyData enemy;
 
-        [FormerlySerializedAs("BattleWindow")] [SerializeField] GameObject battleWindow;
-        [FormerlySerializedAs("MonsterHP")] [SerializeField] private Slider monsterHp;
-        [FormerlySerializedAs("MonsterHP_Text")] [SerializeField] private TMP_Text monsterHpText;
-        [FormerlySerializedAs("PlayerHP_Text")] [SerializeField] private TMP_Text playerHpText;
-        [FormerlySerializedAs("PlayerHP")] [SerializeField] private Slider playerHp;
-        [FormerlySerializedAs("MonsterSprite")] [SerializeField] private Image monsterSprite;
-        [FormerlySerializedAs("BattleLogs")] [SerializeField] private TMP_Text battleLogs;
+        [SerializeField] GameObject battleWindow;
+        [SerializeField] private Slider monsterHp;
+        [SerializeField] private TMP_Text monsterHpText;
+        [SerializeField] private TMP_Text playerHpText;
+        [SerializeField] private Slider playerHp;
+        [SerializeField] private Image monsterSprite;
+        [SerializeField] private TMP_Text battleLogs;
 
-        [FormerlySerializedAs("BattleBtns")] [SerializeField] private GameObject battleBtns;
-        [FormerlySerializedAs("SkillPage")] [SerializeField] private GameObject skillPage;
+        [SerializeField] private GameObject battleBtns;
+        [SerializeField] private GameObject skillPage;
 
         private void Awake()
         {

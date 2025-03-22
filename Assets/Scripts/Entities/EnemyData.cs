@@ -1,86 +1,85 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Xml.Linq;
 using UnityEngine;
 
-public enum EnemyType
+namespace Entities
 {
-    None,
-    Monster,
-    Boss,
-    Npc
-}
-[System.Serializable]
-public class EnemyData
-{
-    public int EnemyID { get; private set; }
-    public EnemyType NpcType { get; private set; }
-    public string Name { get; private set; }
-    public string Description { get; private set; }
-    public Sprite EnemySprite { get; private set; }
-    public int Level { get; private set; }
-    public int MaxHp { get; private set; }
-    public int CurrentHp { get; private set; }
-    public int MaxMp { get; private set; }
-    public int Attack { get; private set; }
-    public int Defense { get; private set; }
-    //public List<string> Abilities;
-
-    public void LoadEnemySprite()
+    public enum EnemyType
     {
-        string folderPath = NpcType switch
-        {
-            EnemyType.Npc => "Entities/NPC/Images",
-            EnemyType.Monster => "Entities/Monster/Images",
-            EnemyType.Boss => "Entities/Boss/Images",
-            _ => "Entities/Default"
-        };
+        None,
+        Monster,
+        Boss,
+        Npc
+    }
+    [System.Serializable]
+    public class EnemyData
+    {
+        public int EnemyID { get; private set; }
+        public EnemyType NpcType { get; private set; }
+        public string Name { get; private set; }
+        public string Description { get; private set; }
+        public Sprite EnemySprite { get; private set; }
+        public int Level { get; private set; }
+        public int MaxHp { get; private set; }
+        public int CurrentHp { get; private set; }
+        public int MaxMp { get; private set; }
+        public int Attack { get; private set; }
+        public int Defense { get; private set; }
+        //public List<string> Abilities;
 
-        EnemySprite = Resources.Load<Sprite>($"{folderPath}/{Name}") ?? Resources.Load<Sprite>("Entities/default");
+        public void LoadEnemySprite()
+        {
+            string folderPath = NpcType switch
+            {
+                EnemyType.Npc => "Entities/NPC/Images",
+                EnemyType.Monster => "Entities/Monster/Images",
+                EnemyType.Boss => "Entities/Boss/Images",
+                _ => "Entities/Default"
+            };
+
+            EnemySprite = Resources.Load<Sprite>($"{folderPath}/{Name}") ?? Resources.Load<Sprite>("Entities/default");
         
-    }
+        }
 
-    public void GetDescription()
-    {
-        string folderPath = NpcType switch
+        public void GetDescription()
         {
-            EnemyType.Npc => "Entitie/NPC/Descriptions",
-            EnemyType.Monster => "Entitie/Monster/Descriptions",
-            EnemyType.Boss => "Entitie/Boss/Descriptions",
-            _ => "Entitie/Default"
-        };
+            string folderPath = NpcType switch
+            {
+                EnemyType.Npc => "Entitie/NPC/Descriptions",
+                EnemyType.Monster => "Entitie/Monster/Descriptions",
+                EnemyType.Boss => "Entitie/Boss/Descriptions",
+                _ => "Entitie/Default"
+            };
 
-        TextAsset textAsset = Resources.Load<TextAsset>($"{folderPath}/{Name}");
-        Description = textAsset != null ? textAsset.text : "설명 없음";
-    }
+            TextAsset textAsset = Resources.Load<TextAsset>($"{folderPath}/{Name}");
+            Description = textAsset != null ? textAsset.text : "설명 없음";
+        }
 
-    public EnemyData(int id, string name, EnemyType type, int level, int maxHp, int maxMp, int attack, int defense)
-    {
-        EnemyID = id;
-        Name = name;
-        NpcType = type;
-        Level = level;
-        MaxHp = maxHp;
-        CurrentHp = maxHp;
-        MaxMp = maxMp;
-        Attack = attack;
-        Defense = defense;
+        public EnemyData(int id, string name, EnemyType type, int level, int maxHp, int maxMp, int attack, int defense)
+        {
+            EnemyID = id;
+            Name = name;
+            NpcType = type;
+            Level = level;
+            MaxHp = maxHp;
+            CurrentHp = maxHp;
+            MaxMp = maxMp;
+            Attack = attack;
+            Defense = defense;
 
-        LoadEnemySprite();
-        GetDescription();
+            LoadEnemySprite();
+            GetDescription();
 
-    }
+        }
 
-    public void TakeDamage(int damage)
-    {
-        CurrentHp -= damage;
-        if(CurrentHp < 0) CurrentHp = 0;
-    }    
+        public void TakeDamage(int damage)
+        {
+            CurrentHp -= damage;
+            if(CurrentHp < 0) CurrentHp = 0;
+        }    
 
-    public void Heal(int amount)
-    {
-        CurrentHp += amount;
-        if(CurrentHp > MaxHp) CurrentHp = MaxHp;
+        public void Heal(int amount)
+        {
+            CurrentHp += amount;
+            if(CurrentHp > MaxHp) CurrentHp = MaxHp;
+        }
     }
 }

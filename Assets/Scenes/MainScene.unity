@@ -436,11 +436,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   menu: {fileID: 1659559502}
   gameMenu: {fileID: 1555521074}
-  GodSelect: {fileID: 682988543}
-  CharacterSelect: {fileID: 2032912000}
-  SpeciesSelect: {fileID: 2144877267}
-  TraitSelect: {fileID: 1796247733}
-  FaithPoint: {fileID: 229031733}
+  godSelect: {fileID: 682988543}
+  characterSelect: {fileID: 2032912000}
+  speciesSelect: {fileID: 2144877267}
+  traitSelect: {fileID: 1796247733}
+  faithPoint: {fileID: 229031733}
+  godUI: {fileID: 1482002267}
 --- !u!114 &59144034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -453,7 +454,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53bd5c4245759894eab02bfb57447736, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerImg: {fileID: 0}
+  playerImg: {fileID: 0}
   selectedTraits: []
 --- !u!1 &93285438
 GameObject:
@@ -539,7 +540,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2032912002}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: RaceList, Assembly-CSharp
         m_MethodName: MainToSelect
         m_Mode: 1
@@ -1268,127 +1269,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!1 &514617995
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 514617996}
-  - component: {fileID: 514617999}
-  - component: {fileID: 514617998}
-  - component: {fileID: 514617997}
-  m_Layer: 5
-  m_Name: Back
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!224 &514617996
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 514617995}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1914239214}
-  m_Father: {fileID: 682988544}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -397, y: -1058}
-  m_SizeDelta: {x: 300, y: 150}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &514617997
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 514617995}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Navigation:
-    m_Mode: 3
-    m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.1
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_SelectedTrigger: Selected
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 514617998}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!114 &514617998
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 514617995}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &514617999
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 514617995}
-  m_CullTransparentMesh: 1
 --- !u!1 &519623051
 GameObject:
   m_ObjectHideFlags: 0
@@ -1711,7 +1591,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2032912002}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: RaceList, Assembly-CSharp
         m_MethodName: ShowNextCharacter
         m_Mode: 1
@@ -1903,14 +1783,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 682988544}
-  - component: {fileID: 682988545}
   m_Layer: 5
   m_Name: GodSelect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &682988544
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1930,7 +1809,6 @@ RectTransform:
   - {fileID: 1036134359}
   - {fileID: 2053455048}
   - {fileID: 935634905}
-  - {fileID: 514617996}
   - {fileID: 1945702282}
   - {fileID: 692379793}
   - {fileID: 888865898}
@@ -1941,62 +1819,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &682988545
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 682988543}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a7937f9d833f41408370ba7101f24f5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ImgList:
-  - Img: {fileID: 21300000, guid: adc01e43af8798c429636ae94e3f3a98, type: 3}
-    Name: "\uC790\uC720\uC758 \uC2E0"
-    GodName: 0
-    BackgroundImg: {fileID: 21300000, guid: 9f7bdcf4bdfbe2c4b973ee567ef58e5c, type: 3}
-    information: "\uBB34\uC5C7\uC744 \uD558\uB358 \uBB34\uC5C7\uC774 \uB418\uB358
-      \uB2F9\uC2E0\uC744 \uC874\uC911\uD569\uB2C8\uB2E4.\n\n-\uD55C\uACC4\uB3CC\uD30C
-      : MaxCost + 5\n\n-\uB2E4\uB2E4\uC775\uC120 : \uAE0D\uC815\uC801\uC778 \uD2B9\uC131
-      \uAC2F\uC218\uB2F9 \uBAA8\uB4E0 \uB2A5\uB825\uCE58 + 1"
-  - Img: {fileID: 21300000, guid: fb354f08d66154344ba669964484e4dd, type: 3}
-    Name: "\uBCF5\uC218\uC758 \uC2E0"
-    GodName: 1
-    BackgroundImg: {fileID: 21300000, guid: 6b22b836872a2714cae1c4474018d684, type: 3}
-    information: "\uC740\uD61C\uB294 \uC78A\uC5B4\uB3C4 \uBCF5\uC218\uB294 \uC78A\uC9C0
-      \uC54A\uC744\uAC83\uC785\uB2C8\uB2E4. \uC601\uC6D0\uD788...\n\n-\uBCF4\uBCF5
-      : \uB370\uBBF8\uC9C0\uB97C \uC785\uC5C8\uC744 \uACBD\uC6B0 \uB2E4\uC74C\uBC88
-      \uACF5\uACA9\uC5D0 \uB300\uD55C \uB370\uBBF8\uC9C0\uC99D\uAC00\n\n-\uC6D0\uD55C
-      : \uB3D9\uC77C NPC \uC778\uCE74\uC6B4\uD130 \uBC1C\uC0DD \uBC0F \uD574\uB2F9
-      \uC778\uBB3C\uC5D0 \uB300\uD55C \uBD80\uC815\uC801 \uC778\uCE74\uC6B4\uD130
-      \uACBD\uD5D8\uD588\uC744\uC2DC \uAC15\uC81C \uC804\uD22C \uBC1C\uC0DD"
-  - Img: {fileID: 21300000, guid: 9f4c908c1a3d364458a56c84424481a5, type: 3}
-    Name: "\uCF8C\uB77D\uC758 \uC2E0"
-    GodName: 2
-    BackgroundImg: {fileID: 21300000, guid: 27ce0a066dae15b4cba5f54635896d0d, type: 3}
-    information: "\uC78A\uC9C0\uB9C8\uC2ED\uC2DC\uC624. \uB2F9\uC2E0 \uB610\uD55C
-      \uCF8C\uB77D\uC758 \uC2E0\uC758 \uBCC0\uB355\uC5D0 \uC758\uD574 \uCC3D\uC870\uB41C
-      \uC0AC\uB3C4\uC784\uC744\n\n-\uCF54\uBA58\uD130\uB9AC : \uB2F9\uC2E0\uC758
-      \uD589\uB3D9\uC5D0 \uB530\uB77C \uADF8\uAC00 \uBC18\uC751\uD569\uB2C8\uB2E4.\r\n\r\n\r-\uBCC0\uB355
-      : \uAC00\uB054\uC529 \uC2EC\uC2EC\uD560\uB54C\uB9C8\uB2E4 \uC120\uD0DD\uC9C0\uC5D0\uC11C
-      \uC870\uC5B8\uC744 \uD574\uC90D\uB2C8\uB2E4. \uD5C8\uB098 \uC774 \uACB0\uACFC\uAC00
-      \uB2F9\uC2E0\uC5D0\uAC8C \uB4DD\uC774\uB420\uC9C0\uB294 \uBAA8\uB974\uB294
-      \uC77C\uC774\uC8E0. \uD558\uC9C0\uB9CC \uADF8\uB294 \uC88B\uC544\uD560\uAC81\uB2C8\uB2E4.\r\n\r\n-\uD53C\uB0A0\uB808
-      : \uC804\uD22C\uC2DC \uC77C\uC815\uD655\uB960\uB85C \uD53C\uB0A0\uB808 \uBC1C\uB3D9\uD569\uB2C8\uB2E4."
-  mainImage: {fileID: 764120756}
-  leftImage: {fileID: 1036134360}
-  rightImage: {fileID: 791330259}
-  nameText: {fileID: 1160288532}
-  infoText: {fileID: 2128284866}
-  player: {fileID: 59144034}
-  GodSelect: {fileID: 682988543}
-  GodBackground: {fileID: 1352645926}
-  CharacterSelect: {fileID: 2032912000}
-  SelectMenu: {fileID: 1659559502}
-  GameMenu: {fileID: 1555521074}
 --- !u!1 &684920160
 GameObject:
   m_ObjectHideFlags: 0
@@ -2154,8 +1976,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 682988545}
-        m_TargetAssemblyTypeName: GodList, Assembly-CSharp
+      - m_Target: {fileID: 1482002267}
+        m_TargetAssemblyTypeName: UI.GodUI, Assembly-CSharp
         m_MethodName: PreviousButton
         m_Mode: 1
         m_Arguments:
@@ -3568,8 +3390,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 682988545}
-        m_TargetAssemblyTypeName: GodList, Assembly-CSharp
+      - m_Target: {fileID: 1482002267}
+        m_TargetAssemblyTypeName: UI.GodUI, Assembly-CSharp
         m_MethodName: OnPreviousButtonPressed
         m_Mode: 1
         m_Arguments:
@@ -3832,7 +3654,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2032912002}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: RaceList, Assembly-CSharp
         m_MethodName: ShowPreviousCharacter
         m_Mode: 1
@@ -5229,6 +5051,191 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1470899561}
   m_CullTransparentMesh: 1
+--- !u!1 &1482002264
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1482002268}
+  - component: {fileID: 1482002267}
+  - component: {fileID: 1482002266}
+  m_Layer: 0
+  m_Name: UIManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1482002266
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1482002264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c8ce454af51d2d4abf640a03afccf9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MainImg: {fileID: 1469483344}
+  NameArea: {fileID: 58240059}
+  DescriptionArea: {fileID: 1210958087}
+  raceList:
+  - raceImg: {fileID: 21300000, guid: 7706b4803df37bc4a9f9c8e9e270a51e, type: 3}
+    offRaceImg: {fileID: 0}
+    RaceName: "\uACE8\uB818"
+    RequireFaith: 100
+    DerivedCharacters:
+    - characterName: 
+      characterImg: {fileID: 0}
+      onImg: {fileID: 0}
+      offImg: {fileID: 0}
+      characterDescription: 
+      characterStat: 
+      unlockHint: 
+      requireFaith: 300
+      isUnlocked: 0
+    - characterName: 
+      characterImg: {fileID: 0}
+      onImg: {fileID: 0}
+      offImg: {fileID: 0}
+      characterDescription: 
+      characterStat: 
+      unlockHint: 
+      requireFaith: 300
+      isUnlocked: 0
+    - characterName: 
+      characterImg: {fileID: 0}
+      onImg: {fileID: 0}
+      offImg: {fileID: 0}
+      characterDescription: 
+      characterStat: 
+      unlockHint: 
+      requireFaith: 300
+      isUnlocked: 0
+    - characterName: 
+      characterImg: {fileID: 0}
+      onImg: {fileID: 0}
+      offImg: {fileID: 0}
+      characterDescription: 
+      characterStat: 
+      unlockHint: 
+      requireFaith: 300
+      isUnlocked: 0
+    IsUnlocked: 0
+  - raceImg: {fileID: 21300000, guid: 744e7e0220e41d2449dcf9b6c2f3af45, type: 3}
+    offRaceImg: {fileID: 0}
+    RaceName: "\uC624\uD06C"
+    RequireFaith: 100
+    DerivedCharacters:
+    - characterName: 
+      characterImg: {fileID: 0}
+      onImg: {fileID: 0}
+      offImg: {fileID: 0}
+      characterDescription: 
+      characterStat: 
+      unlockHint: 
+      requireFaith: 100
+      isUnlocked: 0
+    - characterName: 
+      characterImg: {fileID: 0}
+      onImg: {fileID: 0}
+      offImg: {fileID: 0}
+      characterDescription: 
+      characterStat: 
+      unlockHint: 
+      requireFaith: 0
+      isUnlocked: 0
+    - characterName: 
+      characterImg: {fileID: 0}
+      onImg: {fileID: 0}
+      offImg: {fileID: 0}
+      characterDescription: 
+      characterStat: 
+      unlockHint: 
+      requireFaith: 0
+      isUnlocked: 0
+    IsUnlocked: 0
+  - raceImg: {fileID: 21300000, guid: 167fc9d7047b88d4393fd6ed6bcae1a0, type: 3}
+    offRaceImg: {fileID: 0}
+    RaceName: "\uC624\uD06C \uC8FC\uC220\uC0AC"
+    RequireFaith: 100
+    DerivedCharacters:
+    - characterName: 
+      characterImg: {fileID: 0}
+      onImg: {fileID: 0}
+      offImg: {fileID: 0}
+      characterDescription: 
+      characterStat: 
+      unlockHint: 
+      requireFaith: 100
+      isUnlocked: 0
+    - characterName: 
+      characterImg: {fileID: 0}
+      onImg: {fileID: 0}
+      offImg: {fileID: 0}
+      characterDescription: 
+      characterStat: 
+      unlockHint: 
+      requireFaith: 0
+      isUnlocked: 0
+    IsUnlocked: 0
+  RaceCollection: {fileID: 2144877267}
+  buttonContainer: {fileID: 864748265}
+  raceButtonPrefab: {fileID: 2831233349434845612, guid: 75cf7654462e03c43831d8bab0d6db48, type: 3}
+  TratiSelect: {fileID: 1796247733}
+  GodSelect: {fileID: 682988543}
+  unlockButton: {fileID: 751033983}
+  QuestionImg: {fileID: 21300000, guid: 7da3485c16d74804da59d7ddce6682ad, type: 3}
+  LeftImg: {fileID: 362110702}
+  RightImg: {fileID: 1665579125}
+  MidImg: {fileID: 684920162}
+  LeftButton: {fileID: 961006456}
+  RightButton: {fileID: 641497797}
+  isFirst: 0
+--- !u!114 &1482002267
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1482002264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a7937f9d833f41408370ba7101f24f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  godDatabase: {fileID: 11400000, guid: e85fd791e6b158c4394bf623947a7e02, type: 2}
+  mainImage: {fileID: 764120756}
+  leftImage: {fileID: 1036134360}
+  rightImage: {fileID: 791330259}
+  nameText: {fileID: 1160288532}
+  infoText: {fileID: 2128284866}
+  player: {fileID: 59144034}
+  godSelect: {fileID: 682988543}
+  godBackground: {fileID: 1352645926}
+  characterSelect: {fileID: 2032912000}
+  selectMenu: {fileID: 1659559502}
+  gameMenu: {fileID: 1555521074}
+--- !u!4 &1482002268
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1482002264}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1555521074
 GameObject:
   m_ObjectHideFlags: 0
@@ -5244,7 +5251,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1555521075
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5852,7 +5859,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2032912002}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: RaceList, Assembly-CSharp
         m_MethodName: PreviousButton
         m_Mode: 1
@@ -6266,7 +6273,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1796247734
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6307,57 +6314,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4cfb8fde03f1da47bd0e2c70ab6d60c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CharacterSelect: {fileID: 2032912000}
-  PostivePannel: {fileID: 1086557675}
-  NegativePannel: {fileID: 728895065}
-  PositiveBtn: {fileID: 857457635}
-  NegativeBtn: {fileID: 20136133}
-  TraitsList:
-  - TraitName: "\uAD73\uAC74\uD55C \uC2E0\uC559"
-    PnN: 0
-    AnP: 0
-    TraitImg: {fileID: 21300000, guid: 2c31e0207e2445b4ba511c4d7997235e, type: 3}
-    TraitDescription: "\uC2E0\uC559\uC2EC \uAC10\uC18C\uC728 -10%"
-    Cost: 3
-  - TraitName: "\uBD88\uD0C0\uB294 \uB9C8\uB825"
-    PnN: 0
-    AnP: 0
-    TraitImg: {fileID: 21300000, guid: a19cebe0599724c469f757f6e0b2d9a4, type: 3}
-    TraitDescription: 2
-    Cost: 2
-  - TraitName: 3
-    PnN: 1
-    AnP: 0
-    TraitImg: {fileID: 21300000, guid: 137adc4b5a4bdb84587af37f8855a33b, type: 3}
-    TraitDescription: 3
-    Cost: 3
-  - TraitName: 4
-    PnN: 0
-    AnP: 0
-    TraitImg: {fileID: 21300000, guid: df5153fca31c9bf47b2d36359b5dd373, type: 3}
-    TraitDescription: 4
-    Cost: 1
-  - TraitName: 5
-    PnN: 1
-    AnP: 0
-    TraitImg: {fileID: 21300000, guid: 188d00ffd2a18c341a38d8ed6b131b7c, type: 3}
-    TraitDescription: 5
-    Cost: 2
-  - TraitName: 6
-    PnN: 1
-    AnP: 0
-    TraitImg: {fileID: 21300000, guid: aa0f991c64b8fcd4f9b052e24775c686, type: 3}
-    TraitDescription: 6
-    Cost: 1
-  PbuttonContainer: {fileID: 1330808807}
-  NbuttonContainer: {fileID: 1810821009}
-  ButtonPrefab: {fileID: 7575426544125561637, guid: 981f4c178f8fd1443a507d311b08fca9, type: 3}
-  DescriptionArea: {fileID: 1845751823}
-  CostArea: {fileID: 702081624}
-  SelectButtonPrefab: {fileID: 4974512768836907702, guid: 7e1316728e7b8a646b528a65948d26c7, type: 3}
-  SelectContainer: {fileID: 1176397049}
-  TotalCost: 0
-  MaxCost: 0
+  characterSelect: {fileID: 0}
+  postivePannel: {fileID: 0}
+  negativePannel: {fileID: 0}
+  positiveBtn: {fileID: 0}
+  negativeBtn: {fileID: 0}
+  traitsList: []
+  pbuttonContainer: {fileID: 0}
+  nbuttonContainer: {fileID: 0}
+  buttonPrefab: {fileID: 0}
+  descriptionArea: {fileID: 0}
+  costArea: {fileID: 0}
+  selectButtonPrefab: {fileID: 0}
+  selectContainer: {fileID: 0}
+  totalCost: 0
+  maxCost: 0
 --- !u!1 &1810821008
 GameObject:
   m_ObjectHideFlags: 0
@@ -6701,140 +6672,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1892440723}
   m_CullTransparentMesh: 1
---- !u!1 &1914239213
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1914239214}
-  - component: {fileID: 1914239216}
-  - component: {fileID: 1914239215}
-  m_Layer: 5
-  m_Name: Text (TMP)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1914239214
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1914239213}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 514617996}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1914239215
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1914239213}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_text: Back
-  m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_fontSharedMaterials: []
-  m_fontMaterial: {fileID: 0}
-  m_fontMaterials: []
-  m_fontColor32:
-    serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
-  m_enableVertexGradient: 0
-  m_colorMode: 3
-  m_fontColorGradient:
-    topLeft: {r: 1, g: 1, b: 1, a: 1}
-    topRight: {r: 1, g: 1, b: 1, a: 1}
-    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
-    bottomRight: {r: 1, g: 1, b: 1, a: 1}
-  m_fontColorGradientPreset: {fileID: 0}
-  m_spriteAsset: {fileID: 0}
-  m_tintAllSprites: 0
-  m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: -1183493901
-  m_overrideHtmlColors: 0
-  m_faceColor:
-    serializedVersion: 2
-    rgba: 4294967295
-  m_fontSize: 70
-  m_fontSizeBase: 70
-  m_fontWeight: 400
-  m_enableAutoSizing: 0
-  m_fontSizeMin: 18
-  m_fontSizeMax: 72
-  m_fontStyle: 0
-  m_HorizontalAlignment: 2
-  m_VerticalAlignment: 512
-  m_textAlignment: 65535
-  m_characterSpacing: 0
-  m_wordSpacing: 0
-  m_lineSpacing: 0
-  m_lineSpacingMax: 0
-  m_paragraphSpacing: 0
-  m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
-  m_wordWrappingRatios: 0.4
-  m_overflowMode: 0
-  m_linkedTextComponent: {fileID: 0}
-  parentLinkedComponent: {fileID: 0}
-  m_enableKerning: 1
-  m_enableExtraPadding: 0
-  checkPaddingRequired: 0
-  m_isRichText: 1
-  m_parseCtrlCharacters: 1
-  m_isOrthographic: 1
-  m_isCullingEnabled: 0
-  m_horizontalMapping: 0
-  m_verticalMapping: 0
-  m_uvLineOffset: 0
-  m_geometrySortingOrder: 0
-  m_IsTextObjectScaleStatic: 0
-  m_VertexBufferAutoSizeReduction: 0
-  m_useMaxVisibleDescender: 1
-  m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
-  m_isUsingLegacyAnimationComponent: 0
-  m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
-  m_baseMaterial: {fileID: 0}
-  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!222 &1914239216
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1914239213}
-  m_CullTransparentMesh: 1
 --- !u!1 &1927045213
 GameObject:
   m_ObjectHideFlags: 0
@@ -7052,8 +6889,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 682988545}
-        m_TargetAssemblyTypeName: GodList, Assembly-CSharp
+      - m_Target: {fileID: 1482002267}
+        m_TargetAssemblyTypeName: UI.GodUI, Assembly-CSharp
         m_MethodName: GodSelectToCharacterSelect
         m_Mode: 1
         m_Arguments:
@@ -7158,7 +6995,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2032912001}
-  - component: {fileID: 2032912002}
   m_Layer: 5
   m_Name: CharacterSet
   m_TagString: Untagged
@@ -7196,137 +7032,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &2032912002
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2032912000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c8ce454af51d2d4abf640a03afccf9b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MainImg: {fileID: 1469483344}
-  NameArea: {fileID: 58240059}
-  DescriptionArea: {fileID: 1210958087}
-  raceList:
-  - RaceImg: {fileID: 21300000, guid: 7706b4803df37bc4a9f9c8e9e270a51e, type: 3}
-    OffRaceImg: {fileID: 0}
-    RaceName: "\uACE8\uB818"
-    race: 3
-    RequireFaith: 100
-    DerivedCharacters:
-    - CharacterName: "\uB8EC \uACE8\uB818"
-      CharacterImg: {fileID: 21300000, guid: 7706b4803df37bc4a9f9c8e9e270a51e, type: 3}
-      OnImg: {fileID: 21300000, guid: 7706b4803df37bc4a9f9c8e9e270a51e, type: 3}
-      OffImg: {fileID: 21300000, guid: 41caf7b8b5b721845bbb5a42ebfb9200, type: 3}
-      CharacterDescription: "\uB8EC \uACE8\uB818\uC785\uB2C8\uB2E4"
-      CharacterStat: "\uC778\uACF5\uBB3C\n\uAD73\uAC74\uD568\n\uB9C8\uBC95\uC800\uD56D"
-      UnlockHint: 
-      RequireFaith: 300
-      IsUnlocked: 0
-    - CharacterName: "\uBC30\uD130\uB9AC \uACE8\uB818"
-      CharacterImg: {fileID: 21300000, guid: 6c34431dcda6af8419a1bc5fc558e243, type: 3}
-      OnImg: {fileID: 21300000, guid: 6c34431dcda6af8419a1bc5fc558e243, type: 3}
-      OffImg: {fileID: 21300000, guid: 54e5d9f1a6f7c2341aad42eb3595c4d4, type: 3}
-      CharacterDescription: "\uD30C\uC9C0\uC9C1 \uACE8\uB818\uC785\uB2C8\uB2E4."
-      CharacterStat: "\uC778\uACF5\uBB3C\n\uC804\uB3C4\uCCB4"
-      UnlockHint: 
-      RequireFaith: 300
-      IsUnlocked: 0
-    - CharacterName: "\uD3EC\uB808\uC2A4\uD2B8 \uACE8\uB818"
-      CharacterImg: {fileID: 21300000, guid: 55f5b9ce3819e7a49a112264c60c9561, type: 3}
-      OnImg: {fileID: 21300000, guid: 55f5b9ce3819e7a49a112264c60c9561, type: 3}
-      OffImg: {fileID: 21300000, guid: de309db24acd06749ad71452f399c9ff, type: 3}
-      CharacterDescription: "\uC232\uC18D\uC758 \uC791\uC740 \uACE8\uB818\uC785\uB2C8\uB2E4"
-      CharacterStat: "\uC778\uACF5\uBB3C\n\uBD80\uC2DD\n\uC790\uC5F0\uCE5C\uD654"
-      UnlockHint: 
-      RequireFaith: 300
-      IsUnlocked: 0
-    - CharacterName: "3\uAC1C\uAC00\uB118\uC744\uB54C"
-      CharacterImg: {fileID: 21300000, guid: 6ef88433f9373964f8ef87c104c1fea4, type: 3}
-      OnImg: {fileID: 21300000, guid: 6ef88433f9373964f8ef87c104c1fea4, type: 3}
-      OffImg: {fileID: 21300000, guid: 6ef88433f9373964f8ef87c104c1fea4, type: 3}
-      CharacterDescription: "\uACFC\uC5F0"
-      CharacterStat: "\uC5B4\uB5A0\uD5E5\uB420\uB824\uB098"
-      UnlockHint: 
-      RequireFaith: 300
-      IsUnlocked: 0
-    IsUnlocked: 0
-  - RaceImg: {fileID: 21300000, guid: 744e7e0220e41d2449dcf9b6c2f3af45, type: 3}
-    OffRaceImg: {fileID: 0}
-    RaceName: "\uC624\uD06C"
-    race: 1
-    RequireFaith: 100
-    DerivedCharacters:
-    - CharacterName: "\uC624\uD06C"
-      CharacterImg: {fileID: 21300000, guid: 6ef88433f9373964f8ef87c104c1fea4, type: 3}
-      OnImg: {fileID: 21300000, guid: 8599a6fb0438a6c4fa5025e38d73f032, type: 3}
-      OffImg: {fileID: 21300000, guid: bea61de79884ada45bc41c2b0c0d0010, type: 3}
-      CharacterDescription: "\uAE30\uBCF8 \uC624\uD06C"
-      CharacterStat: "\uC624\uD06C \uC804\uC0AC"
-      UnlockHint: 
-      RequireFaith: 100
-      IsUnlocked: 0
-    - CharacterName: "\uC624\uD06C - \uD608\uACC4"
-      CharacterImg: {fileID: 21300000, guid: 68e56505b2fd47d4cbb191fc1454e77a, type: 3}
-      OnImg: {fileID: 21300000, guid: 68e56505b2fd47d4cbb191fc1454e77a, type: 3}
-      OffImg: {fileID: 21300000, guid: 68e56505b2fd47d4cbb191fc1454e77a, type: 3}
-      CharacterDescription: "\uC624\uD06C - \uD608\uACC4"
-      CharacterStat: "\uC624\uD06C - \uD608\uACC4"
-      UnlockHint: 
-      RequireFaith: 0
-      IsUnlocked: 0
-    - CharacterName: "\uC624\uD06C - \uB1CC\uC2E0"
-      CharacterImg: {fileID: 21300000, guid: 54b644bc8a5924548bc3a0774a6ee496, type: 3}
-      OnImg: {fileID: 21300000, guid: 54b644bc8a5924548bc3a0774a6ee496, type: 3}
-      OffImg: {fileID: 21300000, guid: 54b644bc8a5924548bc3a0774a6ee496, type: 3}
-      CharacterDescription: "\uC624\uD06C - \uB1CC\uC2E0"
-      CharacterStat: "\uC624\uD06C - \uB1CC\uC2E0"
-      UnlockHint: 
-      RequireFaith: 0
-      IsUnlocked: 0
-    IsUnlocked: 0
-  - RaceImg: {fileID: 21300000, guid: 167fc9d7047b88d4393fd6ed6bcae1a0, type: 3}
-    OffRaceImg: {fileID: 0}
-    RaceName: "\uC624\uD06C \uC8FC\uC220\uC0AC"
-    race: 1
-    RequireFaith: 100
-    DerivedCharacters:
-    - CharacterName: "\uC624\uD06C"
-      CharacterImg: {fileID: 21300000, guid: 167fc9d7047b88d4393fd6ed6bcae1a0, type: 3}
-      OnImg: {fileID: 21300000, guid: 167fc9d7047b88d4393fd6ed6bcae1a0, type: 3}
-      OffImg: {fileID: 21300000, guid: 167fc9d7047b88d4393fd6ed6bcae1a0, type: 3}
-      CharacterDescription: "\uAE30\uBCF8 \uC624\uD06C"
-      CharacterStat: "\uC624\uD06C \uC8FC\uC220\uC0AC"
-      UnlockHint: 
-      RequireFaith: 100
-      IsUnlocked: 0
-    - CharacterName: "\uC624\uD06C - \uD608\uACC4"
-      CharacterImg: {fileID: 21300000, guid: e5b0cc1798217604aa2c4136ecca87a0, type: 3}
-      OnImg: {fileID: 21300000, guid: e5b0cc1798217604aa2c4136ecca87a0, type: 3}
-      OffImg: {fileID: 21300000, guid: e5b0cc1798217604aa2c4136ecca87a0, type: 3}
-      CharacterDescription: "\uC624\uD06C - \uD608\uACC4"
-      CharacterStat: "\uC624\uD06C - \uD608\uACC4"
-      UnlockHint: 
-      RequireFaith: 0
-      IsUnlocked: 0
-    IsUnlocked: 0
-  RaceCollection: {fileID: 2144877267}
-  buttonContainer: {fileID: 864748265}
-  raceButtonPrefab: {fileID: 2831233349434845612, guid: 75cf7654462e03c43831d8bab0d6db48, type: 3}
-  TratiSelect: {fileID: 1796247733}
-  GodSelect: {fileID: 682988543}
-  unlockButton: {fileID: 751033983}
-  QuestionImg: {fileID: 21300000, guid: 7da3485c16d74804da59d7ddce6682ad, type: 3}
-  LeftImg: {fileID: 362110702}
-  RightImg: {fileID: 1665579125}
-  MidImg: {fileID: 684920162}
-  LeftButton: {fileID: 961006456}
-  RightButton: {fileID: 641497797}
-  isFirst: 0
 --- !u!1 &2041565367
 GameObject:
   m_ObjectHideFlags: 0
@@ -7477,8 +7182,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 682988545}
-        m_TargetAssemblyTypeName: GodList, Assembly-CSharp
+      - m_Target: {fileID: 1482002267}
+        m_TargetAssemblyTypeName: UI.GodUI, Assembly-CSharp
         m_MethodName: OnNextButtonPressed
         m_Mode: 1
         m_Arguments:
@@ -8007,3 +7712,4 @@ SceneRoots:
   - {fileID: 2041565370}
   - {fileID: 59144032}
   - {fileID: 1973424196}
+  - {fileID: 1482002268}

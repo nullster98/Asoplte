@@ -1,27 +1,29 @@
-using System.Collections;
-using System.Collections.Generic;
+using Game;
 using UnityEngine;
 
-public class ItemManager : MonoBehaviour
+namespace Item
 {
-    public static ItemManager Instance;
-
-    private void Awake()
+    public class ItemManager : MonoBehaviour
     {
-        if(Instance == null)
-            Instance = this;
-        else
-            Destroy(gameObject);
-    }
+        public static ItemManager Instance;
 
-    public ItemData GiveItemToPlayer(int itemID)
-    {
-        ItemData itemData = DatabaseManager.Instance.itemDatabase.GetItemByID(itemID);
-        if (itemData == null)
+        private void Awake()
         {
-            Debug.LogError("해당 ID의 아이템을 찾을 수 없습니다!");
-            return null;
+            if(Instance == null)
+                Instance = this;
+            else
+                Destroy(gameObject);
         }
-        return itemData;
+
+        public ItemData GiveItemToPlayer(int itemID)
+        {
+            ItemData itemData = DatabaseManager.Instance.itemDatabase.GetItemByID(itemID);
+            if (itemData == null)
+            {
+                Debug.LogError("해당 ID의 아이템을 찾을 수 없습니다!");
+                return null;
+            }
+            return itemData;
+        }
     }
 }

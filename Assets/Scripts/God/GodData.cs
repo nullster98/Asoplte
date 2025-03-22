@@ -1,62 +1,96 @@
-using System.Collections;
 using System.Collections.Generic;
+using PlayerScript;
 using UnityEngine;
 
-public abstract class GodEffect
+namespace God
 {
-    public abstract void ApplyEffect(Player player);
-}
-
-public class GodData : MonoBehaviour
-{
-    public string GodName;
-    public string FileName;
-    public int GodID;
-    public bool IsUnlocked = false;
-    public int UnlockCost;
-    public Sprite GetBackgroundImage()
+    public abstract class GodEffect
     {
-        return LoadBackgroundSprite(FileName);
+        public abstract void ApplyEffect(Player player);
     }
 
-    private Sprite LoadBackgroundSprite(string imageName)
+    [System.Serializable]
+    public sealed class GodData
     {
-        Sprite backgroundSprite = Resources.Load<Sprite>($"God/Backgrounds/{imageName}_BG");
-        return backgroundSprite != null ? backgroundSprite : Resources.Load<Sprite>("God/Backgrounds/default_BG");
+        public string GodName;
+        public string FileName;
+        public int GodID;
+        public bool IsUnlocked;
+        public int UnlockCost;
+        public GodEffect SpecialEffect;
+        public Sprite GetBackgroundImage()
+        {
+            return LoadBackgroundSprite(FileName);
+        }
+
+        private Sprite LoadBackgroundSprite(string imageName)
+        {
+            Sprite backgroundSprite = Resources.Load<Sprite>($"God/Backgrounds/{imageName}_BG");
+            return backgroundSprite != null ? backgroundSprite : Resources.Load<Sprite>("God/default_BG");
+        }
+        public Sprite GetGodImage()
+        {
+            return LoadGodSprite(FileName);
+        }
+
+        private Sprite LoadGodSprite(string imageName)
+        {
+            string path = $"God/Images/{imageName}";
+            Sprite godSprite = Resources.Load<Sprite>(path);
+
+            if (godSprite == null)
+            {
+                Debug.LogWarning($"[LoadGodSprite] ❌ 이미지 로드 실패! 경로: {path}.png 혹은 확장자 없음");
+                return Resources.Load<Sprite>("God/default");
+            }
+
+            Debug.Log($"[LoadGodSprite] ✅ 성공적으로 이미지 로드됨: {path}");
+            return godSprite;
+        }
+
+        public string GetDescription()
+        {
+            TextAsset description = Resources.Load<TextAsset>($"God/Descriptions/{FileName}");
+            return description != null ? description.text : "설명 없음";
+        }
+
+        public Dictionary<string, int> GodStats = new Dictionary<string, int>
+        {
+            {"Atk", 0},
+            {"Def", 0},
+            {"HP", 0 },
+            {"MP", 0 },
+            {"MentalStat", 0 }
+        };
+
+        public GodData(string godName, string fileName, int godID, bool isUnlock, int unlockCost,
+            GodEffect specialEffect)
+        {
+            this.GodName = godName;
+            this.FileName = fileName;
+            this.GodID = godID;
+            IsUnlocked = isUnlock;
+            this.UnlockCost = unlockCost;
+            this.SpecialEffect = specialEffect;
+
+            Sprite godImage = GetGodImage();
+            Sprite background = GetBackgroundImage();
+            string description = GetDescription();
+            
+            if (godImage == null)
+                Debug.LogWarning($"[GodData] {godName}의 메인 이미지가 없습니다! 경로: God/Images/{fileName}");
+            if (background == null)
+                Debug.LogWarning($"[GodData] {godName}의 배경 이미지가 없습니다! 경로: God/Backgrounds/{fileName}_BG");
+            if (description == "설명 없음")
+                Debug.LogWarning($"[GodData] {godName}의 설명 텍스트를 찾을 수 없습니다! 경로: God/Descriptions/{fileName}");
+        }
     }
-    public Sprite GetGodImage()
-    {
-        return LoadGodSprite(FileName);
-    }
 
-    private Sprite LoadGodSprite(string imageName)
+    public class LibertyGodEffect :GodEffect
     {
-        Sprite godSprite = Resources.Load<Sprite>($"Images/Gods/{imageName}");
-        return godSprite != null ? godSprite : Resources.Load<Sprite>("Images/default");
-    }
-
-    public string GetDescription()
-    {
-        TextAsset description = Resources.Load<TextAsset>($"Descriptions/{FileName}");
-        return description != null ? description.text : "설명 없음";
-    }
-
-    public Dictionary<string, int> GodStats = new Dictionary<string, int>
-    {
-        {"Atk", 0},
-        {"Def", 0},
-        {"HP", 0 },
-        {"MP", 0 },
-        {"MentalStat", 0 }
-    };
-
-    public GodEffect SpecialEffect;
-}
-
-public class LibertyGodEffect :GodEffect
-{
-    public override void ApplyEffect(Player player)
-    {
-        Player.Instance.MaxCost += 10;
+        public override void ApplyEffect(Player player)
+        {
+            Player.Instance.MaxCost += 10;
+        }
     }
 }

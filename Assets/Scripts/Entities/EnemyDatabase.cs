@@ -1,43 +1,42 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "EnemyDatabase", menuName = "Game/Enemy Database")]
-public class EnemyDatabase : ScriptableObject
+namespace Entities
 {
-    [SerializeField] private List<EnemyData> enemyList = new List<EnemyData>();
-
-    public ReadOnlyCollection<EnemyData> EnemyList => enemyList.AsReadOnly();
-
-    public EnemyData GetEnemyByID(int? enemyID)
+    [CreateAssetMenu(fileName = "EnemyDatabase", menuName = "Game/Enemy Database")]
+    public class EnemyDatabase : ScriptableObject
     {
-        if (!enemyID.HasValue) return null;
-        return enemyList.Find(enemy => enemy.EnemyID == enemyID);
-    }
+        [SerializeField] private List<EnemyData> enemyList = new List<EnemyData>();
 
-    public void AddEnemy(EnemyData enemy)
-    {
-        if (enemy == null)
+        public ReadOnlyCollection<EnemyData> EnemyList => enemyList.AsReadOnly();
+
+        public EnemyData GetEnemyByID(int? enemyID)
         {
-            Debug.LogError("EnemyDatabase: 추가하려는 EnemyData가 null입니다!");
-            return;
+            if (!enemyID.HasValue) return null;
+            return enemyList.Find(enemy => enemy.EnemyID == enemyID);
         }
 
-        enemyList.Add(enemy);
-        Debug.Log($"적 추가 완료: {enemy.Name} (ID: {enemy.EnemyID})");
-    }
-
-    public void ResetEnemyData() => enemyList.Clear();
-
-    public EnemyData GetRandomEnemy()
-    {
-        if (enemyList.Count == 0)
+        public void AddEnemy(EnemyData enemy)
         {
+            if (enemy == null)
+            {
+                Debug.LogError("EnemyDatabase: 추가하려는 EnemyData가 null입니다!");
+                return;
+            }
+
+            enemyList.Add(enemy);
+            Debug.Log($"적 추가 완료: {enemy.Name} (ID: {enemy.EnemyID})");
+        }
+
+        public void ResetEnemyData() => enemyList.Clear();
+
+        public EnemyData GetRandomEnemy()
+        {
+            if (enemyList.Count != 0) return enemyList[Random.Range(0, enemyList.Count)];
             Debug.LogError("데이터베이스에 적이 없음");
             return null;
-        }
 
-        return enemyList[Random.Range(0, enemyList.Count)];
+        }
     }
 }

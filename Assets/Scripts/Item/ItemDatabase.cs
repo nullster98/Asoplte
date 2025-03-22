@@ -1,21 +1,22 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "ItemDatabase", menuName = "Game/Item Database")]
-public class ItemDatabase : ScriptableObject
+namespace Item
 {
-    public List<ItemData> ItemList = new List<ItemData>();
-
-    public ItemData GetItemByID(int itemID)
+    [CreateAssetMenu(fileName = "ItemDatabase", menuName = "Game/Item Database")]
+    public class ItemDatabase : ScriptableObject
     {
-        return ItemList.Find(item => item.ItemID == itemID);
-    }
+        public List<ItemData> itemList = new List<ItemData>();
 
-    public void ResetDatabase()
-    {
-        ItemList.Clear();
+        public ItemData GetItemByID(int itemID)
+        {
+            return itemList.Find(item => item.ItemID == itemID);
+        }
+
+        public void ResetDatabase()
+        {
+            itemList.Clear();
+        }
     }
 }
 

@@ -1,25 +1,24 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "GodDatabase", menuName = "Game/God Database")]
-public class GodDatabase : ScriptableObject
+namespace God
 {
-    public List<GodData> GodList = new List<GodData>();
-
-    public GodData GetGodByIndex(int index)
+    [CreateAssetMenu(fileName = "GodDatabase", menuName = "Game/God Database")]
+    public class GodDatabase : ScriptableObject
     {
-        if (index < 0 || index >= GodList.Count)
+        public List<GodData> godList = new List<GodData>();
+
+        public GodData GetGodByIndex(int index)
         {
+            if (index >= 0 && index < godList.Count) return godList[index];
             Debug.LogError("인덱스 범위를 초과하였습니다.");
             return null;
         }
-        return GodList[index];
-    }
 
-    public void ResetDatabase()
-    {
-        GodList.Clear();
-    }
+        public void ResetDatabase()
+        {
+            godList.Clear();
+        }
 
+    }
 }

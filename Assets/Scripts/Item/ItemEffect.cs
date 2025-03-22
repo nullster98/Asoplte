@@ -1,3 +1,4 @@
+using PlayerScript;
 using UnityEngine.Serialization;
 
 namespace Item
