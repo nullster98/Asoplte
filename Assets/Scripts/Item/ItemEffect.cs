@@ -4,7 +4,7 @@ using UnityEngine.Serialization;
 namespace Item
 {
     [System.Serializable]  // Unity 직렬화 가능하도록 설정
-    public abstract class ItemEffect
+    public abstract class ItemEffect : IEffect
     {
         public abstract void ApplyEffect(Player player);
     }

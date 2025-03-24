@@ -205,8 +205,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1796247735}
-        m_TargetAssemblyTypeName: TraitScript, Assembly-CSharp
+      - m_Target: {fileID: 1482002269}
+        m_TargetAssemblyTypeName: Trait.TraitUI, Assembly-CSharp
         m_MethodName: NegativeBtnAction
         m_Mode: 1
         m_Arguments:
@@ -540,8 +540,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RaceList, Assembly-CSharp
+      - m_Target: {fileID: 1482002266}
+        m_TargetAssemblyTypeName: UI.RaceUI, Assembly-CSharp
         m_MethodName: MainToSelect
         m_Mode: 1
         m_Arguments:
@@ -1591,8 +1591,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RaceList, Assembly-CSharp
+      - m_Target: {fileID: 1482002266}
+        m_TargetAssemblyTypeName: UI.RaceUI, Assembly-CSharp
         m_MethodName: ShowNextCharacter
         m_Mode: 1
         m_Arguments:
@@ -1724,7 +1724,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1796247735}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: TraitScript, Assembly-CSharp
         m_MethodName: OnNextButtonPressed
         m_Mode: 1
@@ -1789,7 +1789,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &682988544
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3107,8 +3107,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1796247735}
-        m_TargetAssemblyTypeName: TraitScript, Assembly-CSharp
+      - m_Target: {fileID: 1482002269}
+        m_TargetAssemblyTypeName: Trait.TraitUI, Assembly-CSharp
         m_MethodName: PostiveBtnAction
         m_Mode: 1
         m_Arguments:
@@ -3522,7 +3522,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1796247735}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: TraitScript, Assembly-CSharp
         m_MethodName: PreviousButtion
         m_Mode: 1
@@ -3654,8 +3654,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RaceList, Assembly-CSharp
+      - m_Target: {fileID: 1482002266}
+        m_TargetAssemblyTypeName: UI.RaceUI, Assembly-CSharp
         m_MethodName: ShowPreviousCharacter
         m_Mode: 1
         m_Arguments:
@@ -5062,6 +5062,7 @@ GameObject:
   - component: {fileID: 1482002268}
   - component: {fileID: 1482002267}
   - component: {fileID: 1482002266}
+  - component: {fileID: 1482002269}
   m_Layer: 0
   m_Name: UIManager
   m_TagString: Untagged
@@ -5081,121 +5082,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c8ce454af51d2d4abf640a03afccf9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MainImg: {fileID: 1469483344}
-  NameArea: {fileID: 58240059}
-  DescriptionArea: {fileID: 1210958087}
-  raceList:
-  - raceImg: {fileID: 21300000, guid: 7706b4803df37bc4a9f9c8e9e270a51e, type: 3}
-    offRaceImg: {fileID: 0}
-    RaceName: "\uACE8\uB818"
-    RequireFaith: 100
-    DerivedCharacters:
-    - characterName: 
-      characterImg: {fileID: 0}
-      onImg: {fileID: 0}
-      offImg: {fileID: 0}
-      characterDescription: 
-      characterStat: 
-      unlockHint: 
-      requireFaith: 300
-      isUnlocked: 0
-    - characterName: 
-      characterImg: {fileID: 0}
-      onImg: {fileID: 0}
-      offImg: {fileID: 0}
-      characterDescription: 
-      characterStat: 
-      unlockHint: 
-      requireFaith: 300
-      isUnlocked: 0
-    - characterName: 
-      characterImg: {fileID: 0}
-      onImg: {fileID: 0}
-      offImg: {fileID: 0}
-      characterDescription: 
-      characterStat: 
-      unlockHint: 
-      requireFaith: 300
-      isUnlocked: 0
-    - characterName: 
-      characterImg: {fileID: 0}
-      onImg: {fileID: 0}
-      offImg: {fileID: 0}
-      characterDescription: 
-      characterStat: 
-      unlockHint: 
-      requireFaith: 300
-      isUnlocked: 0
-    IsUnlocked: 0
-  - raceImg: {fileID: 21300000, guid: 744e7e0220e41d2449dcf9b6c2f3af45, type: 3}
-    offRaceImg: {fileID: 0}
-    RaceName: "\uC624\uD06C"
-    RequireFaith: 100
-    DerivedCharacters:
-    - characterName: 
-      characterImg: {fileID: 0}
-      onImg: {fileID: 0}
-      offImg: {fileID: 0}
-      characterDescription: 
-      characterStat: 
-      unlockHint: 
-      requireFaith: 100
-      isUnlocked: 0
-    - characterName: 
-      characterImg: {fileID: 0}
-      onImg: {fileID: 0}
-      offImg: {fileID: 0}
-      characterDescription: 
-      characterStat: 
-      unlockHint: 
-      requireFaith: 0
-      isUnlocked: 0
-    - characterName: 
-      characterImg: {fileID: 0}
-      onImg: {fileID: 0}
-      offImg: {fileID: 0}
-      characterDescription: 
-      characterStat: 
-      unlockHint: 
-      requireFaith: 0
-      isUnlocked: 0
-    IsUnlocked: 0
-  - raceImg: {fileID: 21300000, guid: 167fc9d7047b88d4393fd6ed6bcae1a0, type: 3}
-    offRaceImg: {fileID: 0}
-    RaceName: "\uC624\uD06C \uC8FC\uC220\uC0AC"
-    RequireFaith: 100
-    DerivedCharacters:
-    - characterName: 
-      characterImg: {fileID: 0}
-      onImg: {fileID: 0}
-      offImg: {fileID: 0}
-      characterDescription: 
-      characterStat: 
-      unlockHint: 
-      requireFaith: 100
-      isUnlocked: 0
-    - characterName: 
-      characterImg: {fileID: 0}
-      onImg: {fileID: 0}
-      offImg: {fileID: 0}
-      characterDescription: 
-      characterStat: 
-      unlockHint: 
-      requireFaith: 0
-      isUnlocked: 0
-    IsUnlocked: 0
-  RaceCollection: {fileID: 2144877267}
+  raceDatabase: {fileID: 11400000, guid: 93d1a90bc202940488869d66ad7a9820, type: 2}
+  mainImg: {fileID: 1469483344}
+  nameArea: {fileID: 58240059}
+  descriptionArea: {fileID: 1210958087}
+  raceCollection: {fileID: 2144877267}
   buttonContainer: {fileID: 864748265}
   raceButtonPrefab: {fileID: 2831233349434845612, guid: 75cf7654462e03c43831d8bab0d6db48, type: 3}
-  TratiSelect: {fileID: 1796247733}
-  GodSelect: {fileID: 682988543}
+  traitSelect: {fileID: 1796247733}
+  characterSelect: {fileID: 2032912000}
+  godSelect: {fileID: 682988543}
   unlockButton: {fileID: 751033983}
-  QuestionImg: {fileID: 21300000, guid: 7da3485c16d74804da59d7ddce6682ad, type: 3}
-  LeftImg: {fileID: 362110702}
-  RightImg: {fileID: 1665579125}
-  MidImg: {fileID: 684920162}
-  LeftButton: {fileID: 961006456}
-  RightButton: {fileID: 641497797}
+  questionImg: {fileID: 21300000, guid: 7da3485c16d74804da59d7ddce6682ad, type: 3}
+  leftImg: {fileID: 362110702}
+  rightImg: {fileID: 1665579125}
+  midImg: {fileID: 684920162}
+  leftButton: {fileID: 961006456}
+  rightButton: {fileID: 641497797}
   isFirst: 0
 --- !u!114 &1482002267
 MonoBehaviour:
@@ -5236,6 +5139,33 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1482002269
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1482002264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4cfb8fde03f1da47bd0e2c70ab6d60c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  traitDatabase: {fileID: 11400000, guid: d59cf43bdf92411418d1c23cac5f521b, type: 2}
+  characterSelect: {fileID: 2032912000}
+  postivePannel: {fileID: 1086557675}
+  negativePannel: {fileID: 728895065}
+  positiveBtn: {fileID: 857457635}
+  negativeBtn: {fileID: 20136133}
+  pbuttonContainer: {fileID: 1330808807}
+  nbuttonContainer: {fileID: 1810821009}
+  buttonPrefab: {fileID: 7575426544125561637, guid: 981f4c178f8fd1443a507d311b08fca9, type: 3}
+  descriptionArea: {fileID: 1845751823}
+  costArea: {fileID: 702081624}
+  selectButtonPrefab: {fileID: 4974512768836907702, guid: 7e1316728e7b8a646b528a65948d26c7, type: 3}
+  selectContainer: {fileID: 1176397049}
+  totalCost: 0
+  maxCost: 0
 --- !u!1 &1555521074
 GameObject:
   m_ObjectHideFlags: 0
@@ -5859,8 +5789,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RaceList, Assembly-CSharp
+      - m_Target: {fileID: 1482002266}
+        m_TargetAssemblyTypeName: UI.RaceUI, Assembly-CSharp
         m_MethodName: PreviousButton
         m_Mode: 1
         m_Arguments:
@@ -6266,14 +6196,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1796247734}
-  - component: {fileID: 1796247735}
   m_Layer: 5
   m_Name: TraitSelect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1796247734
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6302,33 +6231,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -47}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1796247735
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1796247733}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a4cfb8fde03f1da47bd0e2c70ab6d60c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  characterSelect: {fileID: 0}
-  postivePannel: {fileID: 0}
-  negativePannel: {fileID: 0}
-  positiveBtn: {fileID: 0}
-  negativeBtn: {fileID: 0}
-  traitsList: []
-  pbuttonContainer: {fileID: 0}
-  nbuttonContainer: {fileID: 0}
-  buttonPrefab: {fileID: 0}
-  descriptionArea: {fileID: 0}
-  costArea: {fileID: 0}
-  selectButtonPrefab: {fileID: 0}
-  selectContainer: {fileID: 0}
-  totalCost: 0
-  maxCost: 0
 --- !u!1 &1810821008
 GameObject:
   m_ObjectHideFlags: 0
@@ -6971,6 +6873,7 @@ MonoBehaviour:
   itemDatabase: {fileID: 11400000, guid: 05f53ac303cfbc649809e3f4a8772989, type: 2}
   eventDatabase: {fileID: 11400000, guid: 46aa3be6f670f28478a24715462c5cc3, type: 2}
   enemyDatabase: {fileID: 11400000, guid: 220916dd024de9e4fb0d62f30c55ffb7, type: 2}
+  traitDatabase: {fileID: 11400000, guid: d59cf43bdf92411418d1c23cac5f521b, type: 2}
 --- !u!4 &1973424196
 Transform:
   m_ObjectHideFlags: 0

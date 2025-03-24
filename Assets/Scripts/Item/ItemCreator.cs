@@ -25,14 +25,14 @@ namespace Item
 
             // 소모품 아이템 (HP 포션)
             CreateConsumable(2001, "HP 포션",  500, 250,
-                new List<ItemEffect>(), 50, 0, ItemTraget.Player);
+                new List<ItemEffect>(), 50, 0, ItemTarget.Player);
 
             // 소모품 아이템 (독 포션 - 적용)
             CreateConsumable(2002, "독 포션", 800, 400,
                 new List<ItemEffect>
                 {
                     new PoisonEffect(5, 3)
-                }, 0, 0, ItemTraget.Enemy);
+                }, 0, 0, ItemTarget.Enemy);
 
             Debug.Log("모든 아이템이 생성되었습니다.");
         }
@@ -49,7 +49,7 @@ namespace Item
 
         // 소모품 아이템 생성 함수
         private static void CreateConsumable(int id, string name, int purchasePrice, int salePrice,
-            List<ItemEffect> effects, float healAmount, float manaRestore, ItemTraget target)
+            List<ItemEffect> effects, float healAmount, float manaRestore, ItemTarget target)
         {
             Debug.Log($"소모품 아이템 생성: {name}");
 

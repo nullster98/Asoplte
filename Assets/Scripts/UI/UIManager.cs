@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using PlayerScript;
 using TMPro;
+using Trait;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -99,24 +100,24 @@ namespace UI
 
         private void UpdateTraitsUI()
         {
-            List<Trait.Trait> traits = Player.Instance.selectedTraits;
+            List<TraitData> traits = Player.Instance.selectedTraits;
 
             foreach (Transform child in traitContainer) // 기존 UI 삭제
             {
                 Destroy(child.gameObject);
             }
 
-            foreach (Trait.Trait trait in traits)
+            foreach (TraitData trait in traits)
             {
                 GameObject traitObj = Instantiate(traitPrefab, traitContainer); // UI 생성
                 Image traitImage = traitObj.GetComponent<Image>();
-                traitImage.sprite = trait.traitImg;
+                traitImage.sprite = trait.GetTraitImage();
 
                 // 마우스 호버 기능 추가
                 TraitHoverHandler hoverHandler = traitObj.AddComponent<TraitHoverHandler>();
                 hoverHandler.traitTextBox = traitTextBox;
                 hoverHandler.traitText = traitText;
-                hoverHandler.traitDescription = trait.traitDescription;
+                hoverHandler.traitDescription = trait.GetDescription();
             }
         }
 

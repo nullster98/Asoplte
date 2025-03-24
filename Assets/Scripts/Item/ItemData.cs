@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Item
 {
-    public enum ItemTraget
+    public enum ItemTarget
     {
         Player,
         Enemy,
@@ -98,10 +98,10 @@ namespace Item
     {
         public float HealAmount { get; private set; }
         public float ManaRestore {  get; private set; }
-        public ItemTraget Target {  get; private set; }
+        public ItemTarget Target {  get; private set; }
 
         public Consumable(int id, string name, int purchasePrice, int salePrice,
-            float healAmount, float manaRestore, ItemTraget target ,List<ItemEffect> effects)
+            float healAmount, float manaRestore, ItemTarget target ,List<ItemEffect> effects)
             : base(id, name,  ItemType.Consumable ,purchasePrice, salePrice, effects)
             => (HealAmount, ManaRestore, Target) = (healAmount, manaRestore, target);
    

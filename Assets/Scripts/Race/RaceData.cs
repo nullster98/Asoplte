@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Race
 {
-    public abstract class RaceEffect
+    public abstract class RaceEffect : IEffect
     {
         public abstract void ApplyEffect(Player player);
     }
@@ -77,6 +77,11 @@ namespace Race
         {
             TextAsset UnlockHint = Resources.Load<TextAsset>($"Race/SubRace/Descriptions/{fileName}_Hint");
             return UnlockHint != null ? UnlockHint.text : "준비중 입니다.";
+        }
+        
+        public bool CanUnlock(int playerFaith)
+        {
+            return playerFaith >= requireFaith;
         }
         
     }

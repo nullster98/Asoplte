@@ -2098,11 +2098,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4086db8c56dcc914eb33c30ca8af8be8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemDatabase: {fileID: 11400000, guid: 05f53ac303cfbc649809e3f4a8772989, type: 2}
-  AcquistPannel: {fileID: 1991119531}
-  GetImage: {fileID: 998484709}
-  GetName: {fileID: 1559276749}
-  GetDescription: {fileID: 1987255027}
+  acquistPannel: {fileID: 0}
+  getImage: {fileID: 0}
+  getName: {fileID: 0}
+  getDescription: {fileID: 0}
   confirmButton: {fileID: 384189553}
   cancelButton: {fileID: 702447047}
 --- !u!1 &293875519
@@ -8492,16 +8491,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5986cfc671605664c80a35076959717c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyDatabase: {fileID: 11400000, guid: 220916dd024de9e4fb0d62f30c55ffb7, type: 2}
-  BattleWindow: {fileID: 946958056}
-  MonsterHP: {fileID: 1356581801}
-  MonsterHP_Text: {fileID: 548337972}
-  PlayerHP_Text: {fileID: 423247222}
-  PlayerHP: {fileID: 227008989}
-  MonsterSprite: {fileID: 1496262121}
-  BattleLogs: {fileID: 880000370}
-  BattleBtns: {fileID: 0}
-  SkillPage: {fileID: 0}
+  battleWindow: {fileID: 0}
+  monsterHp: {fileID: 0}
+  monsterHpText: {fileID: 0}
+  playerHpText: {fileID: 0}
+  playerHp: {fileID: 0}
+  monsterSprite: {fileID: 0}
+  battleLogs: {fileID: 0}
+  battleBtns: {fileID: 0}
+  skillPage: {fileID: 0}
 --- !u!1 &1235535491
 GameObject:
   m_ObjectHideFlags: 0
@@ -12670,21 +12668,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 124d9c6c26759ed4bbf54563955f8f6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hp: {fileID: 1678267267}
-  MP: {fileID: 195666193}
+  hp: {fileID: 0}
+  mp: {fileID: 0}
   currentProgress: 0
-  ProgressSlider: {fileID: 1467494635}
-  CurrentGold: {fileID: 869308461}
-  CurrentFaithPoint: {fileID: 578971046}
+  progressSlider: {fileID: 0}
+  currentGold: {fileID: 0}
+  currentFaithPoint: {fileID: 0}
   playerImage: {fileID: 1721555627}
-  PlayerInfoBox: {fileID: 2006907185}
-  InfoImg: {fileID: 1165617149}
-  CharacterName: {fileID: 827865400}
-  InfoStats: {fileID: 451566358}
+  playerInfoBox: {fileID: 0}
+  infoImg: {fileID: 0}
+  characterName: {fileID: 0}
+  infoStats: {fileID: 0}
   traitTextBox: {fileID: 850271850}
   traitText: {fileID: 1044583167}
-  TraitContainer: {fileID: 433378587}
-  TraitPrefab: {fileID: 2593810034020010840, guid: 2598521c2fd6e2e4a91fd6d883a958dd, type: 3}
+  traitContainer: {fileID: 0}
+  traitPrefab: {fileID: 2593810034020010840, guid: 2598521c2fd6e2e4a91fd6d883a958dd, type: 3}
 --- !u!114 &1997265349
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12714,7 +12712,7 @@ MonoBehaviour:
   equipDetailImage: {fileID: 1922967768}
   equipDetailText: {fileID: 1933707174}
   equipDetailDescription: {fileID: 529648448}
-  TrashButton: {fileID: 566078299}
+  trashButton: {fileID: 0}
 --- !u!1 &2006907185
 GameObject:
   m_ObjectHideFlags: 0
@@ -12998,12 +12996,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf68b6892f817e443bb8ecb82e7aab9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EventText: {fileID: 853098932}
-  EventSprite: {fileID: 975924960}
-  ButtonContainer: {fileID: 1449012430}
-  ButtonPrefab: {fileID: 555772823842051698, guid: e4d92286dbed35544ba60cd7b43f54ff, type: 3}
+  eventText: {fileID: 0}
+  eventSprite: {fileID: 0}
+  buttonContainer: {fileID: 0}
+  buttonPrefab: {fileID: 0}
   eventScrollView: {fileID: 907760008}
-  eventDatabase: {fileID: 11400000, guid: 46aa3be6f670f28478a24715462c5cc3, type: 2}
+  battleManger: {fileID: 0}
+  acquisitionUI: {fileID: 0}
 --- !u!1 &2044370905
 GameObject:
   m_ObjectHideFlags: 0
@@ -13662,11 +13661,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41fa04ffb5eddcb4a9db29a6e0e379c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InventoryContainer: {fileID: 1619250019}
-  EquipContainer: {fileID: 1701803841}
-  InventoryContainerTransform: {fileID: 1619250020}
-  ItemPrefab: {fileID: 5921706711212757730, guid: 45ae16ae19fa6d7409e11c7708207090, type: 3}
-  itemDatabase: {fileID: 11400000, guid: 05f53ac303cfbc649809e3f4a8772989, type: 2}
+  inventoryContainer: {fileID: 0}
+  equipContainer: {fileID: 0}
+  inventoryContainerTransform: {fileID: 0}
+  itemPrefab: {fileID: 0}
   defaultSlotImage: {fileID: 21300000, guid: 813b12dc1d715864c8544f7fbe2d2ed8, type: 3}
 --- !u!1 &2111936171
 GameObject:

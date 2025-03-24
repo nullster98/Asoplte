@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using God;
 using Item;
+using Trait;
 using UI;
 using UnityEngine;
 
@@ -48,7 +49,7 @@ namespace PlayerScript
         public int MaxCost { get; set; } // 코스트
         [SerializeField] public Sprite playerImg; //플레이어 이미지
 
-        public List<Trait.Trait> selectedTraits = new List<Trait.Trait>();
+        public List<TraitData> selectedTraits = new List<TraitData>();
 
         private float FaithPoint { get; set; } = 500f;//신앙포인트
         //private RaceData selectedRace;
@@ -86,7 +87,7 @@ namespace PlayerScript
 
 
         // 특성들을 한꺼번에 적용
-        public void ApplySelectedTraits(List<Trait.Trait> traits)
+        public void ApplySelectedTraits(List<TraitData> traits)
         {
             foreach (var trait in traits)
             {
@@ -96,7 +97,7 @@ namespace PlayerScript
         }
 
         // 특성의 효과를 적용하는 메서드
-        private void ApplyTraitEffect(Trait.Trait trait)
+        private void ApplyTraitEffect(TraitData trait)
         {
             switch (trait.traitName)
             {

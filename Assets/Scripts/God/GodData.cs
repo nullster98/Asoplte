@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace God
 {
-    public abstract class GodEffect
+    public abstract class GodEffect : IEffect
     {
         public abstract void ApplyEffect(Player player);
     }

@@ -1,6 +1,7 @@
 using Entities;
 using Event;
 using Item;
+using Trait;
 using UnityEngine;
 
 namespace Game
@@ -12,7 +13,7 @@ namespace Game
         public ItemDatabase itemDatabase;
         public EventDatabase eventDatabase;
         public EnemyDatabase enemyDatabase;
-        //public TraitDatabae traitDatabase;
+        public TraitDatabase traitDatabase;
         //public SkillDatabase skillDatabase;
 
         public void Awake()
@@ -29,4 +30,6 @@ namespace Game
         }
 
     }
+
+   
 }

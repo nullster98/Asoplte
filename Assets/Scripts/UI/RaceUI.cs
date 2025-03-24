@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using PlayerScript;
+using Race;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -7,62 +7,29 @@ using UnityEngine.UI;
 
 namespace UI
 {
-    [System.Serializable]
-    public class DerivedCharacter
-    {
-        public string characterName;
-        public Sprite characterImg;
-        public Sprite onImg;
-        public Sprite offImg;
-
-        [TextArea]
-        public string characterDescription;
-        [TextArea]
-        public string characterStat;
-
-        [TextArea]
-        public string unlockHint;
-        public float requireFaith; // 해금 비용
-        public bool isUnlocked = false; // 활성화 상태
-    }
-
-    [System.Serializable]
-    public class Tribe
-    {
-        public Sprite raceImg;
-        public Sprite offRaceImg;
-        public string RaceName;
-        //public Race race;
-        public float RequireFaith; // 해금 비용
-
-        // 파생 캐릭터 리스트 추가
-        public List<DerivedCharacter> DerivedCharacters;
-
-        public bool IsUnlocked = false; // 활성화 상태
-    }
-
     public class RaceUI : MonoBehaviour
     {
-        [SerializeField] private Image MainImg; // 선택된 종족의 메인 이미지
-        [SerializeField] private TMP_Text NameArea; // 선택된 종족 이름
-        [SerializeField] private TMP_Text DescriptionArea; // 종족 설명
-        [SerializeField] private List<Tribe> raceList = new List<Tribe>(); // 종족 리스트
-        [SerializeField] private GameObject RaceCollection; // 종족 선택 창
+        [SerializeField] private RaceDatabase raceDatabase;
+        [SerializeField] private Image mainImg; // 선택된 종족의 메인 이미지
+        [SerializeField] private TMP_Text nameArea; // 선택된 종족 이름
+        [SerializeField] private TMP_Text descriptionArea; // 종족 설명
+        [SerializeField] private GameObject raceCollection; // 종족 선택 창
         [SerializeField] private Transform buttonContainer; // Scroll View의 Content
         [SerializeField] private Button raceButtonPrefab; // 버튼 프리팹
-        [SerializeField] private GameObject TratiSelect;
-        [SerializeField] private GameObject GodSelect;
+        [SerializeField] private GameObject traitSelect;
+        [SerializeField] private GameObject characterSelect;
+        [SerializeField] private GameObject godSelect;
         [SerializeField] private Button unlockButton; // 해금 버튼
 
-        private int currentRaceIndex = 0; // 선택된 종족의 인덱스
-        private int currentCharacterIndex = 0; // 선택된 파생 캐릭터의 인덱스
-        [SerializeField] private Sprite QuestionImg;
-        [SerializeField] private Image LeftImg;
-        [SerializeField] private Image RightImg;
-        [SerializeField] private Image MidImg;
-        [SerializeField] private Button LeftButton;
-        [SerializeField] private Button RightButton;
-        [SerializeField] private bool isFirst = false;
+        private int currentTribeIndex; // 선택된 종족의 인덱스
+        private int currentSubRaceIndex; // 선택된 파생 캐릭터의 인덱스
+        [SerializeField] private Sprite questionImg;
+        [SerializeField] private Image leftImg;
+        [SerializeField] private Image rightImg;
+        [SerializeField] private Image midImg;
+        [SerializeField] private Button leftButton;
+        [SerializeField] private Button rightButton;
+        [SerializeField] private bool isFirst;
 
         private void Start()
         {
@@ -73,17 +40,17 @@ namespace UI
         // 종족 버튼 생성 및 초기화
         private void CreateRaceButtons()
         {
-            if (raceList == null || raceList.Count == 0)
+            if (!raceDatabase)
             {
-                Debug.LogWarning("Race list is empty!");
+                Debug.LogWarning("종족데이터베이스가 없습니다!");
                 return;
             }
 
-            for (int i = 0; i < raceList.Count; i++)
+            for (int i = 0; i < raceDatabase.raceList.Count; i++)
             {
                 Button button = Instantiate(raceButtonPrefab, buttonContainer);
                 Image buttonImage = button.GetComponent<Image>();
-                buttonImage.sprite = raceList[i].raceImg;
+                buttonImage.sprite = raceDatabase.raceList[i].GetRaceImage();
                 int index = i;
                 button.onClick.RemoveAllListeners();
                 button.onClick.AddListener(() => SelectRace(index));
@@ -93,80 +60,60 @@ namespace UI
         // 종족 선택 메서드
         private void SelectRace(int raceIndex)
         {
-            currentRaceIndex = raceIndex;
-            currentCharacterIndex = 0; // 항상 첫 번째 파생 캐릭터를 보여줌
+            currentTribeIndex = raceIndex;
+            currentSubRaceIndex = 0; // 항상 첫 번째 파생 캐릭터를 보여줌
 
-            Tribe selectedRace = raceList[currentRaceIndex];
-            MainImg.sprite = selectedRace.raceImg;
-            NameArea.text = selectedRace.RaceName;
+            RaceData selectedRace = raceDatabase.raceList[currentTribeIndex];
+            mainImg.sprite = selectedRace.GetRaceImage();
+            nameArea.text = selectedRace.raceName;
             //Player.Instance.Race = selectedRace.race;
-            RaceCollection.SetActive(false);
-
-            EnsureMinimumCharacters(selectedRace);
+            raceCollection.SetActive(false);
 
             // 첫 번째 파생 캐릭터 UI 업데이트
-            if (selectedRace.DerivedCharacters.Count > 0)
+            if (selectedRace.subRace.Count > 0)
             {
                 SelectDerivedCharacter(0);
             }
         }
-
-        private void EnsureMinimumCharacters(Tribe tribe)
-        {
-            // 파생 캐릭터가 3개 미만이면 자동으로 추가
-            while (tribe.DerivedCharacters.Count < 3)
-            {
-                DerivedCharacter placeholderCharacter = new DerivedCharacter
-                {
-                    characterName = "Unknown",
-                    characterImg = QuestionImg,
-                    onImg = QuestionImg,
-                    offImg = QuestionImg,
-                    requireFaith = 0f, // 기본값 설정
-                    characterDescription = "???",
-                    characterStat = "???",
-                    unlockHint = "준비중 입니다."
-                };
-
-                tribe.DerivedCharacters.Add(placeholderCharacter);
-            }
-        }
+        
 
         private void SelectDerivedCharacter(int characterIndex)
         {
-            currentCharacterIndex = characterIndex;
-
-            Tribe currentTribe = raceList[currentRaceIndex];
-            if (currentTribe.DerivedCharacters.Count == 0)
+            currentSubRaceIndex = characterIndex;
+            
+            RaceData currentTribe = raceDatabase.raceList[currentTribeIndex];
+            if (currentTribe.subRace.Count == 0)
                 return;
 
-            DerivedCharacter selectedCharacter = currentTribe.DerivedCharacters[currentCharacterIndex];
+            SubRaceData selectedCharacter = currentTribe.subRace[currentSubRaceIndex];
             // 캐릭터가 해금되었는지 여부에 따라 다른 정보를 표시
 
-            bool isUnknown = selectedCharacter.characterName == "Unknown";
+            bool isUnknown = selectedCharacter.subRaceName == "Unknown";
 
             if(isUnknown)
             {
-                MainImg.sprite = QuestionImg;
-                NameArea.text = "???";
-                DescriptionArea.text = "준비중인 캐릭터입니다.";
+                mainImg.sprite = questionImg;
+                nameArea.text = "???";
+                descriptionArea.text = "준비중인 캐릭터입니다.";
                 ConfigureButton(false, 0f, true);
             }
 
             else if (selectedCharacter.isUnlocked)
             {
-                MainImg.sprite = selectedCharacter.characterImg;
-                NameArea.text = selectedCharacter.characterName;
-                DescriptionArea.text = $"{selectedCharacter.characterName} <sprite=0>\n\n{selectedCharacter.characterDescription}\n\n{selectedCharacter.characterStat}";
+                mainImg.sprite = selectedCharacter.GetSubRaceImage();
+                mainImg.color = Color.white; 
+                nameArea.text = selectedCharacter.subRaceName;
+                descriptionArea.text = $"{selectedCharacter.subRaceName} <sprite=0>\n\n{selectedCharacter.GetDescription()}";
 
                 // 버튼을 '다음 단계'로 설정
                 ConfigureButton(false);
             }
             else
             {
-                MainImg.sprite = selectedCharacter.offImg; // 해금되지 않은 경우 OffImg 사용
-                NameArea.text = "???";
-                DescriptionArea.text = $"{selectedCharacter.unlockHint}\n\n해금 비용: {selectedCharacter.requireFaith} 신앙 재화";
+                mainImg.sprite = selectedCharacter.GetSubRaceImage(); // 해금되지 않은 경우 OffImg 사용
+                mainImg.color = new Color(0.5f, 0.5f, 0.5f); // 회색으로 설정
+                nameArea.text = "???";
+                descriptionArea.text = $"{selectedCharacter.unlockHint}\n\n해금 비용: {selectedCharacter.requireFaith} 신앙 재화";
 
                 // 버튼을 '해금하기'로 설정
                 ConfigureButton(true, selectedCharacter.requireFaith);
@@ -208,107 +155,108 @@ namespace UI
         }
         public void UnlockCharacter()
         {
-            Tribe currentTribe = raceList[currentRaceIndex];
-            DerivedCharacter selectedCharacter = currentTribe.DerivedCharacters[currentCharacterIndex];
+            RaceData currentTribe = raceDatabase.raceList[currentTribeIndex];
+            SubRaceData selectedCharacter = currentTribe.subRace[currentSubRaceIndex];
 
             if (!selectedCharacter.isUnlocked && Player.Instance.SpendFaith(selectedCharacter.requireFaith))
             {
                 selectedCharacter.isUnlocked = true;
-                Debug.Log($"{selectedCharacter.characterName}이(가) 해금되었습니다!");
+                Debug.Log($"{selectedCharacter.subRaceName}이(가) 해금되었습니다!");
 
                 // UI 업데이트
-                SelectDerivedCharacter(currentCharacterIndex);
+                SelectDerivedCharacter(currentSubRaceIndex);
             }
             else
             {
                 Debug.Log("신앙 재화가 부족합니다.");
-                return;
             }
         }
 
         private void UpdateUI()
         {
-            Tribe currentTribe = raceList[currentRaceIndex];
-            if (currentTribe.DerivedCharacters.Count == 0)
+            RaceData currentTribe = raceDatabase.raceList[currentTribeIndex];
+            if (currentTribe.subRace.Count == 0)
                 return;
 
-            int count = currentTribe.DerivedCharacters.Count;
-            int leftIndex = (currentCharacterIndex - 1 + count) % count;
-            int rightIndex = (currentCharacterIndex + 1) % count;
+            int count = currentTribe.subRace.Count;
+            int leftIndex = (currentSubRaceIndex - 1 + count) % count;
+            int rightIndex = (currentSubRaceIndex + 1) % count;
 
             isFirst = true;
             HideDerivation();
 
-            MidImg.sprite = currentTribe.DerivedCharacters[currentCharacterIndex].characterImg;
-            LeftImg.sprite = currentTribe.DerivedCharacters[leftIndex].offImg;
-            RightImg.sprite = currentTribe.DerivedCharacters[rightIndex].offImg;
+            midImg.sprite = currentTribe.subRace[currentSubRaceIndex].GetSubRaceImage();
+            midImg.color = currentTribe.subRace[currentSubRaceIndex].isUnlocked ? Color.white : new Color(0.5f, 0.5f, 0.5f);
+            leftImg.sprite = currentTribe.subRace[leftIndex].GetSubRaceImage();
+            leftImg.color = currentTribe.subRace[leftIndex].isUnlocked ? Color.white : new Color(0.5f, 0.5f, 0.5f);
+            rightImg.sprite = currentTribe.subRace[rightIndex].GetSubRaceImage();
+            rightImg.color = currentTribe.subRace[rightIndex].isUnlocked ? Color.white : new Color(0.5f, 0.5f, 0.5f);
         }
 
         public void ShowNextCharacter()
         {
-            Tribe currentTribe = raceList[currentRaceIndex];
-            if (currentTribe.DerivedCharacters.Count > 0)
+            RaceData currentTribe = raceDatabase.raceList[currentTribeIndex];
+            if (currentTribe.subRace.Count > 0)
             {
-                currentCharacterIndex = (currentCharacterIndex + 1) % currentTribe.DerivedCharacters.Count;
-                SelectDerivedCharacter(currentCharacterIndex);
+                currentSubRaceIndex = (currentSubRaceIndex + 1) % currentTribe.subRace.Count;
+                SelectDerivedCharacter(currentSubRaceIndex);
             }
         }
 
         public void ShowPreviousCharacter()
         {
-            Tribe currentTribe = raceList[currentRaceIndex];
-            if (currentTribe.DerivedCharacters.Count > 0)
+            RaceData currentTribe = raceDatabase.raceList[currentTribeIndex];
+            if (currentTribe.subRace.Count > 0)
             {
-                currentCharacterIndex = (currentCharacterIndex - 1 + currentTribe.DerivedCharacters.Count) % currentTribe.DerivedCharacters.Count;
-                SelectDerivedCharacter(currentCharacterIndex);
+                currentSubRaceIndex = (currentSubRaceIndex - 1 + currentTribe.subRace.Count) % currentTribe.subRace.Count;
+                SelectDerivedCharacter(currentSubRaceIndex);
             }
         }
 
         public void HideDerivation()
         {
-        
-
             if (!isFirst)
             {
-                LeftImg.gameObject.SetActive(false);
-                RightImg.gameObject.SetActive(false);
-                MidImg.gameObject.SetActive(false);
-                LeftButton.interactable = false;
-                RightButton.interactable = false;
+                leftImg.gameObject.SetActive(false);
+                rightImg.gameObject.SetActive(false);
+                midImg.gameObject.SetActive(false);
+                leftButton.interactable = false;
+                rightButton.interactable = false;
             }
 
             else
             {
-                LeftImg.gameObject.SetActive(true);
-                RightImg.gameObject.SetActive(true);
-                MidImg.gameObject.SetActive(true);
-                LeftButton.interactable = true;
-                RightButton.interactable = true;
+                leftImg.gameObject.SetActive(true);
+                rightImg.gameObject.SetActive(true);
+                midImg.gameObject.SetActive(true);
+                leftButton.interactable = true;
+                rightButton.interactable = true;
             }
         }
 
         #region 이동버튼
         public void MainToSelect()
         {
-            RaceCollection.SetActive(true);
+            raceCollection.SetActive(true);
         }
 
         public void ChcToTrait()
         {
-            Player.Instance.playerImg = MainImg.sprite;
+            Player.Instance.playerImg = mainImg.sprite;
             Debug.Log($"PlayerImg 변경됨: {Player.Instance.playerImg}"); // 디버깅 코드 추가
 
             //FindObjectOfType<PlayerUIManager>().UpdatePlayerUI(Player.Instance); // UI 업데이트
-            this.gameObject.SetActive(false);
-            TratiSelect.SetActive(true);
+            characterSelect.SetActive(false);
+            traitSelect.SetActive(true);
         }
 
         public void PreviousButton()
         {
-            gameObject.SetActive(false);
-            GodSelect.SetActive(true);
+            Debug.Log("이전 버튼 클릭 종족 -> 신");
+            godSelect.SetActive(true);
             isFirst = false;
             HideDerivation();
+            characterSelect.SetActive(false);
         }
         #endregion
     }

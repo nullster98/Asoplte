@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Trait;
 using UI;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -71,7 +72,7 @@ namespace Event
         public AcquisitionType? AcqType; //획득하게할 타입
         public int? AcqID; //획득할 아이템의 ID
 
-        public bool CanPlayerSelect(List<Trait.Trait> playerTraits)
+        public bool CanPlayerSelect(List<TraitData> playerTraits)
         {
             if (string.IsNullOrEmpty(requiredTraits)) return true; // 필요 특성이 없으면 선택 가능
             return playerTraits.Exists(trait => trait.traitName == requiredTraits); // 플레이어가 특성을 가지고 있으면 선택 가능
