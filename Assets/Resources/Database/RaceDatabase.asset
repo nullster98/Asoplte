@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eac84f4e3306443479f7d67bb547fa37, type: 3}
+  m_Name: RaceDatabase
+  m_EditorClassIdentifier: 
+  raceList:
+  - raceName: "\uACE8\uB818"
+    fileName: Golem
+    subRace:
+    - subRaceName: "\uB8EC \uACE8\uB818"
+      fileName: RuneGolem
+      unlockHint: 
+      requireFaith: 0
+      isUnlocked: 1
+    - subRaceName: "\uBC30\uD130\uB9AC \uACE8\uB818"
+      fileName: LightGolem
+      unlockHint: 
+      requireFaith: 100
+      isUnlocked: 0
+    - subRaceName: "\uC232 \uACE8\uB818"
+      fileName: ForestGolem
+      unlockHint: 
+      requireFaith: 150
+      isUnlocked: 0
+  - raceName: "\uC624\uD06C"
+    fileName: Oak
+    subRace:
+    - subRaceName: "\uC624\uD06C \uC804\uC0AC"
+      fileName: OakWarrior
+      unlockHint: 
+      requireFaith: 0
+      isUnlocked: 1
+    - subRaceName: "\uC7BF\uBE5B \uC624\uD06C"
+      fileName: GrayOak
+      unlockHint: 
+      requireFaith: 100
+      isUnlocked: 0
+    - subRaceName: "\uD54F\uBE5B \uC624\uD06C"
+      fileName: RedOak
+      unlockHint: 
+      requireFaith: 150
+      isUnlocked: 0
