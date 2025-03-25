@@ -38,7 +38,7 @@ namespace Item
         public int PurchasePrice { get; private set; }
         public int SalePrice { get; private set; }
         public Sprite ItemImg { get; private set; }
-        public List<ItemEffect> Effects { get; private set; }
+        public List<IEffect> Effects { get; set; }
         public string ItemDescription {  get; private set; }
 
         public string GetDescription()
@@ -70,10 +70,10 @@ namespace Item
             ItemImg = Resources.Load<Sprite>($"{folderPath}/{ItemName}");
         }
 
-        protected ItemData(int id, string name, ItemType type, int purchasePrice, int salePrice, List<ItemEffect> effects)
+        protected ItemData(int id, string name, ItemType type, int purchasePrice, int salePrice, List<IEffect> effects)
         {
             (ItemID, ItemName, Type, PurchasePrice, SalePrice, Effects) =
-                (id, name, type, purchasePrice, salePrice, effects ?? new List<ItemEffect>());
+                (id, name, type, purchasePrice, salePrice, effects ?? new List<IEffect>());
 
             ItemDescription = GetDescription(); //  설명 자동 로드
             LoadEventImage(); //  이미지 자동 로드
@@ -89,9 +89,13 @@ namespace Item
         public EquipmentType EquipmentType { get; private set; }
 
         public Equipment(int id, string name, int purchasePrice, int salePrice,
-            EquipmentType equipType, int attack, int defense, List<ItemEffect> effects)
+            EquipmentType equipType, int attack, int defense, List<IEffect> effects)
             : base(id, name, ItemType.Equipment, purchasePrice, salePrice, effects)
-            => (EquipmentType, AttackPoint, DefensePoint) = (equipType, attack, defense);
+        {
+            EquipmentType = equipType;
+            AttackPoint = attack;
+            DefensePoint = defense;
+        }
     }
 
     public class Consumable : ItemData
@@ -101,7 +105,7 @@ namespace Item
         public ItemTarget Target {  get; private set; }
 
         public Consumable(int id, string name, int purchasePrice, int salePrice,
-            float healAmount, float manaRestore, ItemTarget target ,List<ItemEffect> effects)
+            float healAmount, float manaRestore, ItemTarget target ,List<IEffect> effects)
             : base(id, name,  ItemType.Consumable ,purchasePrice, salePrice, effects)
             => (HealAmount, ManaRestore, Target) = (healAmount, manaRestore, target);
    
@@ -113,7 +117,7 @@ namespace Item
         public float DefensePoint {  get; private set; }
 
         public Totem(int id, string name, int purchasePrice, int salePrice,
-            float attack, float defense, List<ItemEffect> effects)
+            float attack, float defense, List<IEffect> effects)
             : base(id, name, ItemType.Totem, purchasePrice, salePrice, effects)
             =>(AttackPoint, DefensePoint) = (attack, defense);
     
@@ -121,7 +125,7 @@ namespace Item
 
     public class Valuable : ItemData
     {
-        public Valuable(int id, string name, int purchasePrice, int salePrice, List<ItemEffect> effects)
+        public Valuable(int id, string name, int purchasePrice, int salePrice, List<IEffect> effects)
             : base(id, name, ItemType.Valuable, purchasePrice, salePrice, effects) { }
     }
 }

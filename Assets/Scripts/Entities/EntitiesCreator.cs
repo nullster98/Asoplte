@@ -5,12 +5,12 @@ using UnityEngine;
 
 namespace Entities
 {
-    public static class EnemyCreator
+    public static class EntitiesCreator
     {
 
         public static void InitializeEnemies(int floor)
         {
-            var enemyDatabase = DatabaseManager.Instance.enemyDatabase;
+            var enemyDatabase = DatabaseManager.Instance.entitiesDatabase;
             if (enemyDatabase == null)
             {
                 Debug.LogError("적 데이터베이스가 null입니다! EnemyCreator에서 초기화 실패");
@@ -25,10 +25,10 @@ namespace Entities
             List<string> availableMonsters = GetAvailableMonsters(floor);
             foreach (string enemyName in availableMonsters)
             {
-                EnemyData newEnemy = new EnemyData(
+                EntitiesData newEnemy = new EntitiesData(
                     id: Random.Range(1000, 9999), // 임시 ID (중복 방지)
                     name: enemyName,
-                    type: EnemyType.Monster,
+                    type: EntitiesType.Monster,
                     level: 1, // 레벨은 전투 시작 시 결정됨
                     maxHp: 0, // 능력치는 전투 시작 시 설정
                     maxMp: 0,
@@ -56,9 +56,9 @@ namespace Entities
             };
         }
 
-        public static EnemyData StartBattle(int floor)
+        public static EntitiesData StartBattle(int floor)
         {
-            var enemyDatabase = DatabaseManager.Instance.enemyDatabase;
+            var enemyDatabase = DatabaseManager.Instance.entitiesDatabase;
             if (enemyDatabase == null || enemyDatabase.EnemyList.Count == 0)
             {
                 Debug.LogError("적 데이터베이스가 비어 있거나 null입니다!");
@@ -66,7 +66,7 @@ namespace Entities
             }
 
             // 랜덤한 적 선택
-            EnemyData baseEnemy = enemyDatabase.GetRandomEnemy();
+            EntitiesData baseEnemy = enemyDatabase.GetRandomEnemy();
 
             if (baseEnemy == null)
             {
@@ -76,7 +76,7 @@ namespace Entities
 
             // 새로운 적 객체 생성 (기존 데이터 수정 방지)
             int level = Random.Range(floor, floor + 4);
-            return new EnemyData(
+            return new EntitiesData(
                 id: baseEnemy.EnemyID,
                 name: baseEnemy.Name,
                 type: baseEnemy.NpcType,

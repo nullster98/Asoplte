@@ -6,7 +6,7 @@ namespace Race
 {
     public abstract class RaceEffect : IEffect
     {
-        public abstract void ApplyEffect(Player player);
+        public abstract void ApplyEffect(IUnit target);
     }
 
     [System.Serializable]
@@ -15,6 +15,7 @@ namespace Race
         public string raceName;
         public string fileName;
         public List<SubRaceData> subRace;
+        public RaceEffect raceEffect;
 
         public Sprite GetRaceImage()
         {
@@ -48,6 +49,7 @@ namespace Race
         public string unlockHint;
         public int requireFaith;
         public bool isUnlocked;
+        public RaceEffect subRaceEffect;
         
         public Sprite GetSubRaceImage()
         {

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Entities;
 using Trait;
 using UI;
 using UnityEngine;
@@ -30,6 +31,7 @@ namespace Event
         public string eventName;   
         public List<EventPhase> phases;
         public EventTag eventType;
+        public EventEncounter encounter;
     }
 
     [Serializable]
@@ -39,6 +41,7 @@ namespace Event
         public Sprite eventImage;
         public List<EventChoice> choices;
         public string EventDescription {  get; set; }
+        public EventOutcome phaseOutcome;
 
         public void GetDescription()
         {
@@ -65,13 +68,9 @@ namespace Event
         public string requiredTraits; //필요 특성
         public string nextEventName;
         public int nextPhaseIndex = -1;
-        public bool battleTrigger;
-        public int? FixedID = -1; //기본값 -1(조우 없음), 0(랜덤 적), ID(특정 조우)
-
-        public bool acquisitionTrigger; //보상 트리거
-        public AcquisitionType? AcqType; //획득하게할 타입
-        public int? AcqID; //획득할 아이템의 ID
-
+       
+        public EventOutcome outcome;
+        
         public bool CanPlayerSelect(List<TraitData> playerTraits)
         {
             if (string.IsNullOrEmpty(requiredTraits)) return true; // 필요 특성이 없으면 선택 가능
@@ -82,5 +81,27 @@ namespace Event
         {
             return (string.IsNullOrEmpty(nextEventName) || nextEventName == "END") && nextPhaseIndex == -1;
         }
+    }
+
+    [Serializable]
+    public class EventOutcome
+    {
+        public bool startBattle; //즉시 전투 발생
+        
+        public bool giveReward; //보상
+        public AcquisitionType? rewardType;
+        public int? rewardID;
+        
+        public bool spawnEntity; //우선 조우
+        public EntitiesType entityType; // e.g., Enemy, NPC, Boss
+        public int? entityID;
+    }
+
+    [Serializable]
+    public class EventEncounter
+    {
+        public bool hasEncounter;
+        public int enemyID;
+        public bool spawnImmediately;
     }
 }

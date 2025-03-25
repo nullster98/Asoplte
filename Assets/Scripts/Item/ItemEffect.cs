@@ -4,17 +4,17 @@ using UnityEngine.Serialization;
 namespace Item
 {
     [System.Serializable]  // Unity 직렬화 가능하도록 설정
-    public abstract class ItemEffect : IEffect
+    public abstract class ItemEffect : IEffect //후에 특수 기믹추가가능
     {
-        public abstract void ApplyEffect(Player player);
+        public abstract void ApplyEffect(IUnit target);
     }
 
 
     [System.Serializable]
     public class PoisonEffect : ItemEffect
     {
-        [FormerlySerializedAs("PoisonDamage")] public int poisonDamage;
-        [FormerlySerializedAs("Duration")] public int duration;
+        public int poisonDamage;
+        public int duration;
 
         public PoisonEffect(int poisonDamage, int duration)
         {
@@ -22,14 +22,27 @@ namespace Item
             this.duration = duration;
         }
 
-        public override void ApplyEffect(Player player)
+        public override void ApplyEffect(IUnit target)
         {
             //player.ApplyPoison(PoisonDamage, Duration);
         }
     
-        public void RemoveEffect(Player player)
+        public void RemoveEffect(IUnit target)
         {
 
+        }
+    }
+
+    public class DoubleDamageEffect : IRemovableEffect
+    {
+        public void ApplyEffect(IUnit target)
+        {
+            
+        }
+
+        public void RemoveEffect(IUnit target)
+        {
+            
         }
     }
 }

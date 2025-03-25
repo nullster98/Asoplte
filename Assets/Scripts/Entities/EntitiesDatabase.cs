@@ -5,19 +5,19 @@ using UnityEngine;
 namespace Entities
 {
     [CreateAssetMenu(fileName = "EnemyDatabase", menuName = "Game/Enemy Database")]
-    public class EnemyDatabase : ScriptableObject
+    public class EntitiesDatabase : ScriptableObject
     {
-        [SerializeField] private List<EnemyData> enemyList = new List<EnemyData>();
+        [SerializeField] private List<EntitiesData> enemyList = new List<EntitiesData>();
 
-        public ReadOnlyCollection<EnemyData> EnemyList => enemyList.AsReadOnly();
+        public ReadOnlyCollection<EntitiesData> EnemyList => enemyList.AsReadOnly();
 
-        public EnemyData GetEnemyByID(int? enemyID)
+        public EntitiesData GetEnemyByID(int? enemyID)
         {
             if (!enemyID.HasValue) return null;
             return enemyList.Find(enemy => enemy.EnemyID == enemyID);
         }
 
-        public void AddEnemy(EnemyData enemy)
+        public void AddEnemy(EntitiesData enemy)
         {
             if (enemy == null)
             {
@@ -31,7 +31,7 @@ namespace Entities
 
         public void ResetEnemyData() => enemyList.Clear();
 
-        public EnemyData GetRandomEnemy()
+        public EntitiesData GetRandomEnemy()
         {
             if (enemyList.Count != 0) return enemyList[Random.Range(0, enemyList.Count)];
             Debug.LogError("데이터베이스에 적이 없음");

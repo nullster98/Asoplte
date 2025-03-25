@@ -1,15 +1,17 @@
 using System.Collections.Generic;
 using God;
 using Item;
+using Race;
 using Trait;
 using UI;
 using UnityEngine;
 
 namespace PlayerScript
 {
-    public class Player : MonoBehaviour
+    public class Player : MonoBehaviour, IUnit
     {
         //싱글톤
+        #region 싱글톤
         private static Player _instance;
         public static Player Instance
         {
@@ -25,43 +27,6 @@ namespace PlayerScript
                 return _instance;
             }
         }
-
-        //플레이어 기본 스텟
-        private Dictionary<string, int> stats = new Dictionary<string, int>()
-        {
-            { "Atk", 0 },          // 공격력
-            { "Def", 0 },          // 방어력
-            { "HP", 0 },          // 최대 체력
-            { "MP", 0 },          // 최대 마나
-            { "CurrentHP", 0 },   // 현재 체력
-            { "CurrentMP", 0 },   // 현재 마나
-            { "MentalStat", 0 },  // 정신력
-            { "CurrentMentalStat", 0 }, // 현재 정신력
-            { "FaithStat", 0 },   // 신앙심
-            { "Gold", 1000 }        // 골드
-
-        };
-
-        private Equipment[] equippedItem = new Equipment[6];
-        private EquipUI equipUI;
-
-
-        public int MaxCost { get; set; } // 코스트
-        [SerializeField] public Sprite playerImg; //플레이어 이미지
-
-        public List<TraitData> selectedTraits = new List<TraitData>();
-
-        private float FaithPoint { get; set; } = 500f;//신앙포인트
-        //private RaceData selectedRace;
-
-        public GodData SelectedGod { get; set; }
-
-        /*public RaceData SelectedRace
-    {
-        get { return selectedRace; }
-        set { selectedRace = value; }
-    }*/
-
         private void Awake()
         {
             // 싱글톤 패턴 구현
@@ -79,61 +44,66 @@ namespace PlayerScript
             }
 
         }
+        #endregion
 
-        public void SetEquipUI(EquipUI uI)
+        #region 플레이어 정보
+        //플레이어 기본 스텟
+        private Dictionary<string, int> stats = new Dictionary<string, int>()
         {
-            equipUI = uI;
+            { "Atk", 0 },          // 공격력
+            { "Def", 0 },          // 방어력
+            { "HP", 0 },          // 최대 체력
+            { "MP", 0 },          // 최대 마나
+            { "CurrentHP", 0 },   // 현재 체력
+            { "CurrentMP", 0 },   // 현재 마나
+            { "MentalStat", 0 },  // 정신력
+            { "CurrentMentalStat", 0 }, // 현재 정신력
+            { "FaithStat", 0 },   // 신앙심
+            { "Gold", 1000 }        // 골드
+
+        };
+
+        public int HP =>GetStat("HP");
+        public int MP => GetStat("MP");
+        public int Atk => GetStat("Atk");
+        public int Def => GetStat("Def");
+        public int CurrentHP => GetStat("CurrentHP");
+        public int CurrentMP => GetStat("CurrentMP");
+        public int MentalStat => GetStat("MentalStat");
+        public int CurrentMentalStat => GetStat("CurrentMentalStat");
+        public int FaithStat => GetStat("FaithStat");
+        public int Gold => GetStat("Gold");
+        private float FaithPoint { get; set; } = 500f;//신앙포인트
+        public int MaxCost { get; set; } // 코스트
+        public UnitType UnitType => UnitType.Player;
+      
+        private Equipment[] equippedItem = new Equipment[6];
+        private EquipUI equipUI;
+      
+        [SerializeField] public Sprite playerImg; //플레이어 이미지
+
+        public List<TraitData> selectedTraits = new List<TraitData>();
+        private RaceData selectedRace { get; set; }
+        public GodData selectedGod { get; set; }
+        
+        #endregion
+        public void TakeDamage(int dmg)
+        {
+            ChangeStat("CurrentHP", -dmg);
         }
 
-
-        // 특성들을 한꺼번에 적용
-        public void ApplySelectedTraits(List<TraitData> traits)
+        public void Heal(int amount)
         {
-            foreach (var trait in traits)
-            {
-                ApplyTraitEffect(trait);
-                selectedTraits.Add(trait); // 선택된 특성 리스트에 추가
-            }
+            ChangeStat("CurrentHP", amount);
         }
-
-        // 특성의 효과를 적용하는 메서드
-        private void ApplyTraitEffect(TraitData trait)
-        {
-            switch (trait.traitName)
-            {
-                case "불타는 마력":
-                    // ChangeStat("Atk", GetStat("MP") * 0.1f);
-                    break;
-
-                case "생명전환":
-                    int excessHp = GetStat("CurrentHP") - GetStat("HP");
-                    if (excessHp > 0)
-                    {
-                        ChangeStat("MP", excessHp);
-                        ChangeStat("CurrentHP", -excessHp);
-                    }
-                    break;
-
-                case "어두운 시야":
-                    // 적의 체력이 보이지 않도록 설정 (UI 상태 업데이트 필요)
-                    break;
-
-                case "마나의 역류":
-                    // 마나를 사용하는 스킬이 체력을 소모하게 함 (스킬 발동 로직 반영 필요)
-                    break;
-            }
-        }
-
-        // 선택된 특성의 효과를 제거하는 메서드도 필요할 경우 구현 가능
-
-
+        
         void Start()
         {
             StartStat();
             MaxCost = 15;
         }
 
-        #region FatihPoint Get,Set
+        #region 신앙포인트관련
         public string GetFatihString()
         {
             return FaithPoint.ToString("F0");
@@ -167,31 +137,22 @@ namespace PlayerScript
         }
         #endregion
 
-        private void ApplyGodBonuses(GodData selectedGod) //신앙 선택에 따른 추가효과
-        {
-            foreach(var effect in selectedGod.GodStats)
-            {
-                ChangeStat(effect.Key, effect.Value);
-            }
-
-            selectedGod.SpecialEffect?.ApplyEffect(this);
-        }
-
-        private void ApplyRaceBonuses() //종족 선택에 따른 추가효과
-        {
-        
-        }
-
+        #region 스탯 관련
         void StartStat() //초기플레이어 스텟
         {
-            ChangeStat("Atk", 10);
-            ChangeStat("Def", 10);
-            ChangeStat("HP", 100);
-            ChangeStat("MP", 100);
-            ChangeStat("CurrentHP", GetStat("HP"));
-            ChangeStat("CurrentMP", GetStat("MP"));
-            ChangeStat("MentalStat", 100);
-            ChangeStat("FaithStat", 100);       
+            SetStat("Atk", 10);
+            SetStat("Def", 10);
+            SetStat("HP", 100);
+            SetStat("MP", 100);
+            SetStat("CurrentHP", GetStat("HP"));
+            SetStat("CurrentMP", GetStat("MP"));
+            SetStat("MentalStat", 100);
+            SetStat("FaithStat", 100);       
+        }
+
+        private void SetStat(string key, int value)
+        {
+            stats[key] = value;
         }
 
 
@@ -212,8 +173,12 @@ namespace PlayerScript
         {
             return stats.TryGetValue(statName, out var stat) ? stat : 0;
         }
-
+        #endregion
         #region 장비관련함수
+        public void SetEquipUI(EquipUI uI)
+        {
+            equipUI = uI;
+        }
         //  특정 슬롯의 장착된 장비를 가져오는 함수
         public Equipment GetEquippedItem(EquipmentType slot)
         {
@@ -233,6 +198,8 @@ namespace PlayerScript
 
             ChangeStat("Atk", equipItem.AttackPoint);
             ChangeStat("Def", equipItem.DefensePoint);
+            
+            equipItem.Effects?.ForEach(effect => effect.ApplyEffect(this));
 
             equipUI?.UpdateEquipmentUI();
 
@@ -252,19 +219,19 @@ namespace PlayerScript
 
                 equippedItem[slotIndex] = null;
             }
+            
+            equipitem.Effects?.ForEach(effect =>
+            {
+                if (effect is IRemovableEffect removable)
+                {
+                    removable.RemoveEffect(this);
+                }
+            });
 
             equipUI?.UpdateEquipmentUI();
         }
 
-        public void ApplyItemEffects(Equipment equipItem)
-        {
-            foreach (var effect in equipItem.Effects)
-            {
-                effect.ApplyEffect(this); // 플레이어에게 효과 적용
-            }
-        }
-
-        /*public void RemoveItemEffects(Equipment equipItem)
+   /*public void RemoveItemEffects(Equipment equipItem)
     {
         foreach (var effect in equipItem.Effects)
         {
@@ -273,5 +240,46 @@ namespace PlayerScript
     }*/
 
         #endregion
+
+        #region 신, 종족, 특성 저장및 적용 + 진행특성 적용
+        
+        public void SelectedGod(GodData god)
+        {
+            selectedGod = god;
+            god.SpecialEffect?.ApplyEffect(this);
+        }
+
+        public void SelectedRace(RaceData race, SubRaceData subRace)
+        {
+            selectedRace = race;
+            race.raceEffect?.ApplyEffect(this);
+            subRace.subRaceEffect.ApplyEffect(this);
+        }
+
+        public void ApplyAllSelectedTraits()
+        {
+            foreach (var trait in selectedTraits)
+            {
+                trait.traiteffect?.ApplyEffect(this);
+            }
+        }
+
+        public void ApplyTraits(TraitData trait)
+        {
+            selectedTraits.Add(trait);
+            trait.traiteffect?.ApplyEffect(this);
+        }
+        #endregion
+        public void ApplyEffect(IEffect effect)
+        {
+            effect.ApplyEffect(this);
+        }
+        public void ApplyEffectList(IEnumerable<IEffect> effects)
+        {
+            foreach (var effect in effects)
+            {
+                effect.ApplyEffect(this);
+            }
+        }
     }
 }

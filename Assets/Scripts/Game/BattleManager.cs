@@ -11,14 +11,11 @@ namespace Game
 {
     public class BattleManager : MonoBehaviour
     {
-        private EnemyData enemy;
+        private EntitiesData enemy;
 
         [SerializeField] GameObject battleWindow;
-        [SerializeField] private Slider monsterHp;
-        [SerializeField] private TMP_Text monsterHpText;
         [SerializeField] private TMP_Text playerHpText;
         [SerializeField] private Slider playerHp;
-        [SerializeField] private Image monsterSprite;
         [SerializeField] private TMP_Text battleLogs;
 
         [SerializeField] private GameObject battleBtns;
@@ -26,24 +23,23 @@ namespace Game
 
         private void Awake()
         {
-            if(DatabaseManager.Instance.enemyDatabase == null)
+            if(DatabaseManager.Instance.entitiesDatabase == null)
             {
                 Debug.LogError("EnemyDatabse missing by.BattleManager");
                 return;
             }
 
-            EnemyCreator.InitializeEnemies(EventManager.Instance.Floor);
+            EntitiesCreator.InitializeEnemies(EventManager.Instance.Floor);
             battleWindow.SetActive(false);
         }
 
-        public void StartBattle(EventChoice selectedChoice)
+        public void StartBattle(int? enemyId = null)
         { 
-            battleWindow.SetActive(true);      
+            battleWindow.SetActive(true);
 
-            int? enemyId = selectedChoice.FixedID;
-
-            enemy = enemyId == 0 ? EnemyCreator.StartBattle(EventManager.Instance.Floor) : DatabaseManager.Instance.enemyDatabase.GetEnemyByID(enemyId);
-
+            enemy = enemyId == null || enemyId == 0
+                ? EntitiesCreator.StartBattle(EventManager.Instance.Floor)
+                : DatabaseManager.Instance.entitiesDatabase.GetEnemyByID(enemyId.Value);
             if(enemy == null )
             {
                 Debug.LogError($"적 정보를 찾을수 없습니다");
@@ -56,23 +52,16 @@ namespace Game
 
         private void InitializeBattleUI()
         {
-            monsterSprite.sprite = enemy.EnemySprite;
-            monsterHp.maxValue = enemy.MaxHp;
-            monsterHp.value = enemy.CurrentHp;
-            monsterHpText.text = $"{enemy.CurrentHp} / {enemy.MaxHp}";
-
-            playerHp.maxValue = Player.Instance.GetStat("HP");
+           playerHp.maxValue = Player.Instance.GetStat("HP");
             playerHp.value = Player.Instance.GetStat("HP");
             playerHpText.text = $"{(float)Player.Instance.GetStat("CurrentHP")} / {(float)Player.Instance.GetStat("HP")}";
         }
 
         private void UpdateBattleUI()
         {
-            monsterHp.value = enemy.CurrentHp;
-            playerHp.value = Player.Instance.GetStat("CurrentHP");
+           playerHp.value = Player.Instance.GetStat("CurrentHP");
 
-            monsterHpText.text = $"{enemy.CurrentHp} / {enemy.MaxHp}";
-            playerHpText.text =
+           playerHpText.text =
                 $"{(float)Player.Instance.GetStat("CurrentHP")} / {(float)Player.Instance.GetStat("HP")}";
         }
 
@@ -98,11 +87,10 @@ namespace Game
 
         private void EndBattle()
         {
-            if(enemy.CurrentHp <= 0)
-                battleWindow.SetActive(false);
+            battleWindow.SetActive(false);
         }
 
-        private void Damage()
+        /*private void Damage()
         {
             int playerAtk = Player.Instance.GetStat("Atk");
            
@@ -125,10 +113,9 @@ namespace Game
 
         public void AtkBtn()
         {
-            Damage();
+            //Damage();
             UpdateBattleUI();
-        }
-
+        }*/
         public void SkillBtn()
         {
             skillPage.SetActive(true);

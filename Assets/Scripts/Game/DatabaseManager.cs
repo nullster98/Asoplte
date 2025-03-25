@@ -12,7 +12,7 @@ namespace Game
 
         public ItemDatabase itemDatabase;
         public EventDatabase eventDatabase;
-        public EnemyDatabase enemyDatabase;
+        public EntitiesDatabase entitiesDatabase;
         public TraitDatabase traitDatabase;
         //public SkillDatabase skillDatabase;
 

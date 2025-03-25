@@ -14,22 +14,22 @@ namespace Item
 
             // 장비 아이템 (한손검)
             CreateEquipment(1001, "한손검",  1500, 800, EquipmentType.LeftHand,
-                new List<ItemEffect>(),10,0);           
+                new List<IEffect>(),10,0);           
 
             // 장비 아이템 (불의 검)
             CreateEquipment(1002, "불의 검", 2000, 1200, EquipmentType.LeftHand,
-                new List<ItemEffect>
+                new List<IEffect>
                 {
                     new PoisonEffect(4, 3) // 매 턴 4 데미지, 3턴 지속
                 }, 7, 0);
 
             // 소모품 아이템 (HP 포션)
             CreateConsumable(2001, "HP 포션",  500, 250,
-                new List<ItemEffect>(), 50, 0, ItemTarget.Player);
+                new List<IEffect>(), 50, 0, ItemTarget.Player);
 
             // 소모품 아이템 (독 포션 - 적용)
             CreateConsumable(2002, "독 포션", 800, 400,
-                new List<ItemEffect>
+                new List<IEffect>
                 {
                     new PoisonEffect(5, 3)
                 }, 0, 0, ItemTarget.Enemy);
@@ -39,7 +39,7 @@ namespace Item
 
         // 장비 아이템 생성 함수
         private static void CreateEquipment(int id, string name, int purchasePrice, int salePrice,
-            EquipmentType slot, List<ItemEffect> effects, int attack, int defense)
+            EquipmentType slot, List<IEffect> effects, int attack, int defense)
         {
             Debug.Log($"장비 아이템 생성: {name}");
 
@@ -49,7 +49,7 @@ namespace Item
 
         // 소모품 아이템 생성 함수
         private static void CreateConsumable(int id, string name, int purchasePrice, int salePrice,
-            List<ItemEffect> effects, float healAmount, float manaRestore, ItemTarget target)
+            List<IEffect> effects, float healAmount, float manaRestore, ItemTarget target)
         {
             Debug.Log($"소모품 아이템 생성: {name}");
 

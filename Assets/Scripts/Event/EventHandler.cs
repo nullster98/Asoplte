@@ -96,20 +96,21 @@ namespace Event
             EventPhase currentPhase = currentEvent.phases[currentPhaseIndex - 1];
             SelectedChoice = currentPhase.choices[choiceIndex];
 
-            if (SelectedChoice.acquisitionTrigger)
+            if (SelectedChoice.outcome.giveReward)
             {
                 Debug.Log("획득 UI 활성화!");
-                if (SelectedChoice.AcqType != null)
-                    if (SelectedChoice.AcqID != null)
-                        acquisitionUI.OpenAcquisitionUI(SelectedChoice.AcqType.Value, SelectedChoice.AcqID.Value);
+                if (SelectedChoice.outcome.rewardType != null)
+                    if (SelectedChoice.outcome.rewardID != null)
+                        acquisitionUI.OpenAcquisitionUI(SelectedChoice.outcome.rewardType.Value, 
+                            SelectedChoice.outcome.rewardID.Value);
                 return;
             }
 
-            if (SelectedChoice.battleTrigger)
+            if (SelectedChoice.outcome.startBattle)
             {
                 Debug.Log("전투 시작!");
                 // 전투 시작
-                battleManager.StartBattle(SelectedChoice);
+                battleManager.StartBattle(SelectedChoice.outcome.entityID);
                 return;
             }
 

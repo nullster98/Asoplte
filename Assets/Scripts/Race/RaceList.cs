@@ -22,24 +22,24 @@ namespace Race
             #region 골렘 생성
             List<SubRaceData> golemSubRaces = new List<SubRaceData>
             {
-                CreateRace("룬 골렘", "RuneGolem", 0, true),
-                CreateRace("배터리 골렘", "LightGolem", 100, false),
-                CreateRace("숲 골렘", "ForestGolem", 150, false),
+                CreateRace("룬 골렘", "RuneGolem", 0, true,null),
+                CreateRace("배터리 골렘", "LightGolem", 100, false,null),
+                CreateRace("숲 골렘", "ForestGolem", 150, false,null),
             };
             #endregion
             #region 오크 생성
 
             List<SubRaceData> oakSubRaces = new List<SubRaceData>
             {
-                CreateRace("오크 전사", "OakWarrior", 0, true),
-                CreateRace("잿빛 오크", "GrayOak", 100, false),
-                CreateRace("핏빛 오크", "RedOak", 150, false),
+                CreateRace("오크 전사", "OakWarrior", 0, true,null),
+                CreateRace("잿빛 오크", "GrayOak", 100, false,null),
+                CreateRace("핏빛 오크", "RedOak", 150, false,null),
             };
 
             #endregion
 
-            RaceData golem = CreateTribe("골렘", "Golem", golemSubRaces);
-            RaceData oak = CreateTribe("오크", "Oak", oakSubRaces);
+            RaceData golem = CreateTribe("골렘", "Golem", golemSubRaces,null);
+            RaceData oak = CreateTribe("오크", "Oak", oakSubRaces,null);
             
             database.raceList.Add(golem);
             database.raceList.Add(oak);
@@ -53,27 +53,29 @@ namespace Race
         }
         
         //대종족 생성 함수
-        private static RaceData CreateTribe(string tribeName, string fileName, List<SubRaceData> subRace)
+        private static RaceData CreateTribe(string tribeName, string fileName, List<SubRaceData> subRace, RaceEffect effect)
         {
             RaceData newTribe = new RaceData
             {
                 raceName = tribeName,
                 fileName = fileName,
-                subRace = new List <SubRaceData>(subRace)
+                subRace = new List <SubRaceData>(subRace),
+                raceEffect = effect
             };
 
             return newTribe;
         }
 
         private static SubRaceData CreateRace(string raceName, string fileName, 
-            int requireFaith, bool isUnlocked)
+            int requireFaith, bool isUnlocked, RaceEffect effect)
         {
             return new SubRaceData
             {
                 subRaceName = raceName,
                 fileName = fileName,
                 requireFaith = requireFaith,
-                isUnlocked = isUnlocked
+                isUnlocked = isUnlocked,
+                subRaceEffect = effect
             };
         }
     }

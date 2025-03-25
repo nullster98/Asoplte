@@ -7,7 +7,7 @@ namespace Trait
 {
     public abstract class TraitEffect : IEffect
     {
-        public abstract void ApplyEffect(Player player);
+        public abstract void ApplyEffect(IUnit target);
     }
 
     public enum TraitPnN
@@ -24,6 +24,7 @@ namespace Trait
         public int traitID;
         public int cost;
         public bool isUnlock;
+        public TraitEffect traiteffect;
 
         public Sprite GetTraitImage()
         {
@@ -82,7 +83,7 @@ namespace Trait
             return true;
         }
 
-        public TraitData(string traitName, string fileName, TraitPnN pnN, int traitID, int cost, bool isUnlock)
+        public TraitData(string traitName, string fileName, TraitPnN pnN, int traitID, int cost, bool isUnlock, TraitEffect effect)
         {
             this.traitName = traitName;
             this.fileName = fileName;
@@ -90,6 +91,25 @@ namespace Trait
             this.traitID = traitID;
             this.cost = cost;
             this.isUnlock = isUnlock;
+            this.traiteffect = effect;
+
+            Sprite traitImage = GetTraitImage();
+            string description = GetDescription();
+        }
+    }
+
+    public class StrongFaith : TraitEffect
+    {
+        public override void ApplyEffect(IUnit target)
+        {
+            switch (target.UnitType)
+            {
+                case UnitType.Player:
+                    target.ChangeStat("FaithStat", 10);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

@@ -260,8 +260,9 @@ namespace Trait
 
         public void OnNextButtonPressed()
         {
+            Player.Instance.selectedTraits = new List<TraitData>(selectedTraits);
             // 선택된 특성들을 플레이어에게 적용
-            Player.Instance.ApplySelectedTraits(selectedTraits);
+            Player.Instance.ApplyAllSelectedTraits();
 
 
             // 다음 화면으로 전환 (예: 특성 선택이 끝난 후 캐릭터 생성 화면)

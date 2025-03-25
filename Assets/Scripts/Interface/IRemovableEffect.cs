@@ -1,9 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using PlayerScript;
 using UnityEngine;
 
-public interface IEffect
+public interface IRemovableEffect : IEffect
 {
-    void ApplyEffect(IUnit target);
+    void RemoveEffect(IUnit target);
 }

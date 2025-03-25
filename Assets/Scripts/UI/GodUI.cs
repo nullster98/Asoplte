@@ -112,7 +112,7 @@ namespace UI
         {
             godSelect.SetActive(false);
             characterSelect.SetActive(true);
-            player.SelectedGod = godDatabase.GetGodByIndex(currentIndex);
+            player.SelectedGod(godDatabase.GetGodByIndex(currentIndex));
         }
 
         public void PreviousButton()

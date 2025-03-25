@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Entities;
 using PlayerScript;
 using UnityEngine;
 
@@ -6,7 +7,7 @@ namespace God
 {
     public abstract class GodEffect : IEffect
     {
-        public abstract void ApplyEffect(Player player);
+        public abstract void ApplyEffect(IUnit target);
     }
 
     [System.Serializable]
@@ -88,9 +89,20 @@ namespace God
 
     public class LibertyGodEffect :GodEffect
     {
-        public override void ApplyEffect(Player player)
+        public override void ApplyEffect(IUnit target)
         {
-            Player.Instance.MaxCost += 10;
+            /*switch (target.UnitType)
+            {
+                case UnitType.Player ;
+                    if(target is Player player)
+                    break;
+                case UnitType.Enemy ;
+                    (if target is Enemy enemy)
+                    break;
+                case UnitType.NPC ;
+                    break;
+                
+            }*/
         }
     }
 }
