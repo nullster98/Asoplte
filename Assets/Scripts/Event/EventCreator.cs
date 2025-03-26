@@ -40,9 +40,9 @@ namespace Event
 
             List<EventData> newEvents = new List<EventData>
             {
-                CreateEvent("시작이벤트", EventTag.None, null,
+                CreateEvent("시작이벤트", EventTag.None,
                     CreatePhase("시작이벤트", null,
-                        CreateChoice("다음랜덤", nextEvent: "END", nextPhaseIndex: null, requiredTrait: null, outcome: null),
+                        CreateChoice("다음랜덤", nextEvent: "전투 이벤트"),
                         CreateChoice("다음페이즈", nextPhaseIndex: 1)
                     ),
                     CreatePhase("시작이벤트2", null,
@@ -51,9 +51,10 @@ namespace Event
                     )
                 ),
 
-                CreateEvent("전투 이벤트", EventTag.Battle, null,
-                    CreatePhase("전투 이벤트", phaseOutcome: null,
-                        CreateChoice("전투 시작", outcome: new EventOutcome { startBattle = true })
+                CreateEvent("전투 이벤트", EventTag.Battle, 
+                    CreatePhase("전투 이벤트", new EventOutcome{spawnEntity = true, entityID = 3001},
+                        CreateChoice("전투 시작", outcome: new EventOutcome { startBattle = true }),
+                        CreateChoice("다음 랜덤")
                     )
                 ),
 
@@ -86,13 +87,12 @@ namespace Event
         }
 
         //이벤트 생성 헬퍼 함수
-        private static EventData CreateEvent(string name, EventTag type, EventEncounter encounter = null, params EventPhase[] phases)
+        private static EventData CreateEvent(string name, EventTag type, params EventPhase[] phases)
         {
             return new EventData
             {
                 eventName = name,
                 eventType = type,
-                encounter = encounter,
                 phases = new List<EventPhase>(phases)
             };
         }
@@ -104,7 +104,7 @@ namespace Event
             {
                 phaseName = phaseName,          
                 choices = new List<EventChoice>(choices),
-                phaseOutcome = phaseOutcome
+                phaseOutcome = phaseOutcome ?? new EventOutcome()
             };
 
             newEventPhase.LoadEventImage();

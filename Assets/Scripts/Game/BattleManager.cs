@@ -25,7 +25,7 @@ namespace Game
         {
             if(DatabaseManager.Instance.entitiesDatabase == null)
             {
-                Debug.LogError("EnemyDatabse missing by.BattleManager");
+                Debug.LogError("EntityDatabse missing by.BattleManager");
                 return;
             }
 

@@ -1,8 +1,9 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Entities
 {
-    public enum EntitiesType
+    public enum EntityType
     {
         Monster,
         Boss,
@@ -11,60 +12,62 @@ namespace Entities
     [System.Serializable]
     public class EntitiesData
     {
-        public int EnemyID { get; private set; }
-        public EntitiesType NpcType { get; private set; }
+        public int EntityID { get; private set; }
+        public EntityType EntityType { get; private set; }
         public string Name { get; private set; }
         public string Description { get; private set; }
         public Sprite EnemySprite { get; private set; }
-        public int Level { get; private set; }
+        public List<int> SpawnableFloors { get; private set; }//스폰 층수
+        public bool IsEventOnly { get; private set; } // 이벤트 전용 여부
         public int MaxHp { get; private set; }
         public int MaxMp { get; private set; }
         public int Attack { get; private set; }
         public int Defense { get; private set; }
-        //public List<string> Abilities;
 
         public void LoadEnemySprite()
         {
-            string folderPath = NpcType switch
+            string folderPath = EntityType switch
             {
-                EntitiesType.Npc => "Entities/NPC/Images",
-                EntitiesType.Monster => "Entities/Monster/Images",
-                EntitiesType.Boss => "Entities/Boss/Images",
+                EntityType.Npc => "Entity/NPC/Images",
+                EntityType.Monster => "Entity/Monster/Images",
+                EntityType.Boss => "Entity/Boss/Images",
                 _ => "Entities/Default"
             };
 
-            EnemySprite = Resources.Load<Sprite>($"{folderPath}/{Name}") ?? Resources.Load<Sprite>("Entities/default");
+            EnemySprite = Resources.Load<Sprite>($"{folderPath}/{Name}") ?? Resources.Load<Sprite>("Entity/default");
         
         }
 
         public void GetDescription()
         {
-            string folderPath = NpcType switch
+            string folderPath = EntityType switch
             {
-                EntitiesType.Npc => "Entitie/NPC/Descriptions",
-                EntitiesType.Monster => "Entitie/Monster/Descriptions",
-                EntitiesType.Boss => "Entitie/Boss/Descriptions",
-                _ => "Entitie/Default"
+                EntityType.Npc => "Entity/NPC/Descriptions",
+                EntityType.Monster => "Entity/Monster/Descriptions",
+                EntityType.Boss => "Entity/Boss/Descriptions",
+                _ => "Entity/Default"
             };
 
             TextAsset textAsset = Resources.Load<TextAsset>($"{folderPath}/{Name}");
             Description = textAsset != null ? textAsset.text : "설명 없음";
         }
 
-        public EntitiesData(int id, string name, EntitiesType type, int level, int maxHp, int maxMp, int attack, int defense)
+        public EntitiesData(int id, string name, EntityType type, 
+            int maxHp, int maxMp, int attack, int defense, List<int> spawnableFloors,
+            bool isEventOnly = false)
         {
-            EnemyID = id;
+            EntityID = id;
             Name = name;
-            NpcType = type;
-            Level = level;
+            EntityType = type;
             MaxHp = maxHp;
             MaxMp = maxMp;
             Attack = attack;
             Defense = defense;
-
+            SpawnableFloors = spawnableFloors;
+            IsEventOnly = isEventOnly;
+            
             LoadEnemySprite();
             GetDescription();
-
         }
 
     }

@@ -13,52 +13,127 @@ MonoBehaviour:
   m_Name: EventDatabase
   m_EditorClassIdentifier: 
   events:
-  - EventName: "\uC2DC\uC791\uC774\uBCA4\uD2B8"
-    Phases:
-    - PhaseName: "\uC2DC\uC791\uC774\uBCA4\uD2B8"
-      Script: "\uAC8C\uC784 \uCC98\uC74C\uC2DC\uC791\uC2DC \uC2E4\uD589\uB418\uB294
-        \uC2A4\uD06C\uB9BD\uD2B8 \uC785\uB2C8\uB2E4."
-      EventImage: {fileID: 21300000, guid: d0188f5340fc2f4468a81d8b04a76aaa, type: 3}
-      Choices:
-      - ChoiceName: "\uB2E4\uC74C\uB79C\uB364"
-        RequiredTraits: 
-        NextEventName: END
-        NextPhaseIndex: -1
-        BattleTrigger: 0
-        FixedID: -1
-      - ChoiceName: "\uB2E4\uC74C\uD398\uC774\uC988"
-        RequiredTraits: 
-        NextEventName: 
-        NextPhaseIndex: 1
-        BattleTrigger: 0
-        FixedID: -1
-    - PhaseName: "\uC2DC\uC791\uC774\uBCA4\uD2B82"
-      Script: "\uB2E4\uC74C \uD398\uC774\uC988\uB85C \uC798 \uB118\uC5B4\uC640 \uC84C\uC2B5\uB2C8\uB2E4.."
-      EventImage: {fileID: 21300000, guid: 52f2ca293272c7f49a3bed0d52d335aa, type: 3}
-      Choices:
-      - ChoiceName: "\uB2E4\uC74C\uB79C\uB364"
-        RequiredTraits: 
-        NextEventName: END
-        NextPhaseIndex: -1
-        BattleTrigger: 0
-        FixedID: -1
-      - ChoiceName: "\uC694\uAD6C\uD2B9\uC131:\uC2E0\uC559"
-        RequiredTraits: "\uAD73\uAC74\uD55C \uC2E0\uC559"
-        NextEventName: END
-        NextPhaseIndex: -1
-        BattleTrigger: 0
-        FixedID: -1
-    EventType: 0
-  - EventName: "\uC804\uD22C \uC774\uBCA4\uD2B8"
-    Phases:
-    - PhaseName: "\uC804\uD22C \uC774\uBCA4\uD2B8"
-      Script: "\uC804\uD22C \uBC1C\uC0DD \uC774\uBCA4\uD2B8\uC785\uB2C8\uB2E4."
-      EventImage: {fileID: 21300000, guid: 91d4625b691e0ba4e884f37cece9f822, type: 3}
-      Choices:
-      - ChoiceName: "\uC804\uD22C \uC2DC\uC791"
-        RequiredTraits: 
-        NextEventName: 
-        NextPhaseIndex: -1
-        BattleTrigger: 1
-        FixedID: 1
-    EventType: 8
+  - eventName: "\uC2DC\uC791\uC774\uBCA4\uD2B8"
+    phases:
+    - phaseName: "\uC2DC\uC791\uC774\uBCA4\uD2B8"
+      eventImage: {fileID: 21300000, guid: d0188f5340fc2f4468a81d8b04a76aaa, type: 3}
+      choices:
+      - choiceName: "\uB2E4\uC74C\uB79C\uB364"
+        requiredTraits: 
+        nextEventName: "\uC804\uD22C \uC774\uBCA4\uD2B8"
+        nextPhaseIndex: -1
+        outcome:
+          startBattle: 0
+          giveReward: 0
+          spawnEntity: 0
+          entityType: 0
+          spawnChance: 1
+      - choiceName: "\uB2E4\uC74C\uD398\uC774\uC988"
+        requiredTraits: 
+        nextEventName: 
+        nextPhaseIndex: 1
+        outcome:
+          startBattle: 0
+          giveReward: 0
+          spawnEntity: 0
+          entityType: 0
+          spawnChance: 1
+      phaseOutcome:
+        startBattle: 0
+        giveReward: 0
+        spawnEntity: 0
+        entityType: 0
+        spawnChance: 1
+    - phaseName: "\uC2DC\uC791\uC774\uBCA4\uD2B82"
+      eventImage: {fileID: 21300000, guid: 52f2ca293272c7f49a3bed0d52d335aa, type: 3}
+      choices:
+      - choiceName: "\uB2E4\uC74C\uB79C\uB364"
+        requiredTraits: 
+        nextEventName: END
+        nextPhaseIndex: -1
+        outcome:
+          startBattle: 0
+          giveReward: 0
+          spawnEntity: 0
+          entityType: 0
+          spawnChance: 1
+      - choiceName: "\uC694\uAD6C\uD2B9\uC131:\uC2E0\uC559"
+        requiredTraits: "\uAD73\uAC74\uD55C \uC2E0\uC559"
+        nextEventName: END
+        nextPhaseIndex: -1
+        outcome:
+          startBattle: 0
+          giveReward: 0
+          spawnEntity: 0
+          entityType: 0
+          spawnChance: 1
+      phaseOutcome:
+        startBattle: 0
+        giveReward: 0
+        spawnEntity: 0
+        entityType: 0
+        spawnChance: 1
+    eventType: 0
+  - eventName: "\uC804\uD22C \uC774\uBCA4\uD2B8"
+    phases:
+    - phaseName: "\uC804\uD22C \uC774\uBCA4\uD2B8"
+      eventImage: {fileID: 21300000, guid: 91d4625b691e0ba4e884f37cece9f822, type: 3}
+      choices:
+      - choiceName: "\uC804\uD22C \uC2DC\uC791"
+        requiredTraits: 
+        nextEventName: 
+        nextPhaseIndex: -1
+        outcome:
+          startBattle: 1
+          giveReward: 0
+          spawnEntity: 0
+          entityType: 0
+          spawnChance: 1
+      - choiceName: "\uB2E4\uC74C \uB79C\uB364"
+        requiredTraits: 
+        nextEventName: 
+        nextPhaseIndex: -1
+        outcome:
+          startBattle: 0
+          giveReward: 0
+          spawnEntity: 0
+          entityType: 0
+          spawnChance: 1
+      phaseOutcome:
+        startBattle: 0
+        giveReward: 0
+        spawnEntity: 1
+        entityType: 0
+        spawnChance: 1
+    eventType: 8
+  - eventName: "\uBCF4\uC0C1 \uC774\uBCA4\uD2B8"
+    phases:
+    - phaseName: 
+      eventImage: {fileID: 0}
+      choices: []
+      phaseOutcome:
+        startBattle: 0
+        giveReward: 0
+        spawnEntity: 0
+        entityType: 0
+        spawnChance: 1
+    - phaseName: "\uBCF4\uC0C1 \uC774\uBCA4\uD2B8"
+      eventImage: {fileID: 21300000, guid: 862f8a16043dd2046ae0b834edf6bd33, type: 3}
+      choices:
+      - choiceName: "\uC0C1\uC790\uB97C \uC5F0\uB2E4"
+        requiredTraits: 
+        nextEventName: 
+        nextPhaseIndex: -1
+        outcome:
+          startBattle: 0
+          giveReward: 1
+          spawnEntity: 0
+          entityType: 0
+          spawnChance: 1
+      phaseOutcome:
+        startBattle: 0
+        giveReward: 0
+        spawnEntity: 0
+        entityType: 0
+        spawnChance: 1
+    eventType: 2

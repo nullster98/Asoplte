@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Data.Common;
 using TMPro;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
@@ -40,6 +41,28 @@ namespace Entities
             enemyData = data;
             SetStat("CurrentHP", data.MaxHp); 
             SetStat("CurrentMP", data.MaxMp);
+            stats["HP"] = data.MaxHp;
+            stats["MP"] = data.MaxMp;
+            stats["Atk"] = data.Attack;
+            stats["Def"] = data.Defense;
+
+            var image = GetComponent<Image>();
+            if (image != null && data.EnemySprite != null)
+            {
+                image.sprite = data.EnemySprite;
+                image.SetNativeSize();
+            }
+            else
+            {
+                Debug.LogWarning("Image가 없거나 Sprite가 비어 있습니다!");
+            }
+
+            RectTransform rect = GetComponent<RectTransform>();
+            if (rect != null)
+            {
+                rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(0.5f, 0.5f);
+                rect.anchoredPosition = new Vector2(0, 100);
+            }
         }
 
         public void SetStat(string key, int value)

@@ -31,7 +31,6 @@ namespace Event
         public string eventName;   
         public List<EventPhase> phases;
         public EventTag eventType;
-        public EventEncounter encounter;
     }
 
     [Serializable]
@@ -56,7 +55,7 @@ namespace Event
             if (eventImage == null)
             {
                 Debug.LogWarning($"{phaseName} 이미지를 찾을 수 없습니다! 기본 이미지로 설정.");
-                eventImage = Resources.Load<Sprite>("Event/Images/default");
+                eventImage = Resources.Load<Sprite>("Event/default");
             }
         }
     }
@@ -93,15 +92,10 @@ namespace Event
         public int? rewardID;
         
         public bool spawnEntity; //우선 조우
-        public EntitiesType entityType; // e.g., Enemy, NPC, Boss
+        public EntityType entityType; // e.g., Enemy, NPC, Boss
         public int? entityID;
-    }
 
-    [Serializable]
-    public class EventEncounter
-    {
-        public bool hasEncounter;
-        public int enemyID;
-        public bool spawnImmediately;
+        public float spawnChance = 1.0f;
     }
+    
 }

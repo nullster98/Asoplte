@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0927cf9ff392eb46b068a6fc5098312, type: 3}
-  m_Name: ItemDatabase
+  m_Script: {fileID: 11500000, guid: d21c2cff0572c8f42ab12f3f61e1ca58, type: 3}
+  m_Name: EntityDatabase
   m_EditorClassIdentifier: 
-  itemList: []
+  enemyList: []

@@ -1724,8 +1724,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: TraitScript, Assembly-CSharp
+      - m_Target: {fileID: 1482002269}
+        m_TargetAssemblyTypeName: Trait.TraitUI, Assembly-CSharp
         m_MethodName: OnNextButtonPressed
         m_Mode: 1
         m_Arguments:
@@ -6872,7 +6872,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemDatabase: {fileID: 11400000, guid: 05f53ac303cfbc649809e3f4a8772989, type: 2}
   eventDatabase: {fileID: 11400000, guid: 46aa3be6f670f28478a24715462c5cc3, type: 2}
-  enemyDatabase: {fileID: 11400000, guid: 220916dd024de9e4fb0d62f30c55ffb7, type: 2}
+  entitiesDatabase: {fileID: 11400000, guid: 7c1e2cd123bac294289104054093cf1f, type: 2}
   traitDatabase: {fileID: 11400000, guid: d59cf43bdf92411418d1c23cac5f521b, type: 2}
 --- !u!4 &1973424196
 Transform:

@@ -20,41 +20,15 @@ namespace Entities
 
             enemyDatabase.ResetEnemyData();
             Debug.Log($"적 데이터베이스 초기화 완료 (현재 층: {floor})");
-
-            // 층마다 등장할 수 있는 몬스터 종류만 등록
-            List<string> availableMonsters = GetAvailableMonsters(floor);
-            foreach (string enemyName in availableMonsters)
-            {
-                EntitiesData newEnemy = new EntitiesData(
-                    id: Random.Range(1000, 9999), // 임시 ID (중복 방지)
-                    name: enemyName,
-                    type: EntitiesType.Monster,
-                    level: 1, // 레벨은 전투 시작 시 결정됨
-                    maxHp: 0, // 능력치는 전투 시작 시 설정
-                    maxMp: 0,
-                    attack: 0,
-                    defense: 0
-                );
-                enemyDatabase.AddEnemy(newEnemy);
-            }
+            
+            enemyDatabase.AddEnemy(
+            new EntitiesData(3001, "Skeleton", EntityType.Monster, 
+                100, 0, 10, 3, 
+                new List<int>{1}, false)
+            );
+            
         }
-
-        [ItemCanBeNull]
-        private static List<string> GetAvailableMonsters(int floor)
-        {
-            var floor1Monsters = new List<string> { "Skeleton" };
-            var floor2Monsters = new List<string> { "Zombie", "Ghoul" };
-            var floor3Monsters = new List<string> { "DarkKnight", "Lich" };
-
-
-            return floor switch
-            {
-                1 => floor1Monsters,
-                2 => floor2Monsters,
-                3 => floor3Monsters,
-                _ => floor3Monsters // 기본적으로 가장 강한 층 몬스터
-            };
-        }
+        
 
         public static EntitiesData StartBattle(int floor)
         {
@@ -66,7 +40,7 @@ namespace Entities
             }
 
             // 랜덤한 적 선택
-            EntitiesData baseEnemy = enemyDatabase.GetRandomEnemy();
+            EntitiesData baseEnemy = enemyDatabase.GetRandomEnemy(floor);
 
             if (baseEnemy == null)
             {
@@ -77,14 +51,15 @@ namespace Entities
             // 새로운 적 객체 생성 (기존 데이터 수정 방지)
             int level = Random.Range(floor, floor + 4);
             return new EntitiesData(
-                id: baseEnemy.EnemyID,
+                id: baseEnemy.EntityID,
                 name: baseEnemy.Name,
-                type: baseEnemy.NpcType,
-                level: level,
+                type: baseEnemy.EntityType,
                 maxHp: 30 + level * 10 + Random.Range(0, 6),
                 maxMp: 0, // MP 필요 시 조정
                 attack: 5 + level * 2 + Random.Range(0, 3),
-                defense: 2 + Mathf.RoundToInt(level * 1.5f + Random.Range(0, 2))
+                defense: 2 + Mathf.RoundToInt(level * 1.5f + Random.Range(0, 2)),
+                spawnableFloors: baseEnemy.SpawnableFloors,
+                isEventOnly: baseEnemy.IsEventOnly
             );
 
 

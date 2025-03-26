@@ -63,6 +63,27 @@ namespace Event
 
             Debug.Log($"이벤트 진행 중: {phase.phaseName}");
 
+            if (phase.phaseOutcome != null && phase.phaseOutcome.spawnEntity)
+            {
+                float chance = phase.phaseOutcome.spawnChance;
+                if (Random.value <= chance)
+                {
+                    var enemyData = DatabaseManager.Instance.entitiesDatabase.GetEnemyByID(phase.phaseOutcome.entityID.Value);
+                    if (enemyData != null)
+                    {
+                        EntitySpawner.Spawn(enemyData);
+                    }
+                    else
+                    {
+                        Debug.LogError($"ID {phase.phaseOutcome.entityID}에 해당하는 적 데이터가 없습니다!");
+                    }
+                }
+                else
+                {
+                    Debug.Log("확률 판정에 따라 적이 등장하지 않았습니다.");
+                }
+            }
+            
             List<EventChoice> availableChoices = new List<EventChoice>();
 
             foreach (var choice in phase.choices)

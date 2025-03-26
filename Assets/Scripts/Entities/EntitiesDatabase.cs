@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using UnityEngine;
 
 namespace Entities
 {
-    [CreateAssetMenu(fileName = "EnemyDatabase", menuName = "Game/Enemy Database")]
+    [CreateAssetMenu(fileName = "EntityDatabase", menuName = "Game/Entity Database")]
     public class EntitiesDatabase : ScriptableObject
     {
         [SerializeField] private List<EntitiesData> enemyList = new List<EntitiesData>();
@@ -14,7 +15,7 @@ namespace Entities
         public EntitiesData GetEnemyByID(int? enemyID)
         {
             if (!enemyID.HasValue) return null;
-            return enemyList.Find(enemy => enemy.EnemyID == enemyID);
+            return enemyList.Find(enemy => enemy.EntityID == enemyID);
         }
 
         public void AddEnemy(EntitiesData enemy)
@@ -26,16 +27,20 @@ namespace Entities
             }
 
             enemyList.Add(enemy);
-            Debug.Log($"적 추가 완료: {enemy.Name} (ID: {enemy.EnemyID})");
+            Debug.Log($"적 추가 완료: {enemy.Name} (ID: {enemy.EntityID})");
+            Debug.Log($"적 데이터 : {enemy.EnemySprite}");
         }
 
         public void ResetEnemyData() => enemyList.Clear();
 
-        public EntitiesData GetRandomEnemy()
+        public EntitiesData GetRandomEnemy(int floor)
         {
-            if (enemyList.Count != 0) return enemyList[Random.Range(0, enemyList.Count)];
-            Debug.LogError("데이터베이스에 적이 없음");
-            return null;
+            var spawnable = enemyList
+                .Where(e => !e.IsEventOnly && e.SpawnableFloors.Contains(floor))
+                .ToList();
+
+            if (spawnable.Count == 0) return null;
+            return spawnable[Random.Range(0, spawnable.Count)];
 
         }
     }
