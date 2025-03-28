@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using Game;
 using PlayerScript;
+using Entities;
 using UI;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Event
@@ -62,28 +64,9 @@ namespace Event
             EventPhase phase = currentEvent.phases[currentPhaseIndex];
 
             Debug.Log($"이벤트 진행 중: {phase.phaseName}");
-
-            if (phase.phaseOutcome != null && phase.phaseOutcome.spawnEntity)
-            {
-                float chance = phase.phaseOutcome.spawnChance;
-                if (Random.value <= chance)
-                {
-                    var enemyData = DatabaseManager.Instance.entitiesDatabase.GetEnemyByID(phase.phaseOutcome.entityID.Value);
-                    if (enemyData != null)
-                    {
-                        EntitySpawner.Spawn(enemyData);
-                    }
-                    else
-                    {
-                        Debug.LogError($"ID {phase.phaseOutcome.entityID}에 해당하는 적 데이터가 없습니다!");
-                    }
-                }
-                else
-                {
-                    Debug.Log("확률 판정에 따라 적이 등장하지 않았습니다.");
-                }
-            }
             
+            TrySpawnAndBattle(phase.phaseOutcome);
+           
             List<EventChoice> availableChoices = new List<EventChoice>();
 
             foreach (var choice in phase.choices)
@@ -116,24 +99,23 @@ namespace Event
         {
             EventPhase currentPhase = currentEvent.phases[currentPhaseIndex - 1];
             SelectedChoice = currentPhase.choices[choiceIndex];
-
-            if (SelectedChoice.outcome.giveReward)
+            if (SelectedChoice.outcome != null)
             {
-                Debug.Log("획득 UI 활성화!");
-                if (SelectedChoice.outcome.rewardType != null)
-                    if (SelectedChoice.outcome.rewardID != null)
-                        acquisitionUI.OpenAcquisitionUI(SelectedChoice.outcome.rewardType.Value, 
+                if (SelectedChoice.outcome.giveReward)
+                {
+                    Debug.Log("획득 UI 활성화!");
+                    if (SelectedChoice.outcome.rewardType != null && SelectedChoice.outcome.rewardID != null)
+                    {
+                        acquisitionUI.OpenAcquisitionUI(
+                            SelectedChoice.outcome.rewardType.Value,
                             SelectedChoice.outcome.rewardID.Value);
-                return;
+                    }
+                    return;
+                }
+
+                TrySpawnAndBattle(SelectedChoice.outcome);
             }
 
-            if (SelectedChoice.outcome.startBattle)
-            {
-                Debug.Log("전투 시작!");
-                // 전투 시작
-                battleManager.StartBattle(SelectedChoice.outcome.entityID);
-                return;
-            }
 
             if (SelectedChoice.nextPhaseIndex != -1) //  특정 페이즈로 이동할 경우
             {
@@ -151,7 +133,40 @@ namespace Event
             }
         }
 
-        private void HandleEventEnd()
+        private void TrySpawnAndBattle(EventOutcome outcome)
+        {
+           
+            if (outcome == null || !outcome.spawnEntity)
+                return;
+
+            float chance = outcome.spawnChance;
+            if (Random.value > chance)
+            {
+                Debug.Log("조우 실패: 확률에 따라 등장 안 함");
+                return;
+            }
+
+            // 적 등장 (연출, 전투 여부 상관없이 항상 등장)
+            var enemyData = DatabaseManager.Instance.entitiesDatabase.GetEnemyByID(outcome.entityID.Value);
+            if (enemyData == null)
+            {
+                Debug.LogError($"ID {outcome.entityID.Value}에 해당하는 적 데이터 없음");
+                return;
+            }
+
+            EntitySpawner.Spawn(enemyData, EventManager.Instance.Floor);
+
+            if (outcome.startBattle)
+            {
+                if (outcome.waitForUser)
+                {
+                    EventManager.Instance.PrepareBattleButton(outcome);
+                }
+            }
+        }
+        
+        
+        public void HandleEventEnd()
         {
             Debug.Log("이벤트가 종료되었습니다. 랜덤 이벤트 실행!");
 

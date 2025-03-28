@@ -8,7 +8,7 @@ namespace Entities
     public static class EntitiesCreator
     {
 
-        public static void InitializeEnemies(int floor)
+        public static void InitializeEnemies()
         {
             var enemyDatabase = DatabaseManager.Instance.entitiesDatabase;
             if (enemyDatabase == null)
@@ -16,10 +16,8 @@ namespace Entities
                 Debug.LogError("적 데이터베이스가 null입니다! EnemyCreator에서 초기화 실패");
                 return;
             }
-            Debug.Log($"적 데이터베이스 정상 확인 (현재 층: {floor})");
 
-            enemyDatabase.ResetEnemyData();
-            Debug.Log($"적 데이터베이스 초기화 완료 (현재 층: {floor})");
+            enemyDatabase.ResetDatabase();
             
             enemyDatabase.AddEnemy(
             new EntitiesData(3001, "Skeleton", EntityType.Monster, 
@@ -30,26 +28,10 @@ namespace Entities
         }
         
 
-        public static EntitiesData StartBattle(int floor)
+        public static EntitiesData GenerateRandomEnemy(EntitiesData baseEnemy, int floor)
         {
-            var enemyDatabase = DatabaseManager.Instance.entitiesDatabase;
-            if (enemyDatabase == null || enemyDatabase.EnemyList.Count == 0)
-            {
-                Debug.LogError("적 데이터베이스가 비어 있거나 null입니다!");
-                return null;
-            }
-
-            // 랜덤한 적 선택
-            EntitiesData baseEnemy = enemyDatabase.GetRandomEnemy(floor);
-
-            if (baseEnemy == null)
-            {
-                Debug.LogError("적을 찾을 수 없습니다!");
-                return null;
-            }
-
-            // 새로운 적 객체 생성 (기존 데이터 수정 방지)
             int level = Random.Range(floor, floor + 4);
+            
             return new EntitiesData(
                 id: baseEnemy.EntityID,
                 name: baseEnemy.Name,

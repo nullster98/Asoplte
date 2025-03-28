@@ -86,6 +86,7 @@ namespace Event
     public class EventOutcome
     {
         public bool startBattle; //즉시 전투 발생
+        public bool waitForUser;
         
         public bool giveReward; //보상
         public AcquisitionType? rewardType;

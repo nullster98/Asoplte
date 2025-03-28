@@ -31,7 +31,7 @@ namespace Entities
             Debug.Log($"적 데이터 : {enemy.EnemySprite}");
         }
 
-        public void ResetEnemyData() => enemyList.Clear();
+        public void ResetDatabase() => enemyList.Clear();
 
         public EntitiesData GetRandomEnemy(int floor)
         {

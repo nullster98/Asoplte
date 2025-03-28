@@ -9,11 +9,10 @@ namespace Entities
 {
     public class Enemy : MonoBehaviour, IUnit
     {
-        private EntitiesData enemyData;
+        public EntitiesData enemyData;
         
         public UnitType UnitType => UnitType.Enemy;
-
-        public int level;
+        
         private Dictionary<string, int> stats = new()
         {
             { "Atk", 0 },
@@ -31,11 +30,6 @@ namespace Entities
         public int CurrentHP => GetStat("CurrnetHP");
         public int CurrentMP => GetStat("CurrnetMP");
 
-        [SerializeField] private TMP_Text enemyHPText;
-        [SerializeField] private Slider enemyHp;
-        [SerializeField] private Image enemySprite; 
-        
-        
         public void Initialize(EntitiesData data)
         {
             enemyData = data;

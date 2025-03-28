@@ -5,13 +5,14 @@ using UnityEngine;
 
 public static class EntitySpawner
 {
-    public static void Spawn(EntitiesData data)
+    public static GameObject Spawn(EntitiesData baseEnemy, int floor)
     {
-        GameObject prefab = Resources.Load<GameObject>($"Prefeb/EnemyObject");
-        if (data == null)
+        EntitiesData rolled = EntitiesCreator.GenerateRandomEnemy(baseEnemy, floor);
+        
+        GameObject prefab = Resources.Load<GameObject>($"Prefab/EnemyObject");
+        if (baseEnemy == null)
         {
             Debug.LogError("EnemySpawner: 전달된 EntitiesData가 null입니다!");
-            return;
         }
         
         Debug.Log("Spawner실행");
@@ -21,7 +22,6 @@ public static class EntitySpawner
         if (canvas == null)
         {
             Debug.LogError("Canvas 오브젝트를 찾을 수 없습니다!");
-            return;
         }
 
         // Instantiate under Canvas
@@ -31,7 +31,9 @@ public static class EntitySpawner
         Enemy enemy = enemyObj.GetComponent<Enemy>();
         if (enemy != null)
         {
-            enemy.Initialize(data);
+            enemy.Initialize(rolled);
         }
+
+        return enemyObj;
     }
 }

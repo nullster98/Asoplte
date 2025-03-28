@@ -21,27 +21,19 @@ namespace Event
         [SerializeField] private Transform buttonContainer;
         [SerializeField] private GameObject buttonPrefab;
         [SerializeField] private ScrollRect eventScrollView;
+        [SerializeField] public Button eventAreaBtn;
 
         [Header("Event Data")]
         private EventHandler eventHandler;
         [SerializeField] private BattleManager battleManger;
         [SerializeField] private AcquisitionUI acquisitionUI;
-
+        
+        
+        
         public EventManager(int floor)
         {
             Floor = floor;
         }
-
-        /*IEnumerator WaitForPlayer()
-    {
-        //  Player.Instance가 null이면 생성될 때까지 대기
-        while (Player.Instance == null)
-        {
-            Debug.LogWarning("Player 인스턴스가 아직 생성되지 않음. 대기 중...");
-            yield return null; // 한 프레임 대기 후 다시 확인
-        }
-
-    }*/
 
         private void Awake()
         {
@@ -54,9 +46,6 @@ namespace Event
                     Debug.LogError("EventDatabase가 연결되지 않았습니다!");
                     return;
                 }
-                ResetEventDatabase();
-                Debug.Log("이벤트 생성 실행");
-                EventCreator.GenerateEvents();
 
                 eventHandler = new EventHandler(battleManger, acquisitionUI); //eventHandler 초기화
             }
@@ -151,6 +140,37 @@ namespace Event
                 Debug.LogError("EventDatabase를 찾을 수 없습니다!");
             }
         }
+        
+        public void PrepareBattleButton(EventOutcome outcome)
+        {
+            eventAreaBtn.onClick.RemoveAllListeners();
 
+            eventAreaBtn.onClick.AddListener(() =>
+            {
+                ExecuteBattleFromOutcome(outcome);
+            });
+            
+        }
+        
+        private void ExecuteBattleFromOutcome(EventOutcome outcome)
+        {
+            if (outcome.entityID == null)
+            {
+                Debug.LogError("ExecuteBattle: entityID가 null입니다.");
+                return;
+            }
+
+            var enemyData = DatabaseManager.Instance.entitiesDatabase.GetEnemyByID(outcome.entityID.Value);
+            if (enemyData == null)
+            {
+                Debug.LogError($"ID {outcome.entityID.Value}의 적 데이터를 찾을 수 없습니다.");
+                return;
+            }
+
+            GameObject enemyObj = EntitySpawner.Spawn(enemyData, Floor);
+            battleManger.StartBattle(enemyObj);
+            eventAreaBtn.onClick.RemoveAllListeners();
+        }
+        
     }
 }

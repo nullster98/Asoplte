@@ -6,7 +6,7 @@ using UnityEngine.Serialization;
 
 namespace Game
 {
-    public class GameManager : MonoBehaviour
+    public class GameStartManager : MonoBehaviour
     {
         [Header("Component")]
         [SerializeField] private GameObject menu;
@@ -28,6 +28,7 @@ namespace Game
                 Debug.LogWarning("Player.Instance가 없어서 새로운 플레이어 객체를 생성합니다.");
                 GameObject playerObj = new GameObject("Player");
                 playerObj.AddComponent<Player>();
+                DontDestroyOnLoad(playerObj); // 씬 넘겨도 유지되게
             }
         }
 

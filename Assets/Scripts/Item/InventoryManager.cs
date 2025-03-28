@@ -158,8 +158,6 @@ namespace Item
                 inventory[i] = null;
             }
             UpdateInventoryUI(); // 시작할 때 인벤토리 UI 초기화
-            ResetItemDatabase();
-            InitializeItemDatabse();
         }
 
         private void Update()
@@ -167,42 +165,6 @@ namespace Item
             GetItem();
         }
 
-        private void InitializeItemDatabse()
-        {
-            if (DatabaseManager.Instance.itemDatabase == null)
-            {
-                Debug.LogError("ItemDatabase를 찾을 수 없습니다! 폴더확인");
-                return;
-            }
 
-            DatabaseManager.Instance.itemDatabase.itemList.RemoveAll(item => item == null);
-
-            Debug.Log($"현재 데이터베이스에 등록된 아이템 갯수 : {DatabaseManager.Instance.itemDatabase.itemList.Count}");
-
-            if (DatabaseManager.Instance.itemDatabase.itemList.Count == 0)
-            {
-                Debug.Log("아이템 데이터베이스가 비어 있음. 모든 아이템을 생성합니다.");
-                ItemCreator.CreateAllItems();
-            }
-            else
-            {
-                Debug.Log("아이템 데이터베이스가 이미 초기화되어 있습니다.");
-            }
-
-            EditorUtility.SetDirty(DatabaseManager.Instance.itemDatabase);
-        }
-
-        private void ResetItemDatabase()
-        {
-            if (DatabaseManager.Instance.itemDatabase != null)
-            {
-                DatabaseManager.Instance.itemDatabase.ResetDatabase();
-                Debug.Log("게임 시작 시 ItemDatabase 초기화 완료!");
-            }
-            else
-            {
-                Debug.LogError("ItemDatabase를 찾을 수 없습니다!");
-            }
-        }
     }
 }
