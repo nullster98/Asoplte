@@ -8,6 +8,14 @@ namespace Skill
     {
         public List<SkillData> skillList = new List<SkillData>();
 
+        public SkillData GetSkillByID(int ID)
+        {
+            if (ID < 0 || ID >= skillList.Count)
+            {
+                return null;
+            }
+            return skillList[ID];
+        }
         public void ResetSkillData()
         {
             skillList.Clear();

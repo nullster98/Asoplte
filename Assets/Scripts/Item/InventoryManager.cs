@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Game;
 using UnityEditor;
@@ -8,6 +9,8 @@ namespace Item
 {
     public class InventoryManager : MonoBehaviour
     {
+        public static InventoryManager Instance { get; private set; }
+        
         private ItemData[] inventory = new ItemData[4]; // 4칸 고정 인벤토리
         [SerializeField] private GameObject inventoryContainer; // 인벤토리 UI 패널
         [SerializeField] private GameObject equipContainer; // 인벤토리 UI 패널
@@ -17,17 +20,30 @@ namespace Item
 
         private List<GameObject> itemUIList = new List<GameObject>(); // UI 아이템 리스트
 
-        private void AddItem(int slot, int itemID)
+        public void Awake()
         {
-            if (slot < 0 || slot >= inventory.Length)
+            if (Instance == null)
             {
-                Debug.Log("잘못된 슬롯");
-                return;
+                Instance = this;
+            }
+            else Destroy(gameObject);
+        }
+
+        public void AddItem(int itemID)
+        {
+            int slot = -1;
+            for (int i = 0; i < inventory.Length; i++)
+            {
+                if (inventory[i] == null)
+                {
+                    slot = i;
+                    break;
+                }
             }
 
-            if (inventory[slot] != null)
+            if (slot == -1)
             {
-                Debug.Log("슬롯 꽉참");
+                Debug.Log("모든 슬롯이 꽉 찼습니다!");
                 return;
             }
 
@@ -46,20 +62,17 @@ namespace Item
 
             ItemData newItemData = null;
 
-            // 소모품 (`Consumable`) 처리
             if (itemDataInfo is Consumable consumable)
             {
                 newItemData = new Consumable(consumable.ItemID, consumable.ItemName,
                     consumable.PurchasePrice, consumable.SalePrice, consumable.HealAmount,
                     consumable.ManaRestore, consumable.Target, consumable.Effects);
             }
-            // 토템 (`Totem`) 처리
             else if (itemDataInfo is Totem totem)
             {
                 newItemData = new Totem(totem.ItemID, totem.ItemName,
                     totem.PurchasePrice, totem.SalePrice, totem.AttackPoint, totem.DefensePoint, totem.Effects);
             }
-            // 귀중품 (`Valuable`) 처리
             else if (itemDataInfo is Valuable valuable)
             {
                 newItemData = new Valuable(valuable.ItemID, valuable.ItemName,
@@ -72,11 +85,9 @@ namespace Item
                 return;
             }
 
-            //  인벤토리에 아이템 추가
             inventory[slot] = newItemData;
             Debug.Log($"{slot} 슬롯에 {newItemData.ItemName}이 추가됨");
 
-            // UI 갱신
             UpdateInventoryUI();
         }
 
@@ -143,14 +154,6 @@ namespace Item
             }
         }
 
-        public void GetItem()
-        {
-            if(Input.GetKeyDown(KeyCode.W))
-            {
-                AddItem(1,1001);
-            }
-        }
-
         void Start()
         {
             for(int i = 0; i < inventory.Length;i++)
@@ -159,12 +162,7 @@ namespace Item
             }
             UpdateInventoryUI(); // 시작할 때 인벤토리 UI 초기화
         }
-
-        private void Update()
-        {
-            GetItem();
-        }
-
+        
 
     }
 }

@@ -17,6 +17,12 @@ namespace Game
 
         public void StartBattle(GameObject enemyObj)
         {
+            if (enemyObj == null)
+            {
+                Debug.LogError("전투 시작 실패: enemyObj가 null입니다.");
+                return;
+            }
+            
             currentEnemy = enemyObj.GetComponent<Enemy>();
             if (currentEnemy == null)
             {
@@ -29,6 +35,8 @@ namespace Game
             ui.UpdatePlayerUI();
 
             ui.Log($"{currentEnemy.enemyData.Name} 출현!");
+
+            Destroy(enemyObj);
         }
 
         public void PlayerAttack()
@@ -50,12 +58,13 @@ namespace Game
             }
         }
 
-        private void EndBattle()
+        public void EndBattle()
         {
             ui.HideBattleWindow();
+            EventManager.Instance.currentSpawnedEnemy = null;
+            EventManager.Instance.eventHandler.HandleEventEnd();
+
         }
-
-
-
+        
     }
 }

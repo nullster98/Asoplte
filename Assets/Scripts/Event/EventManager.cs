@@ -1,9 +1,11 @@
+
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using Game;
 using TMPro;
 using UI;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Event
@@ -12,42 +14,42 @@ namespace Event
     {
         public static EventManager Instance { get; private set; }
 
-        public int Floor { get; private set; }
-
-        
         [Header("Main Component")]
-        [SerializeField] private TMP_Text eventText;
-        [SerializeField] private Image eventSprite;
-        [SerializeField] private Transform buttonContainer;
-        [SerializeField] private GameObject buttonPrefab;
-        [SerializeField] private ScrollRect eventScrollView;
-        [SerializeField] public Button eventAreaBtn;
+        public TMP_Text eventText;
+        public Image eventSprite;
+        public Transform buttonContainer;
+        public GameObject buttonPrefab;
+        public ScrollRect eventScrollView;
+        public Button eventAreaBtn;
 
-        [Header("Event Data")]
-        private EventHandler eventHandler;
-        [SerializeField] private BattleManager battleManger;
-        [SerializeField] private AcquisitionUI acquisitionUI;
-        
-        
-        
-        public EventManager(int floor)
-        {
-            Floor = floor;
-        }
+        [Header("Managers")]
+        public EventHandler eventHandler;
+        public BattleManager battleManger;
+        public AcquisitionUI acquisitionUI;
+
+        [Header("Data")]
+        public int floor;
+        public GameObject currentSpawnedEnemy;
 
         private void Awake()
         {
             if (Instance == null)
             {
-                Instance = this;           
+                Instance = this;
 
-                if (DatabaseManager.Instance.eventDatabase == null)
+                if (DatabaseManager.Instance.eventLines == null || DatabaseManager.Instance.eventLines.Count == 0)
                 {
-                    Debug.LogError("EventDatabase가 연결되지 않았습니다!");
+                    Debug.LogError("[EventManager] eventLines가 비어 있습니다. JSON 로드에 실패했을 수 있습니다.");
                     return;
                 }
 
-                eventHandler = new EventHandler(battleManger, acquisitionUI); //eventHandler 초기화
+                if (battleManger == null || acquisitionUI == null)
+                {
+                    Debug.LogError("[EventManager] 필수 매니저(battleManager 또는 acquisitionUI)가 연결되지 않았습니다.");
+                    return;
+                }
+
+                eventHandler = new EventHandler(battleManger, acquisitionUI);
             }
             else
             {
@@ -63,95 +65,135 @@ namespace Event
                 return;
             }
 
-            eventHandler.StartEvent("시작이벤트");
+            eventHandler.StartEvent("StartEvent");
         }
-        
-        public void UpdateEventUI(string eventDescription, List<EventChoice> choices, Sprite eventUISprite)
-        {
-            eventText.text = eventDescription;
-            this.eventSprite.sprite = eventUISprite;
 
-            // 2. 기존 버튼 삭제 (안전한 방식으로 제거)
-            List<GameObject> buttonsToDestroy = new List<GameObject>();
+        public void UpdateEventUI(List<DialogueBlock> dialogueBlocks)
+        {
+            eventText.text = "";
+            this.eventSprite.sprite = null;
+
             foreach (Transform child in buttonContainer)
             {
-                buttonsToDestroy.Add(child.gameObject);
-            }
-            foreach (GameObject button in buttonsToDestroy)
-            {
-                Destroy(button);
+                Destroy(child.gameObject);
             }
 
-            // 3. 새로운 버튼 생성 (안전한 방식으로 인덱스를 전달)
+            StartCoroutine(PlayDialogueSequence(dialogueBlocks));
+        }
+
+        public EventPhase GetCurrentPhase()
+        {
+            if (eventHandler != null)
+                return eventHandler.GetCurrentPhase();
+            return null;
+        }
+
+        public void UpdateEventUI(string dialogue)
+        {
+            eventText.text = dialogue;
+        }
+
+        public void ShowChoice(List<EventChoice> choices)
+        {
+            ClearChoiceButtons();
+            for (int i = 0; i < choices.Count; i++)
+            {
+                var choice = choices[i];
+
+                GameObject buttonObj = Instantiate(buttonPrefab, buttonContainer);
+                TMP_Text btnText = buttonObj.GetComponentInChildren<TMP_Text>();
+                btnText.text = choice.choiceName;
+
+                int choiceIndex = i;
+                buttonObj.GetComponent<Button>().onClick.AddListener(() => eventHandler.OnChoiceSelected(choiceIndex));
+            }
+
+            if (eventScrollView != null)
+                eventScrollView.verticalNormalizedPosition = 1f;
+        }
+
+        private void ClearChoiceButtons()
+        {
+            foreach (Transform child in buttonContainer)
+            {
+                Destroy(child.gameObject);
+            }
+        }
+
+        public void PrepareBattleButton(EventOutcome outcome)
+        {
+            eventAreaBtn.onClick.RemoveAllListeners();
+            eventAreaBtn.onClick.AddListener(() =>
+            {
+                ExecuteBattleFromOutcome(outcome);
+            });
+        }
+
+        private IEnumerator PlayDialogueSequence(List<DialogueBlock> dialogueBlocks)
+        {
+            foreach (var block in dialogueBlocks)
+            {
+                eventText.text = block.dialogueText;
+
+                var phase = GetCurrentPhase();
+                if (phase != null && phase.backgroundImage != null)
+                {
+                    eventSprite.sprite = phase.backgroundImage;
+                }
+
+                // ✅ 선택지가 먼저 나오도록 우선 순위 조정
+                if (block.choices != null && block.choices.Count > 0)
+                {
+                    CreateChoiceButtons(block.choices);
+                    yield break;
+                }
+
+                if (block.outcome != null)
+                {
+                    if (block.outcome.giveReward)
+                    {
+                        acquisitionUI.SetupAcquisitionUI(block.outcome.rewardType.Value, block.outcome.rewardID.Value);
+                        yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
+                    }
+                    else if (block.outcome.startBattle)
+                    {
+                        // startBattle == true일 경우 ScrollView 클릭 전투 준비
+                        PrepareBattleButton(block.outcome);
+                        yield break;
+                    }
+                }
+
+                yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
+            }
+
+            eventHandler.HandleEventEnd();
+        }
+
+        private void CreateChoiceButtons(List<EventChoice> choices)
+        {
             for (int i = 0; i < choices.Count; i++)
             {
                 EventChoice choice = choices[i];
-
                 GameObject newButton = Instantiate(buttonPrefab, buttonContainer);
+
                 TMP_Text buttonText = newButton.GetComponentInChildren<TMP_Text>();
-
                 if (buttonText != null)
-                {
                     buttonText.text = choice.choiceName;
-                }
-                else
-                {
-                    Debug.LogError("ButtonPrefab에 TMP_Text가 존재하지 않습니다!");
-                }
 
-                Button buttonComponent = newButton.GetComponent<Button>();
-
-                if (buttonComponent != null)
+                Button btn = newButton.GetComponent<Button>();
+                if (btn != null)
                 {
-                    int choiceIndex = i; // 인덱스를 안전하게 전달
-                    buttonComponent.onClick.AddListener(() => eventHandler.OnChoiceSelected(choiceIndex));
+                    int index = i;
+                    btn.onClick.AddListener(() => eventHandler.OnChoiceSelected(index));
                 }
-                else
-                {
-                    Debug.LogError("ButtonPrefab에 Button 컴포넌트가 존재하지 않습니다!");
-                }
-            }
-
-            // 4. 스크롤 뷰의 위치를 최상단으로 이동
-            if (eventScrollView != null)
-            {
-                eventScrollView.verticalNormalizedPosition = 1f;
-            }
-            else
-            {
-                Debug.LogWarning("eventScrollView가 설정되지 않았습니다!");
             }
         }
 
         public void OnChoiceSelected(int choiceIndex)
         {
-            eventHandler.OnChoiceSelected(choiceIndex); // 플레이어가 선택한 이벤트 진행
+            eventHandler.OnChoiceSelected(choiceIndex);
         }
 
-        private void ResetEventDatabase()
-        {
-            if (DatabaseManager.Instance.eventDatabase != null)
-            {
-                DatabaseManager.Instance.eventDatabase.ResetDatabase();
-                Debug.Log("게임 시작 시 EventDatabase 초기화 완료!");
-            }
-            else
-            {
-                Debug.LogError("EventDatabase를 찾을 수 없습니다!");
-            }
-        }
-        
-        public void PrepareBattleButton(EventOutcome outcome)
-        {
-            eventAreaBtn.onClick.RemoveAllListeners();
-
-            eventAreaBtn.onClick.AddListener(() =>
-            {
-                ExecuteBattleFromOutcome(outcome);
-            });
-            
-        }
-        
         private void ExecuteBattleFromOutcome(EventOutcome outcome)
         {
             if (outcome.entityID == null)
@@ -167,10 +209,9 @@ namespace Event
                 return;
             }
 
-            GameObject enemyObj = EntitySpawner.Spawn(enemyData, Floor);
+            GameObject enemyObj = EntitySpawner.Spawn(enemyData, floor);
             battleManger.StartBattle(enemyObj);
             eventAreaBtn.onClick.RemoveAllListeners();
         }
-        
     }
 }

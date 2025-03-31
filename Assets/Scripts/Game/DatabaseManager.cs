@@ -1,9 +1,9 @@
-using System;
+using System.Collections.Generic;
 using Entities;
 using Event;
 using Item;
+using Skill;
 using Trait;
-using UnityEditor;
 using UnityEngine;
 
 namespace Game
@@ -13,18 +13,25 @@ namespace Game
         public static DatabaseManager Instance { get; private set; }
 
         public ItemDatabase itemDatabase;
-        public EventDatabase eventDatabase;
         public EntitiesDatabase entitiesDatabase;
         public TraitDatabase traitDatabase;
-        //public SkillDatabase skillDatabase;
+        public SkillDatabase skillDatabase;
+        public List<FlatEventLine> eventLines;
 
         public void Awake()
         {
-            if(Instance == null)
+            if (Instance == null)
             {
                 Instance = this;
                 ResetDatabases();
                 InitializeDatabases();
+
+                eventLines = JsonLoader.LoadFlatLinesFromJson();
+                foreach (var line in eventLines)
+                {
+                    Debug.Log($"[EVENT] {line.eventName} - {line.phaseName} - {line.dialogueText}");
+                };
+
                 DontDestroyOnLoad(gameObject);
             }
             else
@@ -32,12 +39,11 @@ namespace Game
                 Destroy(gameObject);
             }
         }
-        
+
 
         private void ResetDatabases()
         {
             itemDatabase?.ResetDatabase();
-            eventDatabase?.ResetDatabase();
             entitiesDatabase?.ResetDatabase();
         }
 
@@ -49,20 +55,7 @@ namespace Game
                 Debug.Log("모든 아이템 생성 완료!");
             }
 
-            if (eventDatabase != null && eventDatabase.events.Count == 0)
-            {
-                EventCreator.GenerateEvents();
-                Debug.Log("모든 이벤트 생성 완료!");
-            }
-
-            if (entitiesDatabase != null && entitiesDatabase.EnemyList.Count == 0)
-            {
-                EntitiesCreator.InitializeEnemies();
-            }
-
+            if (entitiesDatabase != null && entitiesDatabase.EnemyList.Count == 0) EntitiesCreator.InitializeEnemies();
         }
-
     }
-
-   
 }

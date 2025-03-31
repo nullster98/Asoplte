@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Entities;
+using Event;
 using UnityEngine;
 
 public static class EntitySpawner
@@ -33,6 +34,10 @@ public static class EntitySpawner
         {
             enemy.Initialize(rolled);
         }
+        Debug.Log("생성된 오브젝트 이름: " + enemyObj.name);
+        Debug.Log("Enemy 컴포넌트: " + enemyObj.GetComponent<Enemy>());
+
+        EventManager.Instance.currentSpawnedEnemy = enemyObj;
 
         return enemyObj;
     }

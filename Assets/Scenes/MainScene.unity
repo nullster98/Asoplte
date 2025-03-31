@@ -2678,6 +2678,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 791330257}
   m_CullTransparentMesh: 1
+--- !u!1 &809011344
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 809011345}
+  - component: {fileID: 809011346}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &809011345
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 809011344}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1122728392}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &809011346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 809011344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff2d98848c6645148ad35fcd98ee451e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &812940432
 GameObject:
   m_ObjectHideFlags: 0
@@ -4220,6 +4264,7 @@ Transform:
   - {fileID: 1973424196}
   - {fileID: 1482002268}
   - {fileID: 1102005949}
+  - {fileID: 809011345}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1160288530
@@ -6938,9 +6983,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemDatabase: {fileID: 11400000, guid: 05f53ac303cfbc649809e3f4a8772989, type: 2}
-  eventDatabase: {fileID: 11400000, guid: 46aa3be6f670f28478a24715462c5cc3, type: 2}
   entitiesDatabase: {fileID: 11400000, guid: 7c1e2cd123bac294289104054093cf1f, type: 2}
   traitDatabase: {fileID: 11400000, guid: d59cf43bdf92411418d1c23cac5f521b, type: 2}
+  skillDatabase: {fileID: 0}
+  eventLines: []
 --- !u!4 &1973424196
 Transform:
   m_ObjectHideFlags: 0

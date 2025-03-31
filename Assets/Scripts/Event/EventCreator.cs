@@ -3,7 +3,7 @@ using Game;
 using UI;
 using UnityEngine;
 
-namespace Event
+/*namespace Event
 {
     public abstract class EventCreator
     {
@@ -40,29 +40,7 @@ namespace Event
 
             List<EventData> newEvents = new List<EventData>
             {
-                CreateEvent("시작이벤트", EventTag.None,
-                    CreatePhase("시작이벤트", null,
-                        CreateChoice("다음랜덤", nextEvent: "전투 이벤트"),
-                        CreateChoice("다음페이즈", nextPhaseIndex: 1)
-                    ),
-                    CreatePhase("시작이벤트2", null,
-                        CreateChoice("다음랜덤", nextEvent: "END"),
-                        CreateChoice("요구특성:신앙", requiredTrait: "굳건한 신앙", nextEvent: "END")
-                    )
-                ),
-
-                CreateEvent("전투 이벤트", EventTag.Battle, 
-                    CreatePhase("전투 이벤트", new EventOutcome{spawnEntity = true, entityID = 3001},
-                        CreateChoice("전투 시작", outcome: new EventOutcome { startBattle = true }),
-                        CreateChoice("다음 랜덤")
-                    )
-                ),
-
-                CreateEvent("보상 이벤트", EventTag.Positive, null,
-                    CreatePhase("보상 이벤트", null,
-                        CreateChoice("상자를 연다", outcome : new EventOutcome{ rewardType = AcquisitionType.Equipment, rewardID = 1001, giveReward = true})
-                    )
-                )
+               
             };
 
 
@@ -98,17 +76,16 @@ namespace Event
         }
 
         //이벤트 페이즈 생성 헬퍼 함수
-        private static EventPhase CreatePhase(string phaseName,EventOutcome phaseOutcome = null, params EventChoice[] choices)
+        private static EventPhase CreatePhase(string phaseName,EventOutcome phaseOutcome = null, params DialogueBlock[] dialogues)
         {
             EventPhase newEventPhase = new EventPhase
             {
                 phaseName = phaseName,          
-                choices = new List<EventChoice>(choices),
+                dialouges = new List<DialogueBlock>(dialogues),
                 phaseOutcome = phaseOutcome ?? new EventOutcome()
             };
 
             newEventPhase.LoadEventImage();
-            newEventPhase.GetDescription();
             return newEventPhase;
         }
 
@@ -127,7 +104,18 @@ namespace Event
             };
         }
 
+        private static DialogueBlock CreateDialogue(string text, List<EventChoice> choices = null,
+            EventOutcome outcome = null)
+        {
+            return new DialogueBlock
+            {
+                dialogueText = text,
+                choices = choices,
+                outcome = outcome
+            };
+        }
+
   
     }
-}
+}*/
 

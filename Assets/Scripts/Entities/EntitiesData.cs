@@ -5,6 +5,7 @@ namespace Entities
 {
     public enum EntityType
     {
+        None,
         Monster,
         Boss,
         Npc

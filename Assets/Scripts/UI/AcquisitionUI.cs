@@ -1,7 +1,10 @@
+using Event;
 using Game;
 using Item;
 using PlayerScript;
 using TMPro;
+using Trait;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -27,40 +30,55 @@ namespace UI
         private AcquisitionType currentType; // 현재 UI에 표시된 타입
         private object currentObject; // 현재 UI에 표시된 데이터 (Item, Trait, Skill 등)
 
-
-        void Update()
+        
+        public void SetupAcquisitionUI(AcquisitionType type, int id)
         {
-            if (Input.GetKeyDown(KeyCode.I))
-            {
-                GetTestSword();
-            }
+            confirmButton.onClick.RemoveAllListeners();
+            
+            object data = null;
 
-            if(Input.GetKeyDown(KeyCode.S))
-            {
-                acquistPannel.SetActive(true);
-            }
-        }
-
-        public void Setup(AcquisitionType type, object data)
-        {
-            currentType = type;
-            currentObject = data;
-
-            // 데이터 타입별 UI 업데이트
             switch (type)
             {
                 case AcquisitionType.Item:
-                    UpdateItemUI((ItemData)data);
+                case AcquisitionType.Equipment:
+                    data = DatabaseManager.Instance.itemDatabase.GetItemByID(id);
                     break;
+
+                case AcquisitionType.Trait:
+                    data = DatabaseManager.Instance.traitDatabase.GetTraitByID(id);
+                    break;
+
+                case AcquisitionType.Skill:
+                    data = DatabaseManager.Instance.skillDatabase.GetSkillByID(id);
+                    break;
+
+                // 필요 시 더 추가
+            }
+
+            if (data == null)
+            {
+                Debug.LogError($"[AcquisitionUI] 데이터 로드 실패: {type}, ID: {id}");
+                return;
+            }
+
+            currentType = type;
+            currentObject = data;
+
+            acquistPannel.SetActive(true);
+
+            // UI 업데이트
+            switch (type)
+            {
+                case AcquisitionType.Item:
                 case AcquisitionType.Equipment:
                     UpdateItemUI((ItemData)data);
                     break;
-                /*case AcquisitionType.Trait:
-                UpdateTraitUI((Trait)data);
-                break;
-            case AcquisitionType.Skill:
-                UpdateSkillUI((Skill)data);
-                break;*/
+                case AcquisitionType.Trait:
+                    UpdateTraitUI((TraitData)data);
+                    break;
+                /*case AcquisitionType.Skill:
+                    UpdateSkillUI((SkillData)data);
+                    break;*/
             }
         }
 
@@ -71,37 +89,17 @@ namespace UI
             getName.text = itemData.ItemName;
             getDescription.text = itemData.ItemDescription;
 
-            confirmButton.onClick.RemoveAllListeners();
-            confirmButton.onClick.AddListener(() =>
-            {
-                if (itemData is Equipment equipment)  //  `item`이 `Equipment` 타입인지 확인
-                {
-                    Player.Instance.EquipItem(equipment); // 캐스팅 후 장비 장착
-   
-                
-                }
-                else if (itemData is Consumable consumable)  //  `item`이 `Consumable` 타입인지 확인
-                {
-                    //Player.Instance.UseItem(consumable); //  캐스팅 후 아이템 사용
-                }
-
-                CloseUI();
-            });
+            confirmButton.onClick.AddListener(ApplyReward);
         }
 
-        /*private void UpdateTraitUI(Trait trait)
+        private void UpdateTraitUI(TraitData trait)
     {
-        GetImage.sprite = trait.TraitImg;
-        GetName.text = trait.TraitName;
-        GetDescription.text = trait.TraitDescription;
+        getImage.sprite = trait.GetTraitImage();
+        getName.text = trait.traitName;
+        getDescription.text = trait.GetDescription();
 
-        confirmButton.onClick.RemoveAllListeners();
-        confirmButton.onClick.AddListener(() =>
-        {
-            Player.Instance.ApplyTrait(trait);
-            CloseUI();
-        });
-    }*/
+        confirmButton.onClick.AddListener(ApplyReward);
+    }
 
         /*private void UpdateSkillUI(Skill skill)
     {
@@ -117,23 +115,32 @@ namespace UI
         });
     }*/
 
-        public void OpenAcquisitionUI(AcquisitionType type, int id)
+        private void ApplyReward()
         {
-            acquistPannel.SetActive(true);
+            switch (currentType)
+            {
+                case AcquisitionType.Item:
+                    var item = currentObject as ItemData;
+                    InventoryManager.Instance.AddItem(item.ItemID);
+                    break;
+                case AcquisitionType.Equipment :
+                    Player.Instance.EquipItem((Equipment)currentObject);
+                    break;
+                case AcquisitionType.Trait:
+                    Player.Instance.ApplyTraits((TraitData)currentObject);
+                    break;
+            }
+            CloseAcquisitionUI();
         }
 
-        private void CloseUI()
+       
+
+        public void CloseAcquisitionUI()
         {
             acquistPannel.SetActive(false);
+            EventManager.Instance.eventHandler.HandleEventEnd();
         }
 
-
-        private void GetTestSword()
-        {
-            
-            ItemData testItemData = DatabaseManager.Instance.itemDatabase.GetItemByID(1001);
-            UpdateItemUI(testItemData);
         
-        }
     }
 }

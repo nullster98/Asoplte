@@ -18,8 +18,8 @@ public class BattleUI : MonoBehaviour
     [Header("Player")]
     [SerializeField] private TMP_Text playerHpText;
     [SerializeField] private Slider playerHp;
-    [SerializeField] private TMP_Text playerMpText;
-    [SerializeField] private Slider playerMp;
+    //[SerializeField] private TMP_Text playerMpText;
+    //[SerializeField] private Slider playerMp;
     
     [Header("Entity")]
     [SerializeField] private TMP_Text entityHpText;
@@ -34,7 +34,7 @@ public class BattleUI : MonoBehaviour
         entitySprite.sprite = enemy.enemyData.EnemySprite;
         entityHp.maxValue = enemy.enemyData.MaxHp;
         entityHp.value = enemy.GetStat("CurrentHP");
-        entityHpText.text = $"{enemy.GetStat("CurrnetHP")} / {enemy.enemyData.MaxHp}";
+        entityHpText.text = $"{enemy.GetStat("CurrentHP")} / {enemy.enemyData.MaxHp}";
     }
     
     public void UpdatePlayerUI()

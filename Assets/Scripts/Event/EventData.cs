@@ -37,29 +37,52 @@ namespace Event
     public class EventPhase
     {
         public string phaseName;
-        public Sprite eventImage;
-        public List<EventChoice> choices;
-        public string EventDescription {  get; set; }
+        public string backgroundImageName;
+        public Sprite backgroundImage;
+        public List<DialogueBlock> dialouges;
         public EventOutcome phaseOutcome;
 
-        public void GetDescription()
-        {
-            TextAsset textAsset = Resources.Load<TextAsset>($"Event/Descriptions/{phaseName}");
-            EventDescription = textAsset != null ? textAsset.text : "설명 없음";
-        }
-
-        //이벤트 이미지 로드 헬퍼 함수
-        public void LoadEventImage()
-        {
-            eventImage = Resources.Load<Sprite>($"Event/Images/{phaseName}");
-            if (eventImage == null)
-            {
-                Debug.LogWarning($"{phaseName} 이미지를 찾을 수 없습니다! 기본 이미지로 설정.");
-                eventImage = Resources.Load<Sprite>("Event/default");
-            }
-        }
+   
+        
     }
 
+    [Serializable]
+    public class DialogueBlock
+    {
+        public string dialogueText;
+        public List<EventChoice> choices;
+        public EventOutcome outcome;
+        public bool waitForInteraction;
+    }
+
+    
+    [Serializable]
+    public class EventOutcome
+    {
+        //전투관련
+        public bool startBattle; //즉시 전투 발생
+        public bool spawnEntity;
+        public int? entityID;
+        public float spawnChance = 1.0f;
+    
+        //보상관련    
+        public bool giveReward; //보상
+        public AcquisitionType? rewardType;
+        public int? rewardID;
+        
+        //상태변화
+        public bool affectPlayerState;
+        public List<StatModifier> modifyStat;
+        public List<string> addTrait;
+        public List<string> removeTrait;
+    }
+    
+    public class StatModifier
+    {
+        public string stat;
+        public int amount;
+    }
+    
     [Serializable]
     public class EventChoice
     {
@@ -80,23 +103,6 @@ namespace Event
         {
             return (string.IsNullOrEmpty(nextEventName) || nextEventName == "END") && nextPhaseIndex == -1;
         }
-    }
-
-    [Serializable]
-    public class EventOutcome
-    {
-        public bool startBattle; //즉시 전투 발생
-        public bool waitForUser;
-        
-        public bool giveReward; //보상
-        public AcquisitionType? rewardType;
-        public int? rewardID;
-        
-        public bool spawnEntity; //우선 조우
-        public EntityType entityType; // e.g., Enemy, NPC, Boss
-        public int? entityID;
-
-        public float spawnChance = 1.0f;
     }
     
 }
