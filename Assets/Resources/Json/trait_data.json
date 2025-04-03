@@ -1,0 +1,66 @@
+[
+  {
+    "TraitName": "StrongFaith",
+    "FileName": "StrongFaith",
+    "PnN": "Positive",
+    "TraitID": 50001,
+    "Cost": 5,
+    "Effect": "StrongFaith,Stat:MentalStat+10"
+  },
+  {
+    "TraitName": "PowerfulForce",
+    "FileName": "PowerfulForce",
+    "PnN": "Positive",
+    "TraitID": 50002,
+    "Cost": 10,
+    "Effect": "PowerfulForce"
+  },
+  {
+    "TraitName": "MentalResponse",
+    "FileName": "MentalResponse",
+    "PnN": "Positive",
+    "TraitID": 50003,
+    "Cost": 15,
+    "Effect": "MentalResponse"
+  },
+  {
+    "TraitName": "Absolute",
+    "FileName": "Absolute",
+    "PnN": "Positive",
+    "TraitID": 54999,
+    "Cost": 999,
+    "Effect": "Absolute"
+  },
+  {
+    "TraitName": "Blind",
+    "FileName": "Blind",
+    "PnN": "Negative",
+    "TraitID": 55001,
+    "Cost": 5,
+    "Effect": "Blind"
+  },
+  {
+    "TraitName": "Weakness",
+    "FileName": "Weakness",
+    "PnN": "Negative",
+    "TraitID": 55002,
+    "Cost": 10,
+    "Effect": "Weakness"
+  },
+  {
+    "TraitName": "Sleepless",
+    "FileName": "Sleepless",
+    "PnN": "Negative",
+    "TraitID": 55003,
+    "Cost": 15,
+    "Effect": "Sleepless"
+  },
+  {
+    "TraitName": "AbsoluteN",
+    "FileName": "AbsoluteN",
+    "PnN": "Negative",
+    "TraitID": 59999,
+    "Cost": 999,
+    "Effect": "AbsoluteN"
+  }
+]

@@ -1,0 +1,68 @@
+[
+  {
+    "RaceName": "Golem",
+    "RaceID": "R1",
+    "FileName": "Golem",
+    "SubRaceName": "RuneGolem",
+    "SubRaceID": "S1",
+    "SubFileName": "RuneGolem",
+    "RequireFaith": 0,
+    "RaceEffect": "Golem",
+    "SubRaceEffect": "RuneGolem"
+  },
+  {
+    "RaceName": "",
+    "RaceID": "",
+    "FileName": "",
+    "SubRaceName": "LightGolem",
+    "SubRaceID": "S2",
+    "SubFileName": "LightGolem",
+    "RequireFaith": 100,
+    "RaceEffect": "",
+    "SubRaceEffect": "LightGolem"
+  },
+  {
+    "RaceName": "",
+    "RaceID": "",
+    "FileName": "",
+    "SubRaceName": "ForestGolem",
+    "SubRaceID": "S3",
+    "SubFileName": "ForestGolem",
+    "RequireFaith": 300,
+    "RaceEffect": "",
+    "SubRaceEffect": "ForestGolem"
+  },
+  {
+    "RaceName": "Oak",
+    "RaceID": "R2",
+    "FileName": "Oak",
+    "SubRaceName": "OakWarrior",
+    "SubRaceID": "S1",
+    "SubFileName": "OakWarrior",
+    "RequireFaith": 0,
+    "RaceEffect": "Oak",
+    "SubRaceEffect": "OakWarrior"
+  },
+  {
+    "RaceName": "",
+    "RaceID": "",
+    "FileName": "",
+    "SubRaceName": "GrayOak",
+    "SubRaceID": "S2",
+    "SubFileName": "GrayOak",
+    "RequireFaith": 100,
+    "RaceEffect": "",
+    "SubRaceEffect": "GrayOak"
+  },
+  {
+    "RaceName": "",
+    "RaceID": "",
+    "FileName": "",
+    "SubRaceName": "RedOak",
+    "SubRaceID": "S3",
+    "SubFileName": "RedOak",
+    "RequireFaith": 200,
+    "RaceEffect": "",
+    "SubRaceEffect": "RedOak"
+  }
+]

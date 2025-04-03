@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Trait
 {
-    public class TraitList : MonoBehaviour
+   /* public class TraitList : MonoBehaviour
     {
         [MenuItem("Game/Create All Traits")]
         public static void CreateAllTraits()
@@ -66,5 +66,5 @@ namespace Trait
             return db;
         }
 #endif
-    }
+    }*/
 }

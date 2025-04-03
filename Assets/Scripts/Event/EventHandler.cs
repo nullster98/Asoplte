@@ -110,12 +110,15 @@ namespace Event
 
             string tagString = linesForEvent.FirstOrDefault()?.eventType;
             EventTag tag = Enum.TryParse(tagString, out EventTag parsed) ? parsed : EventTag.None;
+            bool.TryParse(linesForEvent[0].isRecycle, out bool isRecycleFlag);
 
             currentEvent = new EventData
             {
                 eventName = eventName,
                 eventType = tag,
-                phases = eventPhases
+                phases = eventPhases,
+                isRecycle = isRecycleFlag,
+                isUsed = false
             };
 
             currentPhaseIndex = 0;
@@ -262,11 +265,46 @@ namespace Event
 
         public void HandleEventEnd()
         {
-            Debug.Log("[EventHandler] 이벤트가 종료되었습니다. 랜덤 이벤트 실행!");
+            Debug.Log("[EventHandler] 이벤트가 종료되었습니다. 재사용 여부를 기반으로 랜덤 이벤트 실행!");
 
-            var events = DatabaseManager.Instance.eventLines.Select(l => l.eventName).Distinct().ToList();
-            string randomEventName = events[UnityEngine.Random.Range(0, events.Count)];
+            var groupedEvents = DatabaseManager.Instance.eventLines
+                .GroupBy(l => l.eventName);
+
+            var usableEvents = groupedEvents
+                .Where(group =>
+                {
+                    var line = group.First();
+                    bool.TryParse(line.isRecycle, out bool isRecycle);
+                    bool isUsed = EventUsedTracker.Instance.IsUsed(line.eventName);
+                    return isRecycle || !isUsed;
+                })
+                .Select(group => group.Key)
+                .ToList();
+
+            if (usableEvents.Count == 0)
+            {
+                Debug.LogWarning("사용 가능한 이벤트가 없습니다.");
+                return;
+            }
+
+            string randomEventName = usableEvents[UnityEngine.Random.Range(0, usableEvents.Count)];
+
+            // 사용 처리
+            EventUsedTracker.Instance.MarkAsUsed(randomEventName);
             StartEvent(randomEventName);
+        }
+        
+        public class EventUsedTracker
+        {
+            private static HashSet<string> usedEvents = new();
+
+            public static EventUsedTracker Instance { get; } = new EventUsedTracker();
+
+            public bool IsUsed(string eventName) => usedEvents.Contains(eventName);
+
+            public void MarkAsUsed(string eventName) => usedEvents.Add(eventName);
+
+            public void Reset() => usedEvents.Clear();
         }
 
         private Sprite LoadImage(string imageName)

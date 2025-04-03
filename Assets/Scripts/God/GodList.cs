@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace God
 {
-    public class GodList : MonoBehaviour
+    /*public class GodList : MonoBehaviour
     {
         [MenuItem("Game/Create Default Gods")]
         public static void CreateGodDatabase()
@@ -33,5 +33,5 @@ namespace God
             Debug.Log("기본 신 데이터를 추가했습니다!");
         }
         
-    }
+    }*/
 }

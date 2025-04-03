@@ -4215,6 +4215,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerImg: {fileID: 0}
   selectedTraits: []
+  selectedGodID: 0
+  selectedTraitID: 
 --- !u!4 &1102005949
 Transform:
   m_ObjectHideFlags: 0
@@ -4224,11 +4226,11 @@ Transform:
   m_GameObject: {fileID: 1102005947}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 733.9512, y: 1640.3356, z: 21.27735}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1122728392}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1122728391
 GameObject:
@@ -4261,9 +4263,7 @@ Transform:
   m_Children:
   - {fileID: 2041565370}
   - {fileID: 59144032}
-  - {fileID: 1973424196}
   - {fileID: 1482002268}
-  - {fileID: 1102005949}
   - {fileID: 809011345}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5224,7 +5224,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a7937f9d833f41408370ba7101f24f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  godDatabase: {fileID: 11400000, guid: e85fd791e6b158c4394bf623947a7e02, type: 2}
   mainImage: {fileID: 764120756}
   leftImage: {fileID: 1036134360}
   rightImage: {fileID: 791330259}
@@ -5263,7 +5262,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4cfb8fde03f1da47bd0e2c70ab6d60c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  traitDatabase: {fileID: 11400000, guid: d59cf43bdf92411418d1c23cac5f521b, type: 2}
   characterSelect: {fileID: 2032912000}
   postivePannel: {fileID: 1086557675}
   negativePannel: {fileID: 728895065}
@@ -6984,9 +6982,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemDatabase: {fileID: 11400000, guid: 05f53ac303cfbc649809e3f4a8772989, type: 2}
   entitiesDatabase: {fileID: 11400000, guid: 7c1e2cd123bac294289104054093cf1f, type: 2}
-  traitDatabase: {fileID: 11400000, guid: d59cf43bdf92411418d1c23cac5f521b, type: 2}
+  traitList: []
   skillDatabase: {fileID: 0}
   eventLines: []
+  godList: []
 --- !u!4 &1973424196
 Transform:
   m_ObjectHideFlags: 0
@@ -6996,11 +6995,11 @@ Transform:
   m_GameObject: {fileID: 1973424194}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -733.9512, y: -1640.3356, z: -21.27735}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1122728392}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2032912000
 GameObject:
@@ -7725,4 +7724,6 @@ SceneRoots:
   m_Roots:
   - {fileID: 268940784}
   - {fileID: 431410036}
+  - {fileID: 1102005949}
+  - {fileID: 1973424196}
   - {fileID: 1122728392}

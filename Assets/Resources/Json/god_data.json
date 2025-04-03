@@ -1,0 +1,23 @@
+[
+  {
+    "GodName": "Liberty",
+    "FileName": "Liberty",
+    "GodID": 1000001,
+    "UnlockCost": 0,
+    "Effect": "Liberty,Stat:Atk+3,Stat:HP+100"
+  },
+  {
+    "GodName": "Revenge",
+    "FileName": "Revenge",
+    "GodID": 1000002,
+    "UnlockCost": 500,
+    "Effect": "Revenge"
+  },
+  {
+    "GodName": "Furious",
+    "FileName": "Furious",
+    "GodID": 1000003,
+    "UnlockCost": 1000,
+    "Effect": "Furious"
+  }
+]

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Race
 {
-    public class RaceList : MonoBehaviour
+    /*public class RaceList : MonoBehaviour
     {
         [MenuItem("Game/Create Default Race")]
         public static void CreateRaceDatabase()
@@ -78,5 +78,5 @@ namespace Race
                 subRaceEffect = effect
             };
         }
-    }
+    }*/
 }

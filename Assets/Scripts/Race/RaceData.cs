@@ -1,85 +1,108 @@
 using System.Collections.Generic;
 using PlayerScript;
 using UnityEngine;
+using Utility;
 
 namespace Race
 {
-    public abstract class RaceEffect : IEffect
-    {
-        public abstract void ApplyEffect(IUnit target);
-    }
 
     [System.Serializable]
   public class RaceData //종족 기본 뼈대(대분류)
     {
         public string raceName;
         public string fileName;
+        public string raceID;
         public List<SubRaceData> subRace;
-        public RaceEffect raceEffect;
+        public IEffect raceEffect;
+        public string EffectKey;
 
-        public Sprite GetRaceImage()
+        public Sprite raceImage;
+        public string raceDescription;
+        
+        public void InitializeRaceEffect()
         {
-            return LoadRaceSprite(fileName);
-        }
-
-        private Sprite LoadRaceSprite(string imageName)
-        {
-            string path = $"Race/Images/{imageName}";
-            Sprite tribeSprite = Resources.Load<Sprite>(path);
-
-            if (tribeSprite == null)
+            var effect = EffectFactory.Create(EffectKey);
+            if (effect != null)
             {
-                return Resources.Load<Sprite>("Race/default");
+                raceEffect = effect;
+                Debug.Log($"[✅ 종족 효과 적용] {EffectKey} → {effect.GetType().Name}");
             }
-
-            return tribeSprite;
+            else
+            {
+                Debug.LogWarning($"[❌ 종족 효과 생성 실패] {EffectKey}");
+            }
         }
 
-        public string GetDescription()
+        public void LoadRaceData()
         {
+            raceImage = Resources.Load<Sprite>($"Race/Images/{fileName}");
+            if (raceImage == null)
+                Debug.LogWarning($"[❌] Race 이미지 로드 실패: Race/Images/{fileName}");
             TextAsset description = Resources.Load<TextAsset>($"Race/Descriptions/{fileName}");
-            return description != null ? description.text : "설명 없음";
+            raceDescription = description != null ? description.text : "설명 없음";
         }
+
     }
-[System.Serializable]
+    [System.Serializable]
     public class SubRaceData
     {
         public string subRaceName;
         public string fileName;
-        public string unlockHint;
+        public string subRaceID;
         public int requireFaith;
         public bool isUnlocked;
-        public RaceEffect subRaceEffect;
+        public List<IEffect> subRaceEffect = new();
+        public string EffectKey;
+
+        public Sprite subRaceImage;
+        public string subRaceDescription;
+        public string unlockHint;
         
-        public Sprite GetSubRaceImage()
+        public void initializeSubRaceEffect(IEffect baseRaceEffect = null)
         {
-            return LoadSubRaceSprite(fileName);
-        }
+            subRaceEffect.Clear();
 
-        private Sprite LoadSubRaceSprite(string imageName)
-        {
-            string path = $"Race/SubRace/Images/{imageName}";
-            Sprite subRaceSprite = Resources.Load<Sprite>(path);
-
-            if (subRaceSprite == null)
+            // 1. 대종족 효과 먼저 상속
+            if (baseRaceEffect != null)
             {
-                return Resources.Load<Sprite>("Race/default");
+                subRaceEffect.Add(baseRaceEffect);
+                Debug.Log($"[🧬 상속] 대종족 효과 {baseRaceEffect.GetType().Name} 상속됨");
             }
 
-            return subRaceSprite;
+            // 2. 소종족 효과 처리
+            if (!string.IsNullOrWhiteSpace(EffectKey))
+            {
+                string[] effectKeys = EffectKey.Split(',');
+
+                foreach (var key in effectKeys)
+                {
+                    var trimmedKey = key.Trim();
+                    var effect = EffectFactory.Create(trimmedKey);
+
+                    if (effect != null)
+                    {
+                        subRaceEffect.Add(effect);
+                        Debug.Log($"[✅ 추가됨] {trimmedKey} → {effect.GetType().Name}");
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"[❌ 생성 실패] {trimmedKey} in {subRaceName}");
+                    }
+                }
+            }
         }
 
-        public string GetDescription()
+        public void LoadSubRaceData()
         {
+            subRaceImage = Resources.Load<Sprite>($"Race/SubRace/Images/{fileName}");
+            if (subRaceImage == null)
+                Debug.LogWarning($"[❌] SubRace 이미지 로드 실패: Race/SubRace/Images/{fileName}");
             TextAsset description = Resources.Load<TextAsset>($"Race/SubRace/Descriptions/{fileName}");
-            return description != null ? description.text : "설명 없음";
-        }
-
-        public string GetUnlockHint()
-        {
+            subRaceDescription = description != null ? description.text : "설명 없음";
             TextAsset UnlockHint = Resources.Load<TextAsset>($"Race/SubRace/Descriptions/{fileName}_Hint");
-            return UnlockHint != null ? UnlockHint.text : "준비중 입니다.";
+            unlockHint = UnlockHint != null ? UnlockHint.text : "준비중 입니다.";
         }
+        
         
         public bool CanUnlock(int playerFaith)
         {

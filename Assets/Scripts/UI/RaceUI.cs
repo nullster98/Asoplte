@@ -1,3 +1,4 @@
+using Game;
 using PlayerScript;
 using Race;
 using TMPro;
@@ -9,7 +10,6 @@ namespace UI
 {
     public class RaceUI : MonoBehaviour
     {
-        [SerializeField] private RaceDatabase raceDatabase;
         [SerializeField] private Image mainImg; // 선택된 종족의 메인 이미지
         [SerializeField] private TMP_Text nameArea; // 선택된 종족 이름
         [SerializeField] private TMP_Text descriptionArea; // 종족 설명
@@ -40,17 +40,17 @@ namespace UI
         // 종족 버튼 생성 및 초기화
         private void CreateRaceButtons()
         {
-            if (!raceDatabase)
+            if (DatabaseManager.Instance.raceList == null)
             {
                 Debug.LogWarning("종족데이터베이스가 없습니다!");
                 return;
             }
 
-            for (int i = 0; i < raceDatabase.raceList.Count; i++)
+            for (int i = 0; i < DatabaseManager.Instance.raceList.Count; i++)
             {
                 Button button = Instantiate(raceButtonPrefab, buttonContainer);
                 Image buttonImage = button.GetComponent<Image>();
-                buttonImage.sprite = raceDatabase.raceList[i].GetRaceImage();
+                buttonImage.sprite = DatabaseManager.Instance.raceList[i].raceImage;
                 int index = i;
                 button.onClick.RemoveAllListeners();
                 button.onClick.AddListener(() => SelectRace(index));
@@ -63,8 +63,8 @@ namespace UI
             currentTribeIndex = raceIndex;
             currentSubRaceIndex = 0; // 항상 첫 번째 파생 캐릭터를 보여줌
 
-            RaceData selectedRace = raceDatabase.raceList[currentTribeIndex];
-            mainImg.sprite = selectedRace.GetRaceImage();
+            RaceData selectedRace = DatabaseManager.Instance.raceList[currentTribeIndex];
+            mainImg.sprite = selectedRace.raceImage;
             nameArea.text = selectedRace.raceName;
             //Player.Instance.Race = selectedRace.race;
             raceCollection.SetActive(false);
@@ -81,7 +81,7 @@ namespace UI
         {
             currentSubRaceIndex = characterIndex;
             
-            RaceData currentTribe = raceDatabase.raceList[currentTribeIndex];
+            RaceData currentTribe = DatabaseManager.Instance.raceList[currentTribeIndex];
             if (currentTribe.subRace.Count == 0)
                 return;
 
@@ -100,17 +100,17 @@ namespace UI
 
             else if (selectedCharacter.isUnlocked)
             {
-                mainImg.sprite = selectedCharacter.GetSubRaceImage();
+                mainImg.sprite = selectedCharacter.subRaceImage;
                 mainImg.color = Color.white; 
                 nameArea.text = selectedCharacter.subRaceName;
-                descriptionArea.text = $"{selectedCharacter.subRaceName} <sprite=0>\n\n{selectedCharacter.GetDescription()}";
+                descriptionArea.text = $"{selectedCharacter.subRaceName} <sprite=0>\n\n{selectedCharacter.subRaceDescription}";
 
                 // 버튼을 '다음 단계'로 설정
                 ConfigureButton(false);
             }
             else
             {
-                mainImg.sprite = selectedCharacter.GetSubRaceImage(); // 해금되지 않은 경우 OffImg 사용
+                mainImg.sprite = selectedCharacter.subRaceImage; // 해금되지 않은 경우 OffImg 사용
                 mainImg.color = new Color(0.5f, 0.5f, 0.5f); // 회색으로 설정
                 nameArea.text = "???";
                 descriptionArea.text = $"{selectedCharacter.unlockHint}\n\n해금 비용: {selectedCharacter.requireFaith} 신앙 재화";
@@ -155,7 +155,7 @@ namespace UI
         }
         public void UnlockCharacter()
         {
-            RaceData currentTribe = raceDatabase.raceList[currentTribeIndex];
+            RaceData currentTribe = DatabaseManager.Instance.raceList[currentTribeIndex];
             SubRaceData selectedCharacter = currentTribe.subRace[currentSubRaceIndex];
 
             if (!selectedCharacter.isUnlocked && Player.Instance.SpendFaith(selectedCharacter.requireFaith))
@@ -174,7 +174,7 @@ namespace UI
 
         private void UpdateUI()
         {
-            RaceData currentTribe = raceDatabase.raceList[currentTribeIndex];
+            RaceData currentTribe = DatabaseManager.Instance.raceList[currentTribeIndex];
             if (currentTribe.subRace.Count == 0)
                 return;
 
@@ -185,17 +185,17 @@ namespace UI
             isFirst = true;
             HideDerivation();
 
-            midImg.sprite = currentTribe.subRace[currentSubRaceIndex].GetSubRaceImage();
+            midImg.sprite = currentTribe.subRace[currentSubRaceIndex].subRaceImage;
             midImg.color = currentTribe.subRace[currentSubRaceIndex].isUnlocked ? Color.white : new Color(0.5f, 0.5f, 0.5f);
-            leftImg.sprite = currentTribe.subRace[leftIndex].GetSubRaceImage();
+            leftImg.sprite = currentTribe.subRace[leftIndex].subRaceImage;
             leftImg.color = currentTribe.subRace[leftIndex].isUnlocked ? Color.white : new Color(0.5f, 0.5f, 0.5f);
-            rightImg.sprite = currentTribe.subRace[rightIndex].GetSubRaceImage();
+            rightImg.sprite = currentTribe.subRace[rightIndex].subRaceImage;
             rightImg.color = currentTribe.subRace[rightIndex].isUnlocked ? Color.white : new Color(0.5f, 0.5f, 0.5f);
         }
 
         public void ShowNextCharacter()
         {
-            RaceData currentTribe = raceDatabase.raceList[currentTribeIndex];
+            RaceData currentTribe = DatabaseManager.Instance.raceList[currentTribeIndex];
             if (currentTribe.subRace.Count > 0)
             {
                 currentSubRaceIndex = (currentSubRaceIndex + 1) % currentTribe.subRace.Count;
@@ -205,7 +205,7 @@ namespace UI
 
         public void ShowPreviousCharacter()
         {
-            RaceData currentTribe = raceDatabase.raceList[currentTribeIndex];
+            RaceData currentTribe = DatabaseManager.Instance.raceList[currentTribeIndex];
             if (currentTribe.subRace.Count > 0)
             {
                 currentSubRaceIndex = (currentSubRaceIndex - 1 + currentTribe.subRace.Count) % currentTribe.subRace.Count;
@@ -243,6 +243,7 @@ namespace UI
         public void ChcToTrait()
         {
             Player.Instance.playerImg = mainImg.sprite;
+            //Player.Instance.SelectedRace(current);
             Debug.Log($"PlayerImg 변경됨: {Player.Instance.playerImg}"); // 디버깅 코드 추가
 
             //FindObjectOfType<PlayerUIManager>().UpdatePlayerUI(Player.Instance); // UI 업데이트

@@ -34,7 +34,7 @@ namespace Game
 
         public void Update()
         {
-            //faithPoint.text = "신앙 포인트 : " + Player.Instance.GetFatihString();
+            faithPoint.text = "신앙 포인트 : " + Player.Instance.GetFatihString();
         }
 
         /*public void Load() //시작씬 -> 메인씬

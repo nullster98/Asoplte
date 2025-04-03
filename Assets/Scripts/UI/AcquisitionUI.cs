@@ -4,7 +4,7 @@ using Item;
 using PlayerScript;
 using TMPro;
 using Trait;
-using Unity.VisualScripting;
+using Unity;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -45,7 +45,7 @@ namespace UI
                     break;
 
                 case AcquisitionType.Trait:
-                    data = DatabaseManager.Instance.traitDatabase.GetTraitByID(id);
+                    data = DatabaseManager.Instance.GetTraitByIndex(id);
                     break;
 
                 case AcquisitionType.Skill:
@@ -94,9 +94,9 @@ namespace UI
 
         private void UpdateTraitUI(TraitData trait)
     {
-        getImage.sprite = trait.GetTraitImage();
+        getImage.sprite = trait.traitImage;
         getName.text = trait.traitName;
-        getDescription.text = trait.GetDescription();
+        getDescription.text = trait.traitDescription;
 
         confirmButton.onClick.AddListener(ApplyReward);
     }
@@ -127,7 +127,7 @@ namespace UI
                     Player.Instance.EquipItem((Equipment)currentObject);
                     break;
                 case AcquisitionType.Trait:
-                    Player.Instance.ApplyTraits((TraitData)currentObject);
+                    Player.Instance.ApplyTraitEffect((TraitData)currentObject);
                     break;
             }
             CloseAcquisitionUI();

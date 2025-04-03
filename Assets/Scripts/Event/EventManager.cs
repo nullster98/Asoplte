@@ -2,7 +2,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Game;
+using PlayerScript;
 using TMPro;
 using UI;
 using UnityEngine;
@@ -96,16 +98,41 @@ namespace Event
         public void ShowChoice(List<EventChoice> choices)
         {
             ClearChoiceButtons();
+
             for (int i = 0; i < choices.Count; i++)
             {
                 var choice = choices[i];
 
+                // ✅ requiredTraits 조건 처리
+                if (!string.IsNullOrEmpty(choice.requiredTraits))
+                {
+                    // 예: "탐구자+필멸자, 신앙인" → [ [탐구자, 필멸자], [신앙인] ]
+                    var orGroups = choice.requiredTraits
+                        .Split(',')
+                        .Select(group => group.Split('+')
+                            .Select(s => s.Trim()).ToList())
+                        .ToList();
+
+                    // 이 중 하나라도 만족하는지 (AND 그룹 하나 이상 만족하면 OK)
+                    bool isUnlocked = orGroups.Any(andGroup =>
+                        andGroup.All(req => Player.Instance.selectedTraits
+                            .Any(trait => trait.traitName == req)));
+
+                    if (!isUnlocked)
+                    {
+                        Debug.Log($"[ShowChoice] {choice.choiceName} 선택지는 조건({choice.requiredTraits}) 불충족으로 숨김.");
+                        continue;
+                    }
+                }
+
+                // ✅ 조건 만족한 경우 버튼 생성
                 GameObject buttonObj = Instantiate(buttonPrefab, buttonContainer);
                 TMP_Text btnText = buttonObj.GetComponentInChildren<TMP_Text>();
                 btnText.text = choice.choiceName;
 
                 int choiceIndex = i;
-                buttonObj.GetComponent<Button>().onClick.AddListener(() => eventHandler.OnChoiceSelected(choiceIndex));
+                buttonObj.GetComponent<Button>().onClick.AddListener(() =>
+                    eventHandler.OnChoiceSelected(choiceIndex));
             }
 
             if (eventScrollView != null)
@@ -144,7 +171,7 @@ namespace Event
                 // ✅ 선택지가 먼저 나오도록 우선 순위 조정
                 if (block.choices != null && block.choices.Count > 0)
                 {
-                    CreateChoiceButtons(block.choices);
+                    ShowChoice(block.choices);
                     yield break;
                 }
 
@@ -169,7 +196,7 @@ namespace Event
             eventHandler.HandleEventEnd();
         }
 
-        private void CreateChoiceButtons(List<EventChoice> choices)
+        /*private void CreateChoiceButtons(List<EventChoice> choices)
         {
             for (int i = 0; i < choices.Count; i++)
             {
@@ -192,7 +219,7 @@ namespace Event
         public void OnChoiceSelected(int choiceIndex)
         {
             eventHandler.OnChoiceSelected(choiceIndex);
-        }
+        }*/
 
         private void ExecuteBattleFromOutcome(EventOutcome outcome)
         {

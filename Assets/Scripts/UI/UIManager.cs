@@ -111,13 +111,13 @@ namespace UI
             {
                 GameObject traitObj = Instantiate(traitPrefab, traitContainer); // UI 생성
                 Image traitImage = traitObj.GetComponent<Image>();
-                traitImage.sprite = trait.GetTraitImage();
+                traitImage.sprite = trait.traitImage;
 
                 // 마우스 호버 기능 추가
                 TraitHoverHandler hoverHandler = traitObj.AddComponent<TraitHoverHandler>();
                 hoverHandler.traitTextBox = traitTextBox;
                 hoverHandler.traitText = traitText;
-                hoverHandler.traitDescription = trait.GetDescription();
+                hoverHandler.traitDescription = trait.traitDescription;
             }
         }
 

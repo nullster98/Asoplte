@@ -1,10 +1,14 @@
 using System.Collections.Generic;
 using Entities;
 using Event;
+using God;
 using Item;
+using JetBrains.Annotations;
+using Race;
 using Skill;
 using Trait;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Game
 {
@@ -14,11 +18,13 @@ namespace Game
 
         public ItemDatabase itemDatabase;
         public EntitiesDatabase entitiesDatabase;
-        public TraitDatabase traitDatabase;
+        public List<TraitData> traitList;
         public SkillDatabase skillDatabase;
         public List<FlatEventLine> eventLines;
+        public List<GodData> godList;
+        public List<RaceData> raceList;
 
-        public void Awake()
+        private void Awake()
         {
             if (Instance == null)
             {
@@ -26,7 +32,15 @@ namespace Game
                 ResetDatabases();
                 InitializeDatabases();
 
+                GodEffectRegistry.RegisterAll();
+                TraitEffectRegistry.RegisterAll();
+                RaceEffectRegistry.RegisterAll();
+                
+                godList = JsonLoader.LoadGodData();
+                traitList = JsonLoader.LoadTraitData();
                 eventLines = JsonLoader.LoadFlatLinesFromJson();
+                raceList = JsonLoader.LoadRaceData();
+                
                 foreach (var line in eventLines)
                 {
                     Debug.Log($"[EVENT] {line.eventName} - {line.phaseName} - {line.dialogueText}");
@@ -36,7 +50,7 @@ namespace Game
             }
             else
             {
-                Destroy(gameObject);
+                //Destroy(gameObject);
             }
         }
 
@@ -56,6 +70,18 @@ namespace Game
             }
 
             if (entitiesDatabase != null && entitiesDatabase.EnemyList.Count == 0) EntitiesCreator.InitializeEnemies();
+        }
+
+        public GodData GetGodByIndex(int index)
+        {
+            if (index < 0 || index >= godList.Count) return null;
+            return godList[index];
+        }
+
+        public TraitData GetTraitByIndex(int index)
+        {
+            if (index < 0 || index >= traitList.Count) return null;
+            return traitList[index];
         }
     }
 }

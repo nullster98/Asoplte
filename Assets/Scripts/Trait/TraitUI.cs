@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Game;
 using PlayerScript;
 using TMPro;
 using UnityEngine;
@@ -10,8 +11,6 @@ namespace Trait
 {
   public class TraitUI : MonoBehaviour
     {
-        [SerializeField] private TraitDatabase traitDatabase;
-        
         [Header("ObjectControl")]
         [SerializeField] private GameObject characterSelect;
         [SerializeField] private GameObject postivePannel;
@@ -45,7 +44,7 @@ namespace Trait
             //SetButtonColors(PostiveBtn, Color.black, Color.white); // Positive 버튼을 흰색 배경, 검은색 글자로 설정
             //SetButtonColors(NegavieBtn, Color.white, Color.black); // Negative 버튼을 흰색 배경, 검은색 글자로 설정
 
-            traitDatabase.traitList = traitDatabase.traitList.OrderBy(t => t.cost).ToList();
+            DatabaseManager.Instance.traitList = DatabaseManager.Instance.traitList.OrderBy(t => t.cost).ToList();
             CreateTraitButtons();
             CreateSelectButtons();
 
@@ -119,31 +118,31 @@ namespace Trait
         private void CreateTraitButtons()
         {
             // 리스트가 비어 있는지 체크
-            if (traitDatabase == null)
+            if (DatabaseManager.Instance == null)
             {
                 Debug.LogWarning("특성 list is empty!");
                 return;
             }
 
-            for (int i = 0; i < traitDatabase.traitList.Count; i++)
+            for (int i = 0; i < DatabaseManager.Instance.traitList.Count; i++)
             {
                 // Positive와 Negative에 따라 다른 Container에 추가
-                Transform targetContainer = traitDatabase.traitList[i].PnN == TraitPnN.Positive ? pbuttonContainer : nbuttonContainer;
+                Transform targetContainer = DatabaseManager.Instance.traitList[i].PnN == TraitPnN.Positive ? pbuttonContainer : nbuttonContainer;
 
                 // 버튼 프리팹을 Content에 추가
-                if (traitDatabase.traitList[i].isUnlock)
+                if (DatabaseManager.Instance.traitList[i].isUnlock)
                 {
                     Button button = Instantiate(buttonPrefab, targetContainer);
 
 
                     // 버튼의 이미지 컴포넌트에 특성 이미지 설정
                     Image buttonImage = button.GetComponent<Image>();
-                    buttonImage.sprite = traitDatabase.traitList[i].GetTraitImage();
+                    buttonImage.sprite = DatabaseManager.Instance.traitList[i].traitImage;
 
                     // 버튼 클릭 이벤트 연결 (기존 리스너 제거 후 추가)
                     int index = i;
                     button.onClick.RemoveAllListeners();
-                    button.onClick.AddListener(() => PushTrait(traitDatabase.traitList[index]));
+                    button.onClick.AddListener(() => PushTrait(DatabaseManager.Instance.traitList[index]));
                 }
             }
 
@@ -201,61 +200,49 @@ namespace Trait
             for (int i = 0; i < selectedTraits.Count; i++)
             {
                 Button selectButton = selectButtonList[i];
-                selectButton.image.sprite = selectedTraits[i].GetTraitImage();
+                selectButton.image.sprite = selectedTraits[i].traitImage;
             }
         }
 
         private void PushTrait(TraitData selectedTrait)
         {
             // 특성 설명 업데이트
-            descriptionArea.text = $"{selectedTrait.traitName}\n[Cost: {selectedTrait.cost}]\n\n{selectedTrait.GetDescription()}";
-            //중복 선택 확인
-            for (int i = 0; i < selectButtonList.Count; i++)
+            descriptionArea.text = $"{selectedTrait.traitName}\n[Cost: {selectedTrait.cost}]\n\n{selectedTrait.traitDescription}";
+
+            if (selectedTraits.Contains(selectedTrait))
             {
-                if (selectedTraits.Contains(selectedTrait))
-                {
-                    Debug.Log("중복선택");
-                    return;
-                }
+                Debug.Log("중복선택");
+                return;
             }
-            // 선택 가능한 빈 자리가 있는지 확인
-            if (selectedTraits.Count < selectButtonList.Count)
-            {
-               // 특성을 선택 리스트에 추가 (적용은 나중에)
-                selectedTraits.Add(selectedTrait);
 
-                // 특성 비용을 TotalCost에 추가
-                if (selectedTrait.PnN == TraitPnN.Positive)
-                {
-                    if (totalCost + selectedTrait.cost > Player.Instance.MaxCost)
-                    {
-                        Debug.Log("코스트가 충분하지 않습니다!");
-                        return;
-                    }
-
-                    totalCost += selectedTrait.cost;
-                }
-
-                else if (selectedTrait.PnN == TraitPnN.Negative)
-                {
-                    totalCost -= selectedTrait.cost;
-                }
-                // 선택된 특성의 이미지를 하단 버튼에 반영
-                for (int i = 0; i < selectedTraits.Count; i++)
-                {
-                    Button selectButton = selectButtonList[i];
-                    selectButton.image.sprite = selectedTraits[i].GetTraitImage(); // 선택된 특성 이미지 설정
-                }
-
-                // 하단 버튼을 선택된 특성의 이미지로 업데이트 후, 나머지는 원래 상태로 복구
-                ReorganizeSelectButtons();
-            }
-            else
+            // 선택 가능한 슬롯이 있는지 확인
+            if (selectedTraits.Count >= selectButtonList.Count)
             {
                 Debug.Log("더 이상 선택할 수 있는 버튼이 없습니다.");
+                return;
             }
 
+            // 코스트 검사 먼저
+            if (selectedTrait.PnN == TraitPnN.Positive &&
+                totalCost + selectedTrait.cost > Player.Instance.MaxCost)
+            {
+                Debug.Log("코스트가 충분하지 않습니다!");
+                return;
+            }
 
+            // 조건 통과 후 
+            selectedTraits.Add(selectedTrait);
+
+            if (selectedTrait.PnN == TraitPnN.Positive)
+            {
+                totalCost += selectedTrait.cost;
+            }
+            else if (selectedTrait.PnN == TraitPnN.Negative)
+            {
+                totalCost -= selectedTrait.cost;
+            }
+
+            ReorganizeSelectButtons();
         }
 
         public void OnNextButtonPressed()

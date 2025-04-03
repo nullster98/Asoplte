@@ -1,58 +1,53 @@
 using System.Collections.Generic;
 using Entities;
 using PlayerScript;
+using Unity;
 using UnityEngine;
+using UnityEngine.UI;
+using Utility;
 
 namespace God
 {
-    public abstract class GodEffect : IEffect
-    {
-        public abstract void ApplyEffect(IUnit target);
-    }
-
     [System.Serializable]
     public sealed class GodData
     {
         public string GodName;
         public string FileName;
-        public int GodID;
-        public bool IsUnlocked;
+        public string GodID;
         public int UnlockCost;
-        public GodEffect SpecialEffect;
-        public Sprite GetBackgroundImage()
+        public string EffectKey;
+       
+        public List<IEffect> SpecialEffect = new();
+        public bool IsUnlocked;
+        public Sprite GodImage;
+        public Sprite GodBackgroundImage;
+        public string GodDescription;
+        public void initializeEffect()
         {
-            return LoadBackgroundSprite(FileName);
-        }
-
-        private Sprite LoadBackgroundSprite(string imageName)
-        {
-            Sprite backgroundSprite = Resources.Load<Sprite>($"God/Backgrounds/{imageName}_BG");
-            return backgroundSprite != null ? backgroundSprite : Resources.Load<Sprite>("God/default_BG");
-        }
-        public Sprite GetGodImage()
-        {
-            return LoadGodSprite(FileName);
-        }
-
-        private Sprite LoadGodSprite(string imageName)
-        {
-            string path = $"God/Images/{imageName}";
-            Sprite godSprite = Resources.Load<Sprite>(path);
-
-            if (godSprite == null)
+            string[] effectKeys = EffectKey.Split(',');
+            foreach (var key in effectKeys)
             {
-                Debug.LogWarning($"[LoadGodSprite] ❌ 이미지 로드 실패! 경로: {path}.png 혹은 확장자 없음");
-                return Resources.Load<Sprite>("God/default");
+                var trimmedKey = key.Trim();
+                var effect = EffectFactory.Create(trimmedKey);
+        
+                if (effect != null)
+                {
+                    Debug.Log($"[✅ 추가됨] {trimmedKey} → {effect.GetType().Name}");
+                    SpecialEffect.Add(effect);
+                }
+                else
+                {
+                    Debug.LogWarning($"[❌ 생성 실패] {trimmedKey}");
+                }
             }
-
-            Debug.Log($"[LoadGodSprite] ✅ 성공적으로 이미지 로드됨: {path}");
-            return godSprite;
         }
 
-        public string GetDescription()
+        public void LoadGodData()
         {
+            GodImage = Resources.Load<Sprite>($"God/Images/{FileName}");
+            GodBackgroundImage = Resources.Load<Sprite>($"God/Backgrounds/{FileName}_BG");
             TextAsset description = Resources.Load<TextAsset>($"God/Descriptions/{FileName}");
-            return description != null ? description.text : "설명 없음";
+            GodDescription = description != null ? description.text : "설명 안적음";
         }
 
         public Dictionary<string, int> GodStats = new Dictionary<string, int>
@@ -63,46 +58,7 @@ namespace God
             {"MP", 0 },
             {"MentalStat", 0 }
         };
-
-        public GodData(string godName, string fileName, int godID, bool isUnlock, int unlockCost,
-            GodEffect specialEffect)
-        {
-            this.GodName = godName;
-            this.FileName = fileName;
-            this.GodID = godID;
-            IsUnlocked = isUnlock;
-            this.UnlockCost = unlockCost;
-            this.SpecialEffect = specialEffect;
-
-            Sprite godImage = GetGodImage();
-            Sprite background = GetBackgroundImage();
-            string description = GetDescription();
-            
-            if (godImage == null)
-                Debug.LogWarning($"[GodData] {godName}의 메인 이미지가 없습니다! 경로: God/Images/{fileName}");
-            if (background == null)
-                Debug.LogWarning($"[GodData] {godName}의 배경 이미지가 없습니다! 경로: God/Backgrounds/{fileName}_BG");
-            if (description == "설명 없음")
-                Debug.LogWarning($"[GodData] {godName}의 설명 텍스트를 찾을 수 없습니다! 경로: God/Descriptions/{fileName}");
-        }
+        
     }
-
-    public class LibertyGodEffect :GodEffect
-    {
-        public override void ApplyEffect(IUnit target)
-        {
-            /*switch (target.UnitType)
-            {
-                case UnitType.Player ;
-                    if(target is Player player)
-                    break;
-                case UnitType.Enemy ;
-                    (if target is Enemy enemy)
-                    break;
-                case UnitType.NPC ;
-                    break;
-                
-            }*/
-        }
-    }
+    
 }

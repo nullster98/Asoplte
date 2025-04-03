@@ -31,6 +31,8 @@ namespace Event
         public string eventName;   
         public List<EventPhase> phases;
         public EventTag eventType;
+        public bool isRecycle;
+        public bool isUsed;
     }
 
     [Serializable]

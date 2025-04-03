@@ -4,6 +4,7 @@ using System.Collections.Generic;
 public class FlatEventLine
 {
     public string eventName;
+    public string isRecycle;
     public string eventType;
     public string phaseName;
     public string backgroundImage;

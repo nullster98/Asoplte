@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using Game;
 using God;
 using Item;
 using Race;
@@ -17,31 +19,25 @@ namespace PlayerScript
         {
             get
             {
-                if (_instance) return _instance;
-                // ReSharper disable once Unity.PerformanceCriticalCodeInvocation
-                _instance = FindObjectOfType<Player>();
-                if (_instance) return _instance;
-                GameObject obj = new GameObject("Player");
-                // ReSharper disable once Unity.PerformanceCriticalCodeInvocation
-                _instance = obj.AddComponent<Player>();
-                return _instance;
+                if (_instance != null) return _instance;
+
+                // ⚠ Awake() 전에 접근 방지용 로그
+                Debug.LogWarning("⚠ Player.Instance가 아직 초기화되지 않았습니다.");
+                return null;
             }
         }
         private void Awake()
         {
-            // 싱글톤 패턴 구현
-            if (_instance == null)
+            if (_instance != null && _instance != this)
             {
-                _instance = this;
-                DontDestroyOnLoad(gameObject);
-                Debug.Log("플레이어 데이터 생성");
+                Debug.Log("⚠ 중복 Player 발견, 파괴");
+                Destroy(gameObject); // 중복 방지
+                return;
+            }
 
-            }
-            else
-            {
-                Debug.Log("데이터가 이미 존재함");
-                Destroy(gameObject);
-            }
+            _instance = this;
+            DontDestroyOnLoad(gameObject);
+            Debug.Log("✅ Player Awake() 호출, DontDestroyOnLoad 적용됨");
 
         }
         #endregion
@@ -84,7 +80,11 @@ namespace PlayerScript
 
         public List<TraitData> selectedTraits = new List<TraitData>();
         private RaceData selectedRace { get; set; }
+        private SubRaceData selectedSubRace { get; set; }
         public GodData selectedGod { get; set; }
+        public string selectedGodID;
+        public string selectedSubRaceID;
+        public List<string> selectedTraitID = new();
         
         #endregion
         public void TakeDamage(int dmg)
@@ -100,6 +100,7 @@ namespace PlayerScript
         void Start()
         {
             StartStat();
+            RecoverAll();
             MaxCost = 15;
         }
 
@@ -246,29 +247,110 @@ namespace PlayerScript
         public void SelectedGod(GodData god)
         {
             selectedGod = god;
-            god.SpecialEffect?.ApplyEffect(this);
+            selectedGodID = god.GodID;
+            foreach (var effect in god.SpecialEffect)
+            {
+                effect?.ApplyEffect(this);
+            }
+        }
+
+        public void RecoverGodFromID()
+        {
+            selectedGod = DatabaseManager.Instance.godList
+                .FirstOrDefault(g => g.GodID == selectedGodID);
+            
+            if (selectedGod != null)
+            {
+                foreach (var effect in selectedGod.SpecialEffect)
+                {
+                    effect?.ApplyEffect(this);
+                }
+            }
         }
 
         public void SelectedRace(RaceData race, SubRaceData subRace)
         {
             selectedRace = race;
-            race.raceEffect?.ApplyEffect(this);
-            subRace.subRaceEffect.ApplyEffect(this);
+            selectedSubRace = subRace;
+            foreach (var effect in subRace.subRaceEffect)
+            {
+                effect.ApplyEffect(this);
+            }
+        }
+
+        public void RecoverRaceFromID(string subRaceID)
+        {
+            foreach (var race in DatabaseManager.Instance.raceList)
+            {
+                foreach (var sub in race.subRace)
+                {
+                    if (sub.subRaceID == subRaceID)
+                    {
+                        SelectedRace(race, sub);
+                        Debug.Log($"[🔁 복원 완료] {subRaceID} → {race.raceName} / {sub.subRaceName}");
+                        return;
+                    }
+                }
+            }
+
+            Debug.LogWarning($"[❌ 복원 실패] subRaceID: {subRaceID} 를 찾을 수 없습니다.");
         }
 
         public void ApplyAllSelectedTraits()
         {
             foreach (var trait in selectedTraits)
             {
-                trait.traiteffect?.ApplyEffect(this);
+                ApplyTraitEffect(trait);
             }
         }
 
-        public void ApplyTraits(TraitData trait)
+        public void ApplyTraitEffect(TraitData trait)
         {
-            selectedTraits.Add(trait);
-            trait.traiteffect?.ApplyEffect(this);
+            if (!selectedTraits.Contains(trait))
+            {
+                selectedTraits.Add(trait);
+
+                if (!selectedTraitID.Contains(trait.traitID))
+                {
+                    selectedTraitID.Add(trait.traitID);
+                }
+            }
+
+            if (trait.traitEffect == null || trait.traitEffect.Count == 0)
+            {
+                trait.initializeEffect(); // 누락된 경우 대비
+            }
+
+            foreach (var effect in trait.traitEffect)
+            {
+                effect?.ApplyEffect(this);
+            }
         }
+        
+        public void RecoverTraitsFromIDs()
+        {
+            selectedTraits = selectedTraitID
+                .Select(id => DatabaseManager.Instance.traitList
+                    .FirstOrDefault(t => t.traitID == id))
+                .Where(t => t != null)
+                .ToList();
+
+            ApplyAllSelectedTraits(); // 효과 재적용
+        }
+
+        public void RecoverAll()
+        {
+            if (DatabaseManager.Instance.godList == null || DatabaseManager.Instance.godList.Count == 0)
+            {
+                Debug.LogWarning("❌ GodList가 비어 있음. RecoverAll을 나중에 다시 호출해야 함.");
+                return;
+            }            
+            
+            RecoverGodFromID();
+            RecoverTraitsFromIDs();
+            RecoverRaceFromID(selectedSubRaceID);
+        }
+        
         #endregion
         public void ApplyEffect(IEffect effect)
         {

@@ -1,15 +1,12 @@
+using System.Collections.Generic;
 using PlayerScript;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine;
+using Utility;
 
 namespace Trait
 {
-    public abstract class TraitEffect : IEffect
-    {
-        public abstract void ApplyEffect(IUnit target);
-    }
-
     public enum TraitPnN
     {
         Positive,
@@ -21,60 +18,46 @@ namespace Trait
         public string traitName;
         public string fileName;
         public TraitPnN PnN;
-        public int traitID;
+        public string traitID;
         public int cost;
         public bool isUnlock;
-        public TraitEffect traiteffect;
+        public string EffectKey;
+        public List<IEffect> traitEffect = new ();
 
-        public Sprite GetTraitImage()
-        {
-            return LoadTraitSprite(fileName);
-        }
+        public Sprite traitImage;
+        public string traitDescription;
+        public string unlockHint;
 
-        private Sprite LoadTraitSprite(string imageName)
+
+        public void LoadTraitData()
         {
             string path = PnN switch
             {
-                TraitPnN.Positive => $"Trait/Positive/Images/{imageName}",
-                TraitPnN.Negative => $"Trait/Negative/Images/{imageName}",
-                _ => $"Trait/Images/{imageName}"
+                TraitPnN.Positive => $"Trait/Positive/Images/{fileName}",
+                TraitPnN.Negative => $"Trait/Negative/Images/{fileName}",
+                _ => $"Trait/default"
             };
-            
-            Sprite traitSprite = Resources.Load<Sprite>(path);
+            traitImage = Resources.Load<Sprite>(path);
 
-            
-            if (!traitSprite)
+            string Dpath = PnN switch
             {
-                return Resources.Load<Sprite>("Trait/default");
-            }
-
-            return traitSprite;
-        }
-
-        public string GetDescription()
-        { 
-            string path= PnN switch
-            {
-                TraitPnN.Positive => $"Trait/Descriptions/Positive/{fileName}",
-                TraitPnN.Negative => $"Trait/Descriptions/Negative/{fileName}",
-                _ => $"Trait/Descriptions/{fileName}"
+                TraitPnN.Positive => $"Trait/Positive/Descriptions/{fileName}",
+                TraitPnN.Negative => $"Trait/Negative/Descriptions/{fileName}",
+                _ => $"Trait/default"
             };
-                
-            TextAsset description = Resources.Load<TextAsset>(path);
-            return description != null ? description.text : "설명 없음";
-        }
-
-        public string GetUnlockHint()
-        {
-            string path= PnN switch
+            var descAsset = Resources.Load<TextAsset>(Dpath);
+            traitDescription = descAsset != null ? descAsset.text : "(설명 없음)";
+            if (descAsset == null) Debug.LogWarning($"[TraitData] 설명 파일 없음: {Dpath}");
+            
+            string Hpath= PnN switch
             {
                 TraitPnN.Positive => $"Trait/Descriptions/Positive/{fileName}_Hint",
                 TraitPnN.Negative => $"Trait/Descriptions/Negative/{fileName}_Hint",
-                _ => $"Trait/Descriptions/{fileName}_Hint"
+                _ => $"Trait/default"
             };
-                
-            TextAsset description = Resources.Load<TextAsset>(path);
-            return description != null ? description.text : "설명 없음";
+            var hintAsset = Resources.Load<TextAsset>(Hpath);
+            unlockHint = hintAsset != null ? hintAsset.text : "(힌트 없음)";
+            if (hintAsset == null) Debug.LogWarning($"[TraitData] 힌트 파일 없음: {Hpath}");
         }
 
         public bool CanUnlock()
@@ -83,33 +66,25 @@ namespace Trait
             return true;
         }
 
-        public TraitData(string traitName, string fileName, TraitPnN pnN, int traitID, int cost, bool isUnlock, TraitEffect effect)
+        public void initializeEffect()
         {
-            this.traitName = traitName;
-            this.fileName = fileName;
-            this.PnN = pnN;
-            this.traitID = traitID;
-            this.cost = cost;
-            this.isUnlock = isUnlock;
-            this.traiteffect = effect;
-
-            Sprite traitImage = GetTraitImage();
-            string description = GetDescription();
-        }
-    }
-
-    public class StrongFaith : TraitEffect
-    {
-        public override void ApplyEffect(IUnit target)
-        {
-            switch (target.UnitType)
+            string[] effectKeys = EffectKey.Split(',');
+            foreach (var key in effectKeys)
             {
-                case UnitType.Player:
-                    target.ChangeStat("FaithStat", 10);
-                    break;
-                default:
-                    break;
+                var trimmedKey = key.Trim();
+                var effect = EffectFactory.Create(trimmedKey);
+        
+                if (effect != null)
+                {
+                    Debug.Log($"[✅ 추가됨] {trimmedKey} → {effect.GetType().Name}");
+                    traitEffect.Add(effect);
+                }
+                else
+                {
+                    Debug.LogWarning($"[❌ 생성 실패] {trimmedKey}");
+                }
             }
         }
+        
     }
 }
