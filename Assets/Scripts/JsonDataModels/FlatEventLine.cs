@@ -21,12 +21,12 @@ public class FlatEventLine
     // 전투 관련
     public bool startBattle;
     public bool spawnEntity;
-    public int entityID;
+    public string entityID;
 
     // 보상 관련
     public bool giveReward;
     public string rewardType;
-    public int rewardID;
+    public string rewardID;
 
     // 상태 변화 - 스탯
     public string stat_1_name;

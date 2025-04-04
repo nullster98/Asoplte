@@ -64,13 +64,13 @@ namespace Event
         //전투관련
         public bool startBattle; //즉시 전투 발생
         public bool spawnEntity;
-        public int? entityID;
+        public string entityID;
         public float spawnChance = 1.0f;
     
         //보상관련    
         public bool giveReward; //보상
         public AcquisitionType? rewardType;
-        public int? rewardID;
+        public string rewardID;
         
         //상태변화
         public bool affectPlayerState;

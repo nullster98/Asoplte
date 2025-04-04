@@ -1,0 +1,50 @@
+[
+  {
+    "EntityID": "EM01",
+    "Name": "Skeleton",
+    "Type": "Monster",
+    "MaxHP": 50,
+    "MaxMP": 0,
+    "Attack": 10,
+    "Defense": 5,
+    "SpawnFloor": "1,2,3",
+    "IsEventOnly": false,
+    "Effect": ""
+  },
+  {
+    "EntityID": "EM02",
+    "Name": "Slime",
+    "Type": "Monster",
+    "MaxHP": 30,
+    "MaxMP": 0,
+    "Attack": 5,
+    "Defense": 7,
+    "SpawnFloor": "1,2,3",
+    "IsEventOnly": false,
+    "Effect": ""
+  },
+  {
+    "EntityID": "EN01",
+    "Name": "Dwarf_Merchant",
+    "Type": "NPC",
+    "MaxHP": 100,
+    "MaxMP": 50,
+    "Attack": 30,
+    "Defense": 15,
+    "SpawnFloor": "1,2,3,4,5",
+    "IsEventOnly": true,
+    "Effect": ""
+  },
+  {
+    "EntityID": "EB01",
+    "Name": "Skeleton_Rich",
+    "Type": "Boss",
+    "MaxHP": 150,
+    "MaxMP": 250,
+    "Attack": 10,
+    "Defense": 10,
+    "SpawnFloor": 1,
+    "IsEventOnly": true,
+    "Effect": ""
+  }
+]

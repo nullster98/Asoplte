@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Utility;
 
 namespace Item
 {
@@ -10,14 +12,24 @@ namespace Item
         Both
     }
 
+    public enum Rarity
+    {
+        Common,
+        Rare,
+        Epic,
+        Legendary,
+        Absolute
+    }
+
     public enum EquipmentType
     {
-        Helmet,
-        LeftHand,
-        RightHand,
-        UpperBody,
-        LowerBody,
-        Shoes
+        None = -1,
+        Helmet = 0,
+        LeftHand = 1,
+        RightHand = 2,
+        UpperBody = 3,
+        LowerBody = 4,
+        Shoes = 5
     }
 
     public enum ItemType
@@ -32,100 +44,89 @@ namespace Item
     [System.Serializable]
     public class ItemData
     {
-        public int ItemID { get; private set; }
-        public string ItemName { get; private set; }
-        public ItemType Type { get; private set; }
-        public int PurchasePrice { get; private set; }
-        public int SalePrice { get; private set; }
-        public Sprite ItemImg { get; private set; }
-        public List<IEffect> Effects { get; set; }
-        public string ItemDescription {  get; private set; }
+        [Header("기본정보")]
+        public string itemName;
+        public string itemID;
+        public ItemType itemType;
+        public Rarity rarity;
+        public Sprite itemImage;
+        public string itemDescription;
+        public List<IEffect> effects = new();
+        public string EffectKey;
+        
+        [Header("장비정보")] 
+        public bool isEquipable;
+        public EquipmentType equipSlot = EquipmentType.None;
 
-        public string GetDescription()
+        [Header("상점 정보")] 
+        public int purchasePrice;
+        public int salePrice;
+
+        public void LoadItemData()
         {
-            string folderPath = Type switch
+            string path = itemType switch
             {
-                ItemType.Equipment => "Item/Equipment/Descriptions",
-                ItemType.Consumable => "Item/Consumable/Descriptions",
-                ItemType.Totem => "Item/Totem/Descriptions",
-                ItemType.Valuable => "Item/Valuable/Descriptions",
-                _ => "Item/Default" // 기본 폴더
+                ItemType.Consumable => "Item/Consumable",
+                ItemType.Totem => "Item/Totem",
+                ItemType.Valuable => "Item/Valuable",
+                ItemType.Equipment => "Item/Equipment",
+                _ => "Item/Default"
+            };
+            
+            TextAsset textAsset = Resources.Load<TextAsset>($"{path}/Descriptions/{itemName}");
+            itemDescription = textAsset != null ? textAsset.text : "설명 없음";
+            
+            itemImage = Resources.Load<Sprite>($"{path}/Images/{itemName}");
+        }
+        
+        public void initializeEffect()
+        {
+            if (string.IsNullOrWhiteSpace(EffectKey)) return;
+            
+            string[] effectKeys = EffectKey.Split(',');
+            
+            foreach (var key in effectKeys)
+            {
+                var trimmedKey = key.Trim();
+                if (string.IsNullOrWhiteSpace(trimmedKey)) continue;
+                
+                var effect = EffectFactory.Create(trimmedKey);
+        
+                if (effect != null)
+                {
+                    Debug.Log($"[✅ 추가됨] {trimmedKey} → {effect.GetType().Name}");
+                    effects.Add(effect);
+                }
+                else
+                {
+                    Debug.LogWarning($"[❌ 생성 실패] {trimmedKey}");
+                }
+            }
+        }
+        
+        public ItemData Clone()
+        {
+            var copy = new ItemData
+            {
+                itemID = this.itemID,
+                itemName = this.itemName,
+                itemType = this.itemType,
+                rarity = this.rarity,
+                isEquipable = this.isEquipable,
+                equipSlot = this.equipSlot,
+                purchasePrice = this.purchasePrice,
+                salePrice = this.salePrice,
+                itemImage = this.itemImage, // Sprite는 공유 가능
+                itemDescription = this.itemDescription,
+                EffectKey = this.EffectKey
             };
 
-            TextAsset textAsset = Resources.Load<TextAsset>($"{folderPath}/{ItemName}");
-            return textAsset != null ? textAsset.text : "설명 없음";
-        }
-
-        public void LoadEventImage()
-        {
-            string folderPath = Type switch
-            {
-                ItemType.Equipment => "Item/Equipment/images",
-                ItemType.Consumable => "Item/Consumable/Images",
-                ItemType.Totem => "Item/Totem/Images",
-                ItemType.Valuable => "Item/Valuable/Images",
-                _ => "Item/Default" // 기본 폴더
-            };
-
-            ItemImg = Resources.Load<Sprite>($"{folderPath}/{ItemName}");
-        }
-
-        protected ItemData(int id, string name, ItemType type, int purchasePrice, int salePrice, List<IEffect> effects)
-        {
-            (ItemID, ItemName, Type, PurchasePrice, SalePrice, Effects) =
-                (id, name, type, purchasePrice, salePrice, effects ?? new List<IEffect>());
-
-            ItemDescription = GetDescription(); //  설명 자동 로드
-            LoadEventImage(); //  이미지 자동 로드
+            copy.initializeEffect(); // 효과 리스트는 새로 생성해야 함 (List<IEffect>는 참조 타입)
+            return copy;
         }
 
 
     }
 
-    public class Equipment : ItemData
-    {
-        public int AttackPoint { get; private set; }
-        public int DefensePoint { get; private set; }
-        public EquipmentType EquipmentType { get; private set; }
-
-        public Equipment(int id, string name, int purchasePrice, int salePrice,
-            EquipmentType equipType, int attack, int defense, List<IEffect> effects)
-            : base(id, name, ItemType.Equipment, purchasePrice, salePrice, effects)
-        {
-            EquipmentType = equipType;
-            AttackPoint = attack;
-            DefensePoint = defense;
-        }
-    }
-
-    public class Consumable : ItemData
-    {
-        public float HealAmount { get; private set; }
-        public float ManaRestore {  get; private set; }
-        public ItemTarget Target {  get; private set; }
-
-        public Consumable(int id, string name, int purchasePrice, int salePrice,
-            float healAmount, float manaRestore, ItemTarget target ,List<IEffect> effects)
-            : base(id, name,  ItemType.Consumable ,purchasePrice, salePrice, effects)
-            => (HealAmount, ManaRestore, Target) = (healAmount, manaRestore, target);
-   
-    }
-
-    public class Totem : ItemData
-    {
-        public float AttackPoint {  get; private set; }
-        public float DefensePoint {  get; private set; }
-
-        public Totem(int id, string name, int purchasePrice, int salePrice,
-            float attack, float defense, List<IEffect> effects)
-            : base(id, name, ItemType.Totem, purchasePrice, salePrice, effects)
-            =>(AttackPoint, DefensePoint) = (attack, defense);
     
-    }
-
-    public class Valuable : ItemData
-    {
-        public Valuable(int id, string name, int purchasePrice, int salePrice, List<IEffect> effects)
-            : base(id, name, ItemType.Valuable, purchasePrice, salePrice, effects) { }
-    }
 }

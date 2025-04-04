@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Item
 {
-    public class ItemCreator : MonoBehaviour
+   /* public class ItemCreator : MonoBehaviour
     {
         [MenuItem("Game/Create All Items")]
         public static void CreateAllItems()
@@ -74,6 +74,6 @@ namespace Item
                 Debug.LogError("ItemDatabase를 찾을 수 없습니다! Resources 폴더 내 경로를 확인하세요.");
             }
         }
-    }
+    }*/
 }
 

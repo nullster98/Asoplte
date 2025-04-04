@@ -1,0 +1,46 @@
+[
+  {
+    "ItemName": "IronSword",
+    "ItemType": "Equipment",
+    "Rarity": "Common",
+    "ItemID": "IE001",
+    "IsEquipable": true,
+    "EquipType": "LeftHand",
+    "PurchasePrice": 500,
+    "SalePrice": 250,
+    "Effect": "Stat:Atk+5"
+  },
+  {
+    "ItemName": "Bread",
+    "ItemType": "Consumable",
+    "Rarity": "Common",
+    "ItemID": "IC001",
+    "IsEquipable": false,
+    "EquipType": "",
+    "PurchasePrice": 100,
+    "SalePrice": 50,
+    "Effect": "Heal:HP+30"
+  },
+  {
+    "ItemName": "AttackCharm",
+    "ItemType": "Totem",
+    "Rarity": "Rare",
+    "ItemID": "IT001",
+    "IsEquipable": false,
+    "EquipType": "",
+    "PurchasePrice": 2000,
+    "SalePrice": 500,
+    "Effect": "Stat:Atk+3"
+  },
+  {
+    "ItemName": "GoldBar",
+    "ItemType": "Valuable",
+    "Rarity": "Rare",
+    "ItemID": "IV001",
+    "IsEquipable": false,
+    "EquipType": "",
+    "PurchasePrice": 0,
+    "SalePrice": 1500,
+    "Effect": ""
+  }
+]

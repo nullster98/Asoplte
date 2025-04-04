@@ -5,11 +5,13 @@ using System.Linq;
 using Entities;
 using Event;
 using God;
+using Item;
 using JsonDataModels;
 using Race;
 using Trait;
 using UI;
 using UnityEditor.iOS;
+using UnityEditor.UIElements;
 using UnityEngine.UI;
 
 public static class JsonLoader
@@ -46,8 +48,8 @@ public static class JsonLoader
 
 
             // ✅ int 기본값 처리
-            line.rewardID = line.rewardID != 0 ? line.rewardID : 0;
-            line.entityID = line.entityID != 0 ? line.entityID : 0;
+            line.rewardID = !string.IsNullOrWhiteSpace(line.rewardID) ? line.rewardID : null;
+            line.entityID = !string.IsNullOrWhiteSpace(line.entityID) ? line.entityID : null;
             line.nextPhaseIndex = line.nextPhaseIndex != 0 ? line.nextPhaseIndex : -1;
 
             // ✅ enum (string) → null or string 유지
@@ -227,6 +229,106 @@ public static class JsonLoader
 
         return list;
     }
+
+    #endregion
+
+    #region 아이템 JsonLoader
+
+    public static List<ItemData> LoadItemData()
+    {
+        TextAsset json = Resources.Load<TextAsset>("Json/item_data");
+        if (json == null)
+        {
+            Debug.LogError("ItemData.json 로드 실패");
+            return new List<ItemData>();
+        }
+        
+        List<ItemJsonLine> lines = JsonHelper.FromJson<ItemJsonLine>(json.text);
+        List<ItemData> list = new();
+
+        foreach (var line in lines)
+        {
+            ItemType parsedType = ItemType.None;
+            if (!string.IsNullOrWhiteSpace(line.ItemType))
+            {
+                Enum.TryParse(line.ItemType.Trim(), true, out parsedType);
+            }
+            
+            Rarity parsedRarity = Rarity.Common;
+            if (!string.IsNullOrWhiteSpace(line.Rarity))
+            {
+                Enum.TryParse(line.Rarity.Trim(), true, out parsedRarity);
+            }
+            
+            EquipmentType parsedEquipment = EquipmentType.None;
+            if (!string.IsNullOrWhiteSpace(line.EquipType))
+            {
+                Enum.TryParse(line.EquipType.Trim(), true, out parsedEquipment);
+            }
+            
+            var item = new ItemData
+            {
+                itemName = line.ItemName,
+                itemType = parsedType,
+                rarity = parsedRarity,
+                itemID = line.ItemID,
+                isEquipable = line.IsEquipable,
+                equipSlot = parsedEquipment,
+                purchasePrice = line.PurchasePrice,
+                salePrice = line.SalePrice,
+                EffectKey = line.Effect
+            };
+            item.initializeEffect();
+            item.LoadItemData();
+            list.Add(item);
+        }
+        return list;
+    }
+    
+
+    #endregion
+
+    #region Entity JsonLoader
+
+    public static List<EntitiesData> LoadEntitiesData()
+    {
+        TextAsset json = Resources.Load<TextAsset>("Json/entity_data");
+        if (json == null)
+        {
+            Debug.LogError("Entity.json 로드 실패");
+            return new List<EntitiesData>();
+        }
+        List<EntityJsonLine> lines = JsonHelper.FromJson<EntityJsonLine>(json.text);
+        List<EntitiesData> list = new();
+        
+        EntityType parsedEntity = EntityType.None;
+
+        foreach (var line in lines)
+        {
+            Enum.TryParse(line.Type, true, out EntityType parsedType);
+            
+            var entity = new EntitiesData
+            {
+                EntityID = line.EntityID,
+                Name = line.Name,
+                EntityType = parsedType,
+                MaxHp = line.MaxHP,
+                MaxMp = line.MaxMP,
+                Attack = line.Attack,
+                Defense = line.Defense,
+                SpawnableFloors = line.SpawnFloor,
+                IsEventOnly = line.IsEventOnly,
+                EffectKey = line.Effect
+            };
+            entity.initializeEffect();
+            entity.LoadEnemySprite();
+            entity.GetDescription();
+            list.Add(entity);
+        }
+
+        return list;
+    }
+    
 
     #endregion
 }

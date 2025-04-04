@@ -29,7 +29,7 @@ namespace Item
             else Destroy(gameObject);
         }
 
-        public void AddItem(int itemID)
+        public void AddItem(string itemID)
         {
             int slot = -1;
             for (int i = 0; i < inventory.Length; i++)
@@ -47,47 +47,23 @@ namespace Item
                 return;
             }
 
-            ItemData itemDataInfo = DatabaseManager.Instance.itemDatabase.GetItemByID(itemID);
+            ItemData itemDataInfo = DatabaseManager.Instance.GetItemData(itemID);
             if (itemDataInfo == null)
             {
                 Debug.Log("아이템 정보 없음");
                 return;
             }
 
-            if (itemDataInfo is Equipment)
+            if (!itemDataInfo.isEquipable)
             {
                 Debug.Log("장비 아이템은 인벤토리에 추가할 수 없습니다.");
                 return;
             }
 
-            ItemData newItemData = null;
-
-            if (itemDataInfo is Consumable consumable)
-            {
-                newItemData = new Consumable(consumable.ItemID, consumable.ItemName,
-                    consumable.PurchasePrice, consumable.SalePrice, consumable.HealAmount,
-                    consumable.ManaRestore, consumable.Target, consumable.Effects);
-            }
-            else if (itemDataInfo is Totem totem)
-            {
-                newItemData = new Totem(totem.ItemID, totem.ItemName,
-                    totem.PurchasePrice, totem.SalePrice, totem.AttackPoint, totem.DefensePoint, totem.Effects);
-            }
-            else if (itemDataInfo is Valuable valuable)
-            {
-                newItemData = new Valuable(valuable.ItemID, valuable.ItemName,
-                    valuable.PurchasePrice, valuable.SalePrice, valuable.Effects);
-            }
-
-            if (newItemData == null)
-            {
-                Debug.LogError("아이템 타입을 확인할 수 없음!");
-                return;
-            }
-
+            ItemData newItemData = itemDataInfo.Clone();
             inventory[slot] = newItemData;
-            Debug.Log($"{slot} 슬롯에 {newItemData.ItemName}이 추가됨");
 
+            Debug.Log($"{slot} 슬롯에 {newItemData.itemName}이 추가됨");
             UpdateInventoryUI();
         }
 
@@ -99,7 +75,7 @@ namespace Item
                 return;
             }
 
-            Debug.Log($"{slot}슬롯에서 {inventory[slot].ItemName}이 제거됨");
+            Debug.Log($"{slot}슬롯에서 {inventory[slot].itemName}이 제거됨");
 
             // 인벤토리에서 아이템 제거
             inventory[slot] = null;
@@ -112,7 +88,7 @@ namespace Item
         {
             for (int i = 0; i < inventory.Length; i++)
             {
-                string itemName = inventory[i] != null ? inventory[i].ItemName : "빈 슬롯";
+                string itemName = inventory[i] != null ? inventory[i].itemName : "빈 슬롯";
                 Debug.Log($"슬롯 {i}: {itemName}");
             }
         }
@@ -143,7 +119,7 @@ namespace Item
 
                 if (inventory[i] != null)
                 {
-                    itemImage.sprite = inventory[i].ItemImg;  // 아이템이 있으면 이미지 적용
+                    itemImage.sprite = inventory[i].itemImage;  // 아이템이 있으면 이미지 적용
                     itemImage.enabled = true;
                 }
                 else

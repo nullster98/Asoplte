@@ -16,8 +16,8 @@ namespace Game
     {
         public static DatabaseManager Instance { get; private set; }
 
-        public ItemDatabase itemDatabase;
-        public EntitiesDatabase entitiesDatabase;
+        public List<ItemData> itemList;
+        public List<EntitiesData> entityList;
         public List<TraitData> traitList;
         public SkillDatabase skillDatabase;
         public List<FlatEventLine> eventLines;
@@ -29,17 +29,19 @@ namespace Game
             if (Instance == null)
             {
                 Instance = this;
-                ResetDatabases();
-                InitializeDatabases();
 
                 GodEffectRegistry.RegisterAll();
                 TraitEffectRegistry.RegisterAll();
                 RaceEffectRegistry.RegisterAll();
+                ItemEffectRegistry.RegisterAll();
+                EntityEffectRegistry.RegisterAll();
                 
+                itemList = JsonLoader.LoadItemData();
                 godList = JsonLoader.LoadGodData();
                 traitList = JsonLoader.LoadTraitData();
                 eventLines = JsonLoader.LoadFlatLinesFromJson();
                 raceList = JsonLoader.LoadRaceData();
+                entityList = JsonLoader.LoadEntitiesData();
                 
                 foreach (var line in eventLines)
                 {
@@ -50,38 +52,28 @@ namespace Game
             }
             else
             {
-                //Destroy(gameObject);
+                Destroy(gameObject);
             }
         }
 
-
-        private void ResetDatabases()
+        public EntitiesData GetEntitiesData(string entityID)
         {
-            itemDatabase?.ResetDatabase();
-            entitiesDatabase?.ResetDatabase();
+            return entityList.Find(entity => entity.EntityID == entityID);
         }
 
-        private void InitializeDatabases()
+        public ItemData GetItemData(string itemID)
         {
-            if (itemDatabase != null && itemDatabase.itemList.Count == 0)
-            {
-                ItemCreator.CreateAllItems();
-                Debug.Log("모든 아이템 생성 완료!");
-            }
-
-            if (entitiesDatabase != null && entitiesDatabase.EnemyList.Count == 0) EntitiesCreator.InitializeEnemies();
+            return itemList.Find(item => item.itemID == itemID);
         }
 
-        public GodData GetGodByIndex(int index)
+        public GodData GetGodData(string godID)
         {
-            if (index < 0 || index >= godList.Count) return null;
-            return godList[index];
+            return godList.Find(god => god.GodID == godID);
         }
 
-        public TraitData GetTraitByIndex(int index)
+        public TraitData GetTraitData(string traitID)
         {
-            if (index < 0 || index >= traitList.Count) return null;
-            return traitList[index];
+            return traitList.Find(trait => trait.traitID == traitID);
         }
     }
 }

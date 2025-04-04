@@ -33,6 +33,15 @@ namespace UI
             }
             
         }
+        
+        private GodData GetCurrentGod()
+        {
+            if (DatabaseManager.Instance.godList == null || DatabaseManager.Instance.godList.Count == 0)
+                return null;
+
+            string godID = DatabaseManager.Instance.godList[currentIndex].GodID;
+            return DatabaseManager.Instance.GetGodData(godID);
+        }
 
         public void OnNextButtonPressed()
         {
@@ -56,7 +65,7 @@ namespace UI
                 return;
             }
 
-            GodData currentImage = DatabaseManager.Instance.GetGodByIndex(currentIndex);
+            GodData currentImage = GetCurrentGod();
             if (currentImage == null)
             {
                 Debug.LogError($"currentImage is null! Index: {currentIndex}");
@@ -76,14 +85,17 @@ namespace UI
             int leftIndex = (currentIndex - 1 + DatabaseManager.Instance.godList.Count) % DatabaseManager.Instance.godList.Count;
             int rightIndex = (currentIndex + 1) % DatabaseManager.Instance.godList.Count;
 
-            leftImage.sprite = DatabaseManager.Instance.GetGodByIndex(leftIndex).GodImage;
-            rightImage.sprite = DatabaseManager.Instance.GetGodByIndex(rightIndex).GodImage;
+            string leftID = DatabaseManager.Instance.godList[leftIndex].GodID;
+            string rightID = DatabaseManager.Instance.godList[rightIndex].GodID;
+
+            leftImage.sprite = DatabaseManager.Instance.GetGodData(leftID).GodImage;
+            rightImage.sprite = DatabaseManager.Instance.GetGodData(rightID).GodImage;
 
             // 왼쪽과 오른쪽 이미지를 흑백으로 변환
             leftImage.color = Color.gray;
             rightImage.color = Color.gray;
-            
-            var current = DatabaseManager.Instance.GetGodByIndex(currentIndex);
+
+            var current = GetCurrentGod();
 
             Debug.Log($"[GodUI] 현재 godName: {current.GodName}, fileName: {current.FileName}");
             Debug.Log($"[GodUI] GetDescription(): {current.GodDescription}");
@@ -158,7 +170,7 @@ namespace UI
         {
             godSelect.SetActive(false);
             characterSelect.SetActive(true);
-            player.SelectedGod(DatabaseManager.Instance.GetGodByIndex(currentIndex));
+            player.SelectedGod(GetCurrentGod());
         }
 
         public void PreviousButton()

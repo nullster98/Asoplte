@@ -31,7 +31,7 @@ namespace UI
         private object currentObject; // 현재 UI에 표시된 데이터 (Item, Trait, Skill 등)
 
         
-        public void SetupAcquisitionUI(AcquisitionType type, int id)
+        public void SetupAcquisitionUI(AcquisitionType type, string id)
         {
             confirmButton.onClick.RemoveAllListeners();
             
@@ -41,16 +41,16 @@ namespace UI
             {
                 case AcquisitionType.Item:
                 case AcquisitionType.Equipment:
-                    data = DatabaseManager.Instance.itemDatabase.GetItemByID(id);
+                    data = DatabaseManager.Instance.GetItemData(id);
                     break;
 
                 case AcquisitionType.Trait:
-                    data = DatabaseManager.Instance.GetTraitByIndex(id);
+                    data = DatabaseManager.Instance.GetTraitData(id);
                     break;
 
-                case AcquisitionType.Skill:
+                /*case AcquisitionType.Skill:
                     data = DatabaseManager.Instance.skillDatabase.GetSkillByID(id);
-                    break;
+                    break;*/
 
                 // 필요 시 더 추가
             }
@@ -85,9 +85,9 @@ namespace UI
 
         private void UpdateItemUI(ItemData itemData)
         {
-            getImage.sprite = itemData.ItemImg;
-            getName.text = itemData.ItemName;
-            getDescription.text = itemData.ItemDescription;
+            getImage.sprite = itemData.itemImage;
+            getName.text = itemData.itemName;
+            getDescription.text = itemData.itemDescription;
 
             confirmButton.onClick.AddListener(ApplyReward);
         }
@@ -121,10 +121,10 @@ namespace UI
             {
                 case AcquisitionType.Item:
                     var item = currentObject as ItemData;
-                    InventoryManager.Instance.AddItem(item.ItemID);
+                    InventoryManager.Instance.AddItem(item.itemID);
                     break;
                 case AcquisitionType.Equipment :
-                    Player.Instance.EquipItem((Equipment)currentObject);
+                    Player.Instance.EquipItem((ItemData)currentObject);
                     break;
                 case AcquisitionType.Trait:
                     Player.Instance.ApplyTraitEffect((TraitData)currentObject);

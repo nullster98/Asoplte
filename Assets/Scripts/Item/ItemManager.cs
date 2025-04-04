@@ -15,9 +15,9 @@ namespace Item
                 Destroy(gameObject);
         }
 
-        public ItemData GiveItemToPlayer(int itemID)
+        public ItemData GiveItemToPlayer(string itemID)
         {
-            ItemData itemData = DatabaseManager.Instance.itemDatabase.GetItemByID(itemID);
+            ItemData itemData = DatabaseManager.Instance.GetItemData(itemID);
             if (itemData == null)
             {
                 Debug.LogError("해당 ID의 아이템을 찾을 수 없습니다!");

@@ -179,7 +179,7 @@ namespace Event
                 {
                     if (block.outcome.giveReward)
                     {
-                        acquisitionUI.SetupAcquisitionUI(block.outcome.rewardType.Value, block.outcome.rewardID.Value);
+                        acquisitionUI.SetupAcquisitionUI(block.outcome.rewardType.Value, block.outcome.rewardID);
                         yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
                     }
                     else if (block.outcome.startBattle)
@@ -229,10 +229,10 @@ namespace Event
                 return;
             }
 
-            var enemyData = DatabaseManager.Instance.entitiesDatabase.GetEnemyByID(outcome.entityID.Value);
+            var enemyData = DatabaseManager.Instance.GetEntitiesData(outcome.entityID);
             if (enemyData == null)
             {
-                Debug.LogError($"ID {outcome.entityID.Value}의 적 데이터를 찾을 수 없습니다.");
+                Debug.LogError($"ID {outcome.entityID}의 적 데이터를 찾을 수 없습니다.");
                 return;
             }
 

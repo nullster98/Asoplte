@@ -147,7 +147,7 @@ namespace Event
             // ✅ 전투 태그 + 적 스폰
             if (currentEvent.eventType == EventTag.Battle && phase.phaseOutcome?.spawnEntity == true)
             {
-                var enemyData = DatabaseManager.Instance.entitiesDatabase.GetEnemyByID(phase.phaseOutcome.entityID ?? -1);
+                var enemyData = DatabaseManager.Instance.GetEntitiesData(phase.phaseOutcome.entityID?.ToString());
                 if (enemyData != null)
                 {
                     var enemy = EntitySpawner.Spawn(enemyData, EventManager.Instance.floor);
@@ -209,7 +209,7 @@ namespace Event
             {
                 if (SelectedChoice.outcome.giveReward && SelectedChoice.outcome.rewardType != null)
                 {
-                    acquisitionUI.SetupAcquisitionUI(SelectedChoice.outcome.rewardType.Value, SelectedChoice.outcome.rewardID.Value);
+                    acquisitionUI.SetupAcquisitionUI(SelectedChoice.outcome.rewardType.Value, SelectedChoice.outcome.rewardID);
                     return;
                 }
 
@@ -315,13 +315,13 @@ namespace Event
 
         private EventOutcome ParsePhaseOutcome(FlatEventLine line)
         {
-            if (!line.spawnEntity && line.entityID == 0)
+            if (!line.spawnEntity && line.entityID == null)
                 return null;
 
             return new EventOutcome
             {
                 spawnEntity = line.spawnEntity,
-                entityID = line.entityID != 0 ? line.entityID : (int?)null,
+                entityID = line.entityID,
                 startBattle = line.startBattle
             };
         }
@@ -332,7 +332,7 @@ namespace Event
             {
                 startBattle = line.startBattle,
                 giveReward = line.giveReward,
-                rewardID = line.rewardID != 0 ? line.rewardID : (int?)null,
+                rewardID = line.rewardID,
                 rewardType = string.IsNullOrEmpty(line.rewardType) ? null : EnumParser.Parse<AcquisitionType>(line.rewardType),
                 modifyStat = new List<StatModifier>(),
                 addTrait = new List<string>(),

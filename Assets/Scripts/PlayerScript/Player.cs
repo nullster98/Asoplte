@@ -73,7 +73,7 @@ namespace PlayerScript
         public int MaxCost { get; set; } // 코스트
         public UnitType UnitType => UnitType.Player;
       
-        private Equipment[] equippedItem = new Equipment[6];
+        private ItemData[] equippedItem = new ItemData[6];
         private EquipUI equipUI;
       
         [SerializeField] public Sprite playerImg; //플레이어 이미지
@@ -181,64 +181,73 @@ namespace PlayerScript
             equipUI = uI;
         }
         //  특정 슬롯의 장착된 장비를 가져오는 함수
-        public Equipment GetEquippedItem(EquipmentType slot)
+        public ItemData GetEquippedItem(EquipmentType slot)
         {
-            return equippedItem[(int)slot]; // 배열 인덱스로 직접 접근
+            if (slot == EquipmentType.None)
+            {
+                Debug.LogWarning("[Player] None 슬롯은 장비가 존재하지 않습니다.");
+                return null;
+            }
+
+            return equippedItem[(int)slot];
         }
 
-        public bool EquipItem(Equipment equipItem)
+        public bool EquipItem(ItemData equipItem)
         {
 
-            int slotIndex = (int)equipItem.EquipmentType;
+            int slotIndex = (int)equipItem.equipSlot;
 
             RemoveEquip(equipItem);
 
             //장비 장착
             equippedItem[slotIndex] = equipItem;
-            Debug.Log($"{equipItem.ItemName}을 {equipItem.EquipmentType}칸에 장착했습니다.");
-
-            ChangeStat("Atk", equipItem.AttackPoint);
-            ChangeStat("Def", equipItem.DefensePoint);
+            Debug.Log($"{equipItem.itemName}을 {equipItem.equipSlot}칸에 장착했습니다.");
             
-            equipItem.Effects?.ForEach(effect => effect.ApplyEffect(this));
+            ApplyItemEffects(equipItem);
 
             equipUI?.UpdateEquipmentUI();
 
             return true;
         }
 
-        public void RemoveEquip(Equipment equipitem)
+        public void RemoveEquip(ItemData equipitem)
         {
-            int slotIndex = ( int)equipitem.EquipmentType;
+            int slotIndex = ( int)equipitem.equipSlot;
             // 장비 제거
             if (equippedItem[slotIndex] != null)
             {
-                Debug.Log($"기존 장비 {equippedItem[slotIndex].ItemName}을 해제합니다.");
+                Debug.Log($"기존 장비 {equippedItem[slotIndex].itemName}을 해제합니다.");
 
-                ChangeStat("Atk", -equippedItem[slotIndex].AttackPoint);
-                ChangeStat("Def", -equippedItem[slotIndex].DefensePoint);
+                RemoveItemEffects(equipitem);
 
                 equippedItem[slotIndex] = null;
             }
-            
-            equipitem.Effects?.ForEach(effect =>
+
+            equipUI?.UpdateEquipmentUI();
+        }
+
+        private void ApplyItemEffects(ItemData item)
+        {
+            if (item?.effects == null) return;
+
+            foreach (var effect in item.effects)
+            {
+                effect.ApplyEffect(this);
+            }
+        }
+
+        private void RemoveItemEffects(ItemData item)
+        {
+            if (item?.effects == null) return;
+
+            foreach (var effect in item.effects)
             {
                 if (effect is IRemovableEffect removable)
                 {
                     removable.RemoveEffect(this);
                 }
-            });
-
-            equipUI?.UpdateEquipmentUI();
+            }
         }
-
-   /*public void RemoveItemEffects(Equipment equipItem)
-    {
-        foreach (var effect in equipItem.Effects)
-        {
-            effect.RemoveEffect(this); // 플레이어에게 적용된 효과 제거
-        }
-    }*/
 
         #endregion
 

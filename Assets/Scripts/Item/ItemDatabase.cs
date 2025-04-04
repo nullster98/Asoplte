@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Item
 {
-    [CreateAssetMenu(fileName = "ItemDatabase", menuName = "Game/Item Database")]
+    /*[CreateAssetMenu(fileName = "ItemDatabase", menuName = "Game/Item Database")]
     public class ItemDatabase : ScriptableObject
     {
         public List<ItemData> itemList = new List<ItemData>();
@@ -17,7 +17,7 @@ namespace Item
         {
             itemList.Clear();
         }
-    }
+    }*/
 }
 
 

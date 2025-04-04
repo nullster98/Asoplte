@@ -42,7 +42,8 @@ namespace UI
             for (int i = 0; i < equipinfo.Length; i++)
             {
                 int slotIndex = i; // 람다 표현식에서 안전한 슬롯 저장
-                equipinfo[i].equipmentButtons.onClick.AddListener(() => OpenEquipDetailUI((EquipmentType)slotIndex));
+                equipinfo[i].equipmentButtons.onClick.AddListener(() => 
+                    OpenEquipDetailUI((EquipmentType)slotIndex));
             }
 
             UpdateEquipmentUI(); // 장비창 UI 초기 업데이트
@@ -55,21 +56,34 @@ namespace UI
         {
             foreach (EquipmentType slot in System.Enum.GetValues(typeof(EquipmentType)))
             {
-                Equipment equippedItem = player.GetEquippedItem(slot);
+                if(slot == EquipmentType.None) continue;
+                
+                ItemData equippedItem = player.GetEquippedItem(slot);
                 UpdateSlot(slot, equippedItem);
             }
         }
 
         // 특정 슬롯의 장비 데이터를 UI에 반영하는 함수
-        private void UpdateSlot(EquipmentType slot, Equipment equippedItem)
+        private void UpdateSlot(EquipmentType slot, ItemData equippedItem)
         {
             int slotIndex = (int)slot;
-            equipinfo[slotIndex].equipmentImages.sprite = equippedItem != null ? equippedItem.ItemImg : Resources.Load<Sprite>($"Images/Items/Equipment/default");
+
+            if (slotIndex < 0 || slotIndex >= equipinfo.Length)
+            {
+                Debug.LogWarning($"[EquipUI] 잘못된 슬롯 인덱스 접근: {slot}({slotIndex})");
+                return;
+            }
+
+            equipinfo[slotIndex].equipmentImages.sprite = equippedItem != null
+                ? equippedItem.itemImage
+                : Resources.Load<Sprite>($"Images/Items/Equipment/default");
         }
 
         private void OpenEquipDetailUI(EquipmentType slot)
         {
             Debug.Log($"OpenEquipDetailUI 호출됨: {slot}");
+            
+            if(slot == EquipmentType.None) return;
 
             if (equipDetailUI == null)
             {
@@ -77,7 +91,7 @@ namespace UI
                 return;
             }
 
-            Equipment equippedItem = player.GetEquippedItem(slot);
+            ItemData equippedItem = player.GetEquippedItem(slot);
             if (equippedItem == null)
             {
                 Debug.Log("해당 슬롯에 장착된 장비가 없습니다.");
@@ -85,9 +99,9 @@ namespace UI
             }
 
             equipDetailUI.SetActive(true); //  장비 상세 UI 활성화
-            equipDetailImage.sprite = equippedItem.ItemImg;
-            equipDetailText.text = equippedItem.ItemName;
-            equipDetailDescription.text = equippedItem.ItemDescription;
+            equipDetailImage.sprite = equippedItem.itemImage;
+            equipDetailText.text = equippedItem.itemName;
+            equipDetailDescription.text = equippedItem.itemDescription;
 
             trashButton.onClick.RemoveAllListeners();
 
@@ -106,7 +120,9 @@ namespace UI
 
         private void TrashEquip(EquipmentType slot)
         {
-            Equipment equippedItem = player.GetEquippedItem(slot);
+            if(slot == EquipmentType.None) return;
+            
+            ItemData equippedItem = player.GetEquippedItem(slot);
             if (equippedItem == null)
             {
                 Debug.LogWarning($"슬롯 {slot}에 장착된 장비가 없습니다.");
