@@ -7,9 +7,17 @@
     "MaxMP": 0,
     "Attack": 10,
     "Defense": 5,
-    "SpawnFloor": "1,2,3",
+    "SpawnFloor": "1|2|3",
     "IsEventOnly": false,
-    "Effect": ""
+    "CodexPath": "Entity/Monster/Descriptions/EM01",
+    "ImagePath": "Entity/Monster/Images/EM01",
+    "Summary": "스켈레톤",
+    "LinkedID": "",
+    "Effect": "",
+    "PreferredTraits": "",
+    "DislikedTraits": "",
+    "FixedGodID": "",
+    "Personality": ""
   },
   {
     "EntityID": "EM02",
@@ -19,21 +27,17 @@
     "MaxMP": 0,
     "Attack": 5,
     "Defense": 7,
-    "SpawnFloor": "1,2,3",
+    "SpawnFloor": "1|2|3",
     "IsEventOnly": false,
-    "Effect": ""
-  },
-  {
-    "EntityID": "EN01",
-    "Name": "Dwarf_Merchant",
-    "Type": "NPC",
-    "MaxHP": 100,
-    "MaxMP": 50,
-    "Attack": 30,
-    "Defense": 15,
-    "SpawnFloor": "1,2,3,4,5",
-    "IsEventOnly": true,
-    "Effect": ""
+    "CodexPath": "Entity/Monster/Descriptions/EM02",
+    "ImagePath": "Entity/Monster/Images/EM02",
+    "Summary": "슬라임",
+    "LinkedID": "",
+    "Effect": "",
+    "PreferredTraits": "",
+    "DislikedTraits": "",
+    "FixedGodID": "",
+    "Personality": ""
   },
   {
     "EntityID": "EB01",
@@ -45,6 +49,34 @@
     "Defense": 10,
     "SpawnFloor": 1,
     "IsEventOnly": true,
-    "Effect": ""
+    "CodexPath": "Entity/Monster/Descriptions/EB01",
+    "ImagePath": "Entity/Monster/Images/EB01",
+    "Summary": "리치",
+    "LinkedID": "",
+    "Effect": "",
+    "PreferredTraits": "",
+    "DislikedTraits": "",
+    "FixedGodID": "",
+    "Personality": ""
+  },
+  {
+    "EntityID": "EN01",
+    "Name": "Dwarf_Merchant",
+    "Type": "NPC",
+    "MaxHP": 100,
+    "MaxMP": 50,
+    "Attack": 30,
+    "Defense": 15,
+    "SpawnFloor": "1|2|3|4|5",
+    "IsEventOnly": true,
+    "CodexPath": "Entity/NPC/Descriptions/EN01",
+    "ImagePath": "Entity/NPC/Images/EN01",
+    "Summary": "드워프 상인",
+    "LinkedID": "",
+    "Effect": "",
+    "PreferredTraits": "TP01",
+    "DislikedTraits": "TN01",
+    "FixedGodID": "",
+    "Personality": ""
   }
 ]

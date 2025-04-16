@@ -10,8 +10,9 @@ using UnityEngine.UI;
 namespace Trait
 {
   public class TraitUI : MonoBehaviour
-    {
-        [Header("ObjectControl")]
+  {
+        [Header("ObjectControl")] 
+        [SerializeField] private GameObject traitSelect;
         [SerializeField] private GameObject characterSelect;
         [SerializeField] private GameObject postivePannel;
         [SerializeField] private GameObject negativePannel;
@@ -33,7 +34,7 @@ namespace Trait
         private List<Button> selectButtonList = new List<Button>(); // 선택된 버튼들을 관리할 리스트
         //private int nextSelectIndex = 0; // 선택된 버튼의 다음 빈 자리 인덱스
         private Sprite originalSelectedSprite;
-        private List<TraitData> selectedTraits = new List<TraitData>(); // 선택된 특성들을 관리하는 리스트
+        private List<string> selectedTraits = new (); // 선택된 특성들을 관리하는 리스트
 
         // Start is called before the first frame update
         void Start()
@@ -168,22 +169,28 @@ namespace Trait
         {
             if (index < selectedTraits.Count)
             {
-                TraitData trait = selectedTraits[index];
+                string trait = selectedTraits[index];
+                TraitData traitData = DatabaseManager.Instance.GetTraitData(trait);
 
-                int traitCost = selectedTraits[index].cost;
-                // 선택 취소
-                selectedTraits.RemoveAt(index);
-                if (trait.PnN == TraitPnN.Positive)
+                if (traitData != null)
                 {
-                    totalCost -= traitCost;
-                }
-                else if (trait.PnN == TraitPnN.Negative)
-                {
-                    totalCost += traitCost;
-                }
+                    // 코스트 되돌리기
+                    int costChange = (traitData.PnN == TraitPnN.Positive) ? traitData.cost : -traitData.cost;
+                    totalCost -= costChange; // PushTrait에서 했던 계산을 반대로
 
-                // 버튼을 원래 이미지로 복구
-                ReorganizeSelectButtons();
+                    // 선택된 ID 리스트에서 제거
+                    selectedTraits.RemoveAt(index); // 인덱스로 제거
+
+                    // 선택된 특성 UI 업데이트
+                    ReorganizeSelectButtons();
+
+                    // 설명 창 클리어 또는 기본 메시지 표시 (선택적)
+                    descriptionArea.text = "특성을 선택하거나 선택된 특성을 눌러 설명을 확인하라냥.";
+                }
+                else
+                {
+                    Debug.LogWarning($"제거하려는 특성 ID '{trait}' 데이터를 찾을 수 없다냥!");
+                }
             }
         }
 
@@ -199,17 +206,19 @@ namespace Trait
             // 선택된 특성들을 다시 앞에서부터 차례대로 배치
             for (int i = 0; i < selectedTraits.Count; i++)
             {
+                string traitID = selectedTraits[i];
+                TraitData traitData = DatabaseManager.Instance.GetTraitData(traitID);
                 Button selectButton = selectButtonList[i];
-                selectButton.image.sprite = selectedTraits[i].traitImage;
+                selectButton.image.sprite = traitData.traitImage;
             }
         }
 
         private void PushTrait(TraitData selectedTrait)
         {
             // 특성 설명 업데이트
-            descriptionArea.text = $"{selectedTrait.traitName}\n[Cost: {selectedTrait.cost}]\n\n{selectedTrait.traitDescription}";
+            descriptionArea.text = $"{selectedTrait.traitName} [{selectedTrait.rarity}]\n[Cost: {selectedTrait.cost}]\n\n{selectedTrait.codexText}";
 
-            if (selectedTraits.Contains(selectedTrait))
+            if (selectedTraits.Contains(selectedTrait.traitID))
             {
                 Debug.Log("중복선택");
                 return;
@@ -231,7 +240,7 @@ namespace Trait
             }
 
             // 조건 통과 후 
-            selectedTraits.Add(selectedTrait);
+            selectedTraits.Add(selectedTrait.traitID);
 
             if (selectedTrait.PnN == TraitPnN.Positive)
             {
@@ -247,19 +256,22 @@ namespace Trait
 
         public void OnNextButtonPressed()
         {
-            Player.Instance.selectedTraits = new List<TraitData>(selectedTraits);
-            // 선택된 특성들을 플레이어에게 적용
-            Player.Instance.ApplyAllSelectedTraits();
+            foreach (string traitID in selectedTraits)
+            {
+                Player.Instance.AddTrait(traitID);
+            }
 
-
+            Player.Instance.SelectedGod(Player.Instance.selectedGod);
+            Player.Instance.SelectedRace(Player.Instance.selectedRace, Player.Instance.selectedSubRace);
             // 다음 화면으로 전환 (예: 특성 선택이 끝난 후 캐릭터 생성 화면)
             SceneManager.LoadScene("GameScene");
         }
 
         public void PreviousButtion()
         {
-            gameObject.SetActive(false);
+            traitSelect.SetActive(false);
             characterSelect.SetActive(true);
+            Player.Instance.selectedRace = null;
         }
 
     }

@@ -6,9 +6,10 @@ using UnityEngine;
 public interface IEffect
 {
     void ApplyEffect(IUnit target);
+    string EffectDescription { get; }
 }
 
-public class StatModifierEffect : IEffect
+public class StatModifierEffect : IEffect, IRemovableEffect
 {
     private readonly string stat;
     private readonly int amount;
@@ -26,6 +27,12 @@ public class StatModifierEffect : IEffect
     {
         target.ChangeStat(stat, amount);
     }
+    public void RemoveEffect(IUnit target)
+    {
+        target.ChangeStat(stat, -amount);
+    }
+    public string EffectDescription => null;
+
 }
 
 public class HealEffect : IEffect
@@ -57,4 +64,6 @@ public class HealEffect : IEffect
         }
         target.ChangeStat("CurrentHP", acutalHeal);
     }
+
+    public string EffectDescription => null;
 }

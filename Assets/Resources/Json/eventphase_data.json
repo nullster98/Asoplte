@@ -1,0 +1,72 @@
+[
+  {
+    "eventID": "E1",
+    "phaseID": "E1P1",
+    "phaseName": "시작이벤트",
+    "imagePath": "Event/Images/StartEvent",
+    "outcomeScript": ""
+  },
+  {
+    "eventID": "",
+    "phaseID": "E1P2",
+    "phaseName": "다음페이즈",
+    "imagePath": "",
+    "outcomeScript": ""
+  },
+  {
+    "eventID": "E2",
+    "phaseID": "E2P1",
+    "phaseName": "전투이벤트",
+    "imagePath": "Event/Images/BattleEvent",
+    "outcomeScript": "Entity:EM01"
+  },
+  {
+    "eventID": "E3",
+    "phaseID": "E3P1",
+    "phaseName": "보상이벤트",
+    "imagePath": "Event/Images/ChestEvent",
+    "outcomeScript": ""
+  },
+  {
+    "eventID": "E4",
+    "phaseID": "E4P1",
+    "phaseName": "상점이벤트",
+    "imagePath": "Event/Images/StartEvent",
+    "outcomeScript": "Entity:EN01"
+  },
+  {
+    "eventID": "",
+    "phaseID": "E4P2",
+    "phaseName": "반응 - 친근",
+    "imagePath": "",
+    "outcomeScript": ""
+  },
+  {
+    "eventID": "",
+    "phaseID": "E4P3",
+    "phaseName": "반응 - 평범",
+    "imagePath": "",
+    "outcomeScript": ""
+  },
+  {
+    "eventID": "",
+    "phaseID": "E4P4",
+    "phaseName": "반응 - 적대",
+    "imagePath": "",
+    "outcomeScript": ""
+  },
+  {
+    "eventID": "",
+    "phaseID": "E4P5",
+    "phaseName": "반응 - 전투",
+    "imagePath": "",
+    "outcomeScript": ""
+  },
+  {
+    "eventID": "E5",
+    "phaseID": "E5P1",
+    "phaseName": "대사이벤트",
+    "imagePath": "Event/Images/StartEvent",
+    "outcomeScript": ""
+  }
+]

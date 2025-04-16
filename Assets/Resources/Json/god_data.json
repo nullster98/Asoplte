@@ -1,23 +1,35 @@
 [
   {
     "GodName": "Liberty",
-    "FileName": "Liberty",
-    "GodID": 1000001,
+    "GodID": "G01",
     "UnlockCost": 0,
-    "Effect": "Liberty,Stat:Atk+3,Stat:HP+100"
+    "Effect": "Liberty,Stat:HP+10,Stat:Atk+3",
+    "CodexPath": "God/Descriptions/G01",
+    "ImagePath": "God/Images/G01",
+    "bgPath": "God/Backgrounds/G01",
+    "Summary": "자유의 신 입니다.",
+    "UnlockHint": ""
   },
   {
     "GodName": "Revenge",
-    "FileName": "Revenge",
-    "GodID": 1000002,
-    "UnlockCost": 500,
-    "Effect": "Revenge"
+    "GodID": "G02",
+    "UnlockCost": 50,
+    "Effect": "Revenge",
+    "CodexPath": "God/Descriptions/G02",
+    "ImagePath": "God/Images/G02",
+    "bgPath": "God/Backgrounds/G02",
+    "Summary": "복수의 신 입니다.",
+    "UnlockHint": ""
   },
   {
     "GodName": "Furious",
-    "FileName": "Furious",
-    "GodID": 1000003,
-    "UnlockCost": 1000,
-    "Effect": "Furious"
+    "GodID": "G03",
+    "UnlockCost": 50,
+    "Effect": "Furious",
+    "CodexPath": "God/Descriptions/G03",
+    "ImagePath": "God/Images/G03",
+    "bgPath": "God/Backgrounds/G03",
+    "Summary": "쾌락의 신 입니다.",
+    "UnlockHint": ""
   }
 ]

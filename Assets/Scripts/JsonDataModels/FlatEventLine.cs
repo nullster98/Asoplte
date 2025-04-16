@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Event;
 
 [System.Serializable]
 public class FlatEventLine
@@ -45,4 +46,6 @@ public class FlatEventLine
     public string removeTrait_1;
     public string removeTrait_2;
     public string removeTrait_3;
+    public string outcomeScript;
+    public EventOutcome outcome;
 }

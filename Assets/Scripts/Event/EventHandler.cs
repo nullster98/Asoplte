@@ -6,251 +6,289 @@ using Game;
 using PlayerScript;
 using UI;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Event
 {
     public class EventHandler
     {
-        private EventChoice SelectedChoice { get; set; }
-        private EventData currentEvent;
+        // 상태
+        public EventData currentEvent;
+        private EventPhase currentPhase;
         private int currentPhaseIndex;
+        public int dialogueIndex;
+        public List<DialogueBlock> currentDialogues;
+        private readonly HashSet<string> usedEvents = new();
 
-        private BattleManager battleManager;
-        private AcquisitionUI acquisitionUI;
+        // 의존성
+        private readonly BattleManager battleManager;
+        private readonly AcquisitionUI acquisitionUI;
 
-        private List<DialogueBlock> currentDialogues;
-        private int dialogueIndex;
-
-        public EventHandler(BattleManager battlemanager, AcquisitionUI acquisitionUI)
+        public EventHandler(BattleManager battleManager, AcquisitionUI acquisitionUI)
         {
-            this.battleManager = battlemanager;
+            this.battleManager = battleManager;
             this.acquisitionUI = acquisitionUI;
         }
 
-        public void StartEvent(string eventName)
+        // 이벤트 시작 및 설정
+        public void StartEvent(string eventID, int phaseIndex = 0, int dialogueIndex = 0)
         {
-            List<FlatEventLine> allLines = DatabaseManager.Instance.eventLines;
-
-            if (allLines == null || allLines.Count == 0)
-            {
-                Debug.LogError("[EventHandler] 이벤트 데이터가 로드되지 않았습니다.");
-                return;
-            }
-
-            var linesForEvent = allLines.FindAll(e => e.eventName == eventName);
-            if (linesForEvent == null || linesForEvent.Count == 0)
-            {
-                Debug.LogError($"[EventHandler] 이벤트 '{eventName}'를 찾을 수 없습니다.");
-                return;
-            }
-
-            Debug.Log($"[EventHandler] 이벤트 시작: {eventName}");
-
-            var groupedByPhase = linesForEvent
-                .GroupBy(l => l.phaseName)
-                .ToDictionary(g => g.Key, g => g.ToList());
-
-            var sortedPhases = groupedByPhase.OrderBy(kvp => kvp.Key).ToList();
-            List<EventPhase> eventPhases = new List<EventPhase>();
-
-            foreach (var (phaseName, phaseLines) in sortedPhases)
-            {
-                string bgImageName = phaseLines.FirstOrDefault(l => !string.IsNullOrEmpty(l.backgroundImage))?.backgroundImage;
-                if (string.IsNullOrEmpty(bgImageName) && eventPhases.Count > 0)
-                    bgImageName = eventPhases.Last().backgroundImageName;
-
-                EventPhase phase = new EventPhase
-                {
-                    phaseName = phaseName,
-                    backgroundImageName = bgImageName,
-                    backgroundImage = LoadImage(bgImageName),
-                    dialouges = new List<DialogueBlock>(),
-                    phaseOutcome = ParsePhaseOutcome(phaseLines.First())
-                };
-
-                DialogueBlock currentBlock = null;
-
-                foreach (var line in phaseLines)
-                {
-                    if (string.IsNullOrEmpty(line.dialogueText) && string.IsNullOrEmpty(line.choiceName))
-                        continue;
-
-                    if (!string.IsNullOrEmpty(line.dialogueText))
-                    {
-                        currentBlock = new DialogueBlock
-                        {
-                            dialogueText = line.dialogueText,
-                            outcome = ParseDialogueOutcome(line),
-                            choices = new List<EventChoice>()
-                        };
-                        phase.dialouges.Add(currentBlock);
-                    }
-
-                    if (!string.IsNullOrEmpty(line.choiceName))
-                    {
-                        if (currentBlock == null && phase.dialouges.Count > 0)
-                            currentBlock = phase.dialouges.Last();
-
-                        if (currentBlock != null)
-                        {
-                            currentBlock.choices.Add(new EventChoice
-                            {
-                                choiceName = line.choiceName,
-                                requiredTraits = line.requiredTraits,
-                                nextEventName = line.nextEventName,
-                                nextPhaseIndex = line.nextPhaseIndex,
-                                outcome = ParseChoiceOutcome(line)
-                            });
-                        }
-                    }
-                }
-
-                eventPhases.Add(phase);
-            }
-
-            string tagString = linesForEvent.FirstOrDefault()?.eventType;
-            EventTag tag = Enum.TryParse(tagString, out EventTag parsed) ? parsed : EventTag.None;
-            bool.TryParse(linesForEvent[0].isRecycle, out bool isRecycleFlag);
-
-            currentEvent = new EventData
-            {
-                eventName = eventName,
-                eventType = tag,
-                phases = eventPhases,
-                isRecycle = isRecycleFlag,
-                isUsed = false
-            };
-
-            currentPhaseIndex = 0;
+            SetCurrentEventAndPhase(eventID, phaseIndex, dialogueIndex);
             ProcessPhase();
         }
 
+        private void SetCurrentEventAndPhase(string eventID, int phaseIndex, int dialogueIndex)
+        {
+            currentEvent = DatabaseManager.Instance.eventLines.Find(e => e.eventID == eventID);
+
+            if (currentEvent == null)
+            {
+                Debug.LogError($"Could not find event with ID {eventID}");
+                return;
+            }
+
+            if (phaseIndex < 0 || phaseIndex >= currentEvent.phases.Count)
+            {
+                Debug.LogError($"Could not find phase index {phaseIndex}");
+                return;
+            }
+
+            currentPhaseIndex = phaseIndex;
+            currentPhase = currentEvent.phases[phaseIndex];
+            currentDialogues = currentPhase.dialogues;
+
+            this.dialogueIndex = (dialogueIndex >= 0 && dialogueIndex < currentDialogues.Count) ? dialogueIndex : 0;
+        }
+
+        // 📌 Phase/Dialogue 실행
         private void ProcessPhase()
         {
-            if (currentEvent == null || currentEvent.phases == null || currentEvent.phases.Count == 0)
+            if (currentPhase == null)
             {
-                Debug.LogWarning("[EventHandler] 유효한 페이즈가 없습니다. 이벤트 종료.");
+                Debug.LogError("No phase selected");
                 HandleEventEnd();
                 return;
             }
 
-            if (currentPhaseIndex >= currentEvent.phases.Count)
-            {
-                Debug.Log("[EventHandler] 이벤트 종료");
-                HandleEventEnd();
-                return;
-            }
+            if (currentPhase.phaseOutcome != null)
+                PhaseOutcome(currentPhase.phaseOutcome);
 
-            EventPhase phase = currentEvent.phases[currentPhaseIndex];
-            Debug.Log($"[EventHandler] 페이즈: {phase.phaseName}");
-
-            // ✅ 전투 태그 + 적 스폰
-            if (currentEvent.eventType == EventTag.Battle && phase.phaseOutcome?.spawnEntity == true)
-            {
-                var enemyData = DatabaseManager.Instance.GetEntitiesData(phase.phaseOutcome.entityID?.ToString());
-                if (enemyData != null)
-                {
-                    var enemy = EntitySpawner.Spawn(enemyData, EventManager.Instance.floor);
-                    EventManager.Instance.currentSpawnedEnemy = enemy;
-
-                    if (phase.phaseOutcome.startBattle)
-                        EventManager.Instance.PrepareBattleButton(phase.phaseOutcome);
-                }
-            }
-
-            if (phase.backgroundImage != null)
-                EventManager.Instance.eventSprite.sprite = phase.backgroundImage;
-
-            currentDialogues = phase.dialouges;
-            dialogueIndex = 0;
-
-            if (currentDialogues == null || currentDialogues.Count == 0)
-            {
-                MoveToNextPhaseOrEnd();
-                return;
-            }
-
-            EventManager.Instance.UpdateEventUI(currentDialogues);
-            ShowNextDialogue();
+            EventManager.Instance.eventSprite.sprite = currentPhase.phaseImage;
+            ProcessDialogue();
         }
 
-        public void ShowNextDialogue()
+        private void ProcessDialogue()
         {
-            if (dialogueIndex >= currentDialogues.Count)
+            while (dialogueIndex < currentDialogues.Count)
             {
-                if (currentDialogues.Last().choices?.Count > 0)
-                    EventManager.Instance.ShowChoice(currentDialogues.Last().choices);
-                else
-                    MoveToNextPhaseOrEnd();
+                var dialogue = currentDialogues[dialogueIndex++];
 
+                if (dialogue.condition != null &&
+                    !EventConditionEvaluator.IsConditionMet(dialogue.condition, Player.Instance))
+                    continue;
+
+                if (dialogue.outcome != null && dialogue.outcome.HasEffect())
+                    DialogueOutcome(dialogue.outcome);
+
+                EventManager.Instance.UpdateEventUI(dialogue.dialogueText, dialogue.choices);
                 return;
             }
 
-            var dialogue = currentDialogues[dialogueIndex];
-            EventManager.Instance.UpdateEventUI(dialogue.dialogueText);
-            dialogueIndex++;
+            // 모든 대사 끝난 경우 처리
+            var last = currentDialogues.Last();
+
+            if (!string.IsNullOrEmpty(last.nextEventID))
+            {
+                StartEvent(last.nextEventID);
+                return;
+            }
+
+            if (!string.IsNullOrEmpty(last.nextPhaseID))
+            {
+                MoveToNextPhase(last.nextPhaseID);
+                return;
+            }
+
+            if (last.choices?.Count > 0)
+                EventManager.Instance.ShowChoice(last.choices);
+            else
+                TryFallbackPhaseOrEnd();
         }
 
+        public void ProcessNextDialogue() => ProcessDialogue();
+        public DialogueBlock GetCurrentDialogue() => (dialogueIndex - 1 >= 0 && dialogueIndex - 1 < currentDialogues.Count) ? currentDialogues[dialogueIndex - 1] : null;
+
+        // 📌 선택지 처리
         public void OnChoiceSelected(int choiceIndex)
         {
-            EventPhase currentPhase = currentEvent.phases[currentPhaseIndex];
-            DialogueBlock lastBlockWithChoices = currentPhase.dialouges
-                .LastOrDefault(db => db.choices != null && db.choices.Count > 0);
-
-            if (lastBlockWithChoices == null)
+            Debug.Log($"[EventHandler] 선택지 클릭됨 - 인덱스: {choiceIndex}, 현재 대사 인덱스: {dialogueIndex}");
+            var lastDialogue = currentDialogues[Mathf.Clamp(dialogueIndex - 1, 0, currentDialogues.Count - 1)];
+            if (lastDialogue.choices == null || choiceIndex >= lastDialogue.choices.Count)
             {
-                Debug.LogError("[EventHandler] 선택지를 가진 DialogueBlock이 없음.");
+                Debug.LogWarning("[EventHandler] 선택지 인덱스가 유효하지 않음");
                 return;
             }
 
-            SelectedChoice = lastBlockWithChoices.choices[choiceIndex];
+            var choice = lastDialogue.choices[choiceIndex];
 
-            if (SelectedChoice.outcome != null)
+            if (choice.outcome != null && choice.outcome.HasEffect())
             {
-                if (SelectedChoice.outcome.giveReward && SelectedChoice.outcome.rewardType != null)
-                {
-                    acquisitionUI.SetupAcquisitionUI(SelectedChoice.outcome.rewardType.Value, SelectedChoice.outcome.rewardID);
-                    return;
-                }
-
-                if (SelectedChoice.outcome.startBattle)
-                {
-                    battleManager.StartBattle(EventManager.Instance.currentSpawnedEnemy);
-                    return;
-                }
-            }
-
-            if (!string.IsNullOrEmpty(SelectedChoice.nextEventName))
-            {
-                StartEvent(SelectedChoice.nextEventName);
+                ChoiceOutcome(choice.outcome);
                 return;
             }
 
-            if (SelectedChoice.nextPhaseIndex != -1)
-            {
-                MoveToNextPhase(SelectedChoice.nextPhaseIndex);
-                return;
-            }
-
-            if (SelectedChoice.IsEventEnd())
-            {
-                HandleEventEnd();
-            }
+            HandleChoiceFlow(choice);
         }
 
-        private void MoveToNextPhase(int nextPhaseIndex)
+        private void HandleChoiceFlow(EventChoice choice)
         {
-            if (nextPhaseIndex < 0 || nextPhaseIndex >= currentEvent.phases.Count)
+            if (!string.IsNullOrEmpty(choice.nextDialogueID))
             {
-                Debug.LogError($"[EventHandler] 잘못된 페이즈 인덱스: {nextPhaseIndex}");
+                int targetIndex = currentDialogues.FindIndex(d => d.dialogueID == choice.nextDialogueID);
+                if (targetIndex != -1)
+                {
+                    dialogueIndex = targetIndex;
+                    ProcessDialogue();
+                    return;
+                }
+                else Debug.LogWarning($"[EventHandler] nextDialogueID '{choice.nextDialogueID}' 없음");
+            }
+
+            if (!string.IsNullOrEmpty(choice.nextPhaseID))
+            {
+                MoveToNextPhase(choice.nextPhaseID);
                 return;
             }
 
-            currentPhaseIndex = nextPhaseIndex;
-            ProcessPhase();
+            if (!string.IsNullOrEmpty(choice.nextEventID))
+            {
+                StartEvent(choice.nextEventID);
+                return;
+            }
+
+            HandleEventEnd();
         }
 
-        private void MoveToNextPhaseOrEnd()
+        // 📌 Outcome 처리
+        private void DialogueOutcome(EventOutcome outcome)
+        {
+            if (outcome.rewardTrigger && outcome.rewardType.HasValue)
+            {
+                acquisitionUI.SetupAcquisitionUI(outcome.rewardType.Value, outcome.rewardID);
+                return;
+            }
+
+            if (outcome.stateTrigger)
+            {
+                outcome.modifyStat?.ForEach(mod => Player.Instance.ChangeStat(mod.stat, mod.amount));
+                outcome.addTrait?.ForEach(Player.Instance.AddTrait);
+                outcome.removeTrait?.ForEach(Player.Instance.RemoveTrait);
+            }
+        }
+
+        private void ChoiceOutcome(EventOutcome outcome)
+        {
+            if (outcome.battleTrigger)
+            {
+                var enemy = EventManager.Instance.currentSpawnedEnemy;
+                if (enemy == null)
+                {
+                    Debug.LogError("[ChoiceOutcome] currentSpawnedEnemy가 null임");
+                    return;
+                }
+                EventManager.Instance.battleManager.StartBattle(enemy);
+                return;
+            }
+
+            if (outcome.openShop)
+            {
+                var entity = EventManager.Instance.currentSpawnedEnemy?.GetComponent<EntityObject>();
+                entity?.shopPanel?.SetActive(true);
+                return;
+            }
+
+            if (outcome.rewardTrigger && outcome.rewardType.HasValue)
+            {
+                acquisitionUI.SetupAcquisitionUI(outcome.rewardType.Value, outcome.rewardID);
+                return;
+            }
+
+            if (outcome.stateTrigger)
+            {
+                outcome.modifyStat?.ForEach(mod => Player.Instance.ChangeStat(mod.stat, mod.amount));
+                outcome.addTrait?.ForEach(Player.Instance.AddTrait);
+                outcome.removeTrait?.ForEach(Player.Instance.RemoveTrait);
+                return;
+            }
+
+            // if (Random.value <= outcome.spawnChance)
+            // {
+            //     var enemy = EntitySpawner.Spawn(
+            //         DatabaseManager.Instance.GetEntitiesData(outcome.entityID),
+            //         EventManager.Instance.floor);
+            //     EventManager.Instance.currentSpawnedEnemy = enemy;
+            // }
+        }
+
+        private void PhaseOutcome(EventOutcome outcome)
+        {
+            if (!outcome.spawnEntity || string.IsNullOrEmpty(outcome.entityID)) return;
+
+            if (Random.value <= outcome.spawnChance)
+            {
+                var enemy = EntitySpawner.Spawn(
+                    DatabaseManager.Instance.GetEntitiesData(outcome.entityID),
+                    EventManager.Instance.floor);
+                EventManager.Instance.currentSpawnedEnemy = enemy;
+            }
+        }
+
+        // 📌 이벤트 흐름 종료 및 전환
+        public void HandleEventEnd()
+        {
+            if (!usedEvents.Contains(currentEvent.eventID))
+                usedEvents.Add(currentEvent.eventID);
+
+            Debug.Log("[EventHandler] 이벤트가 종료됨. 랜덤 이벤트로 이동");
+
+            if (EventManager.Instance.currentSpawnedEnemy != null)
+            {
+                GameObject.Destroy(EventManager.Instance.currentSpawnedEnemy);
+                EventManager.Instance.currentSpawnedEnemy = null;
+            }
+
+            var usableEvents = DatabaseManager.Instance.eventLines
+                .Where(e => (e.isRecycle || !usedEvents.Contains(e.eventID)) && e.eventType != EventTag.None)
+                .ToList();
+
+            if (usableEvents.Count == 0)
+            {
+                Debug.LogWarning("사용 가능한 이벤트가 없습니다");
+                return;
+            }
+
+            var next = usableEvents[Random.Range(0, usableEvents.Count)];
+            StartEvent(next.eventID);
+        }
+
+        private void MoveToNextPhase(string nextPhaseID)
+        {
+            var next = currentEvent.phases.Find(p => p.phaseID == nextPhaseID);
+            if (next != null)
+            {
+                currentPhaseIndex = currentEvent.phases.IndexOf(next);
+                currentPhase = next;
+                currentDialogues = next.dialogues;
+                dialogueIndex = 0;
+                ProcessPhase();
+            }
+            else
+            {
+                EventManager.Instance.RequestHandleEventEnd();
+            }
+        }
+
+        private void TryFallbackPhaseOrEnd()
         {
             if (currentPhaseIndex + 1 < currentEvent.phases.Count)
             {
@@ -259,118 +297,8 @@ namespace Event
             }
             else
             {
-                HandleEventEnd();
+                EventManager.Instance.RequestHandleEventEnd();
             }
-        }
-
-        public void HandleEventEnd()
-        {
-            Debug.Log("[EventHandler] 이벤트가 종료되었습니다. 재사용 여부를 기반으로 랜덤 이벤트 실행!");
-
-            var groupedEvents = DatabaseManager.Instance.eventLines
-                .GroupBy(l => l.eventName);
-
-            var usableEvents = groupedEvents
-                .Where(group =>
-                {
-                    var line = group.First();
-                    bool.TryParse(line.isRecycle, out bool isRecycle);
-                    bool isUsed = EventUsedTracker.Instance.IsUsed(line.eventName);
-                    return isRecycle || !isUsed;
-                })
-                .Select(group => group.Key)
-                .ToList();
-
-            if (usableEvents.Count == 0)
-            {
-                Debug.LogWarning("사용 가능한 이벤트가 없습니다.");
-                return;
-            }
-
-            string randomEventName = usableEvents[UnityEngine.Random.Range(0, usableEvents.Count)];
-
-            // 사용 처리
-            EventUsedTracker.Instance.MarkAsUsed(randomEventName);
-            StartEvent(randomEventName);
-        }
-        
-        public class EventUsedTracker
-        {
-            private static HashSet<string> usedEvents = new();
-
-            public static EventUsedTracker Instance { get; } = new EventUsedTracker();
-
-            public bool IsUsed(string eventName) => usedEvents.Contains(eventName);
-
-            public void MarkAsUsed(string eventName) => usedEvents.Add(eventName);
-
-            public void Reset() => usedEvents.Clear();
-        }
-
-        private Sprite LoadImage(string imageName)
-        {
-            if (string.IsNullOrEmpty(imageName)) return null;
-            return Resources.Load<Sprite>($"Event/Images/{imageName}");
-        }
-
-        private EventOutcome ParsePhaseOutcome(FlatEventLine line)
-        {
-            if (!line.spawnEntity && line.entityID == null)
-                return null;
-
-            return new EventOutcome
-            {
-                spawnEntity = line.spawnEntity,
-                entityID = line.entityID,
-                startBattle = line.startBattle
-            };
-        }
-
-        private EventOutcome ParseDialogueOutcome(FlatEventLine line)
-        {
-            var outcome = new EventOutcome
-            {
-                startBattle = line.startBattle,
-                giveReward = line.giveReward,
-                rewardID = line.rewardID,
-                rewardType = string.IsNullOrEmpty(line.rewardType) ? null : EnumParser.Parse<AcquisitionType>(line.rewardType),
-                modifyStat = new List<StatModifier>(),
-                addTrait = new List<string>(),
-                removeTrait = new List<string>()
-            };
-
-            void TryAddStat(string name, int amount)
-            {
-                if (!string.IsNullOrEmpty(name))
-                    outcome.modifyStat.Add(new StatModifier { stat = name, amount = amount });
-            }
-
-            TryAddStat(line.stat_1_name, line.stat_1_amount);
-            TryAddStat(line.stat_2_name, line.stat_2_amount);
-            TryAddStat(line.stat_3_name, line.stat_3_amount);
-
-            if (!string.IsNullOrEmpty(line.addTrait_1)) outcome.addTrait.Add(line.addTrait_1);
-            if (!string.IsNullOrEmpty(line.addTrait_2)) outcome.addTrait.Add(line.addTrait_2);
-            if (!string.IsNullOrEmpty(line.addTrait_3)) outcome.addTrait.Add(line.addTrait_3);
-            if (!string.IsNullOrEmpty(line.removeTrait_1)) outcome.removeTrait.Add(line.removeTrait_1);
-            if (!string.IsNullOrEmpty(line.removeTrait_2)) outcome.removeTrait.Add(line.removeTrait_2);
-            if (!string.IsNullOrEmpty(line.removeTrait_3)) outcome.removeTrait.Add(line.removeTrait_3);
-
-            outcome.affectPlayerState = outcome.modifyStat.Count > 0 || outcome.addTrait.Count > 0 || outcome.removeTrait.Count > 0;
-
-            return outcome;
-        }
-
-        private EventOutcome ParseChoiceOutcome(FlatEventLine line)
-        {
-            return ParseDialogueOutcome(line);
-        }
-
-        public EventPhase GetCurrentPhase()
-        {
-            if (currentEvent != null && currentPhaseIndex < currentEvent.phases.Count)
-                return currentEvent.phases[currentPhaseIndex];
-            return null;
         }
     }
 }

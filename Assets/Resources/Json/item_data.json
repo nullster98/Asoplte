@@ -1,6 +1,6 @@
 [
   {
-    "ItemName": "IronSword",
+    "ItemName": "IornSword",
     "ItemType": "Equipment",
     "Rarity": "Common",
     "ItemID": "IE001",
@@ -8,7 +8,10 @@
     "EquipType": "LeftHand",
     "PurchasePrice": 500,
     "SalePrice": 250,
-    "Effect": "Stat:Atk+5"
+    "Effect": "Stat:Atk+5",
+    "CodexPath": "Item/Equipment/Descriptions/IE001",
+    "ImagePath": "Item/Equipment/Images/IE001",
+    "Summary": "철검"
   },
   {
     "ItemName": "Bread",
@@ -19,7 +22,10 @@
     "EquipType": "",
     "PurchasePrice": 100,
     "SalePrice": 50,
-    "Effect": "Heal:HP+30"
+    "Effect": "Heal:HP+30",
+    "CodexPath": "Item/Consumable/Descriptions/IC001",
+    "ImagePath": "Item/Consumable/Images/IC001",
+    "Summary": "빵"
   },
   {
     "ItemName": "AttackCharm",
@@ -30,7 +36,10 @@
     "EquipType": "",
     "PurchasePrice": 2000,
     "SalePrice": 500,
-    "Effect": "Stat:Atk+3"
+    "Effect": "Stat:Atk+3",
+    "CodexPath": "Item/Totem/Descriptions/IT001",
+    "ImagePath": "Item/Totem/Images/IT001",
+    "Summary": "공격 참"
   },
   {
     "ItemName": "GoldBar",
@@ -41,6 +50,9 @@
     "EquipType": "",
     "PurchasePrice": 0,
     "SalePrice": 1500,
-    "Effect": ""
+    "Effect": "",
+    "CodexPath": "Item/Valuable/Descriptions/IV001",
+    "ImagePath": "Item/Valuable/Images/IV001",
+    "Summary": "금괴"
   }
 ]

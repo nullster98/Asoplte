@@ -100,8 +100,8 @@ namespace UI
 
             equipDetailUI.SetActive(true); //  장비 상세 UI 활성화
             equipDetailImage.sprite = equippedItem.itemImage;
-            equipDetailText.text = equippedItem.itemName;
-            equipDetailDescription.text = equippedItem.itemDescription;
+            equipDetailText.text = ($"{equippedItem.itemName} [{equippedItem.rarity}] \n {equippedItem.equipSlot}");
+            equipDetailDescription.text = equippedItem.summary;
 
             trashButton.onClick.RemoveAllListeners();
 

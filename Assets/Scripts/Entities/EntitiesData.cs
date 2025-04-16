@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using PlayerScript;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Utility;
 
 namespace Entities
@@ -11,14 +13,23 @@ namespace Entities
         Boss,
         Npc
     }
+
+    public enum NpcReaction
+    {
+        Favorable,
+        Neutral,
+        Hostile
+    }
     [System.Serializable]
     public class EntitiesData
     {
         public string EntityID;
         public EntityType EntityType;
         public string Name;
-        public string Description;
+        public string codexText;
+        public string codexPath;
         public Sprite EnemySprite;
+        public string imagePath;
         public List<int> SpawnableFloors;
         public bool IsEventOnly;
         public int MaxHp;
@@ -27,6 +38,15 @@ namespace Entities
         public int Defense;
         public List<IEffect> Effects;
         public string EffectKey;
+        public string summary;
+
+        public List<string> PreferredTraits;
+        public List<string> DislikedTraits;
+
+        public string FixedGodID;
+        public string Personality;
+
+        public string linkedEventPhaseID;
 
         public void initializeEffect()
         {
@@ -36,7 +56,7 @@ namespace Entities
                 return;
             }
             
-            string[] effectKeys = EffectKey.Split(',');
+            string[] effectKeys = EffectKey.Split('|');
             
             foreach (var key in effectKeys)
             {
@@ -56,32 +76,13 @@ namespace Entities
                 }
             }
         }
-        public void LoadEnemySprite()
-        {
-            string folderPath = EntityType switch
-            {
-                EntityType.Npc => "Entity/NPC/Images",
-                EntityType.Monster => "Entity/Monster/Images",
-                EntityType.Boss => "Entity/Boss/Images",
-                _ => "Entities/Default"
-            };
-
-            EnemySprite = Resources.Load<Sprite>($"{folderPath}/{Name}") ?? Resources.Load<Sprite>("Entity/default");
         
-        }
-
-        public void GetDescription()
+        public void InitializeNpcBehavior()
         {
-            string folderPath = EntityType switch
-            {
-                EntityType.Npc => "Entity/NPC/Descriptions",
-                EntityType.Monster => "Entity/Monster/Descriptions",
-                EntityType.Boss => "Entity/Boss/Descriptions",
-                _ => "Entity/Default"
-            };
+            if (EntityType != EntityType.Npc) return;
 
-            TextAsset textAsset = Resources.Load<TextAsset>($"{folderPath}/{Name}");
-            Description = textAsset != null ? textAsset.text : "설명 없음";
+            // 선호, 비선호 특성 초기화 등
+            Debug.Log($"{Name}의 성향: {Personality}, 고정 신앙: {FixedGodID}");
         }
 
         public EntitiesData Clone(int level)
@@ -95,11 +96,47 @@ namespace Entities
                 MaxMp = this.MaxMp,
                 Attack = 5 + level * 2 + Random.Range(0, 3),
                 Defense = 2 + Mathf.RoundToInt(level * 1.5f + Random.Range(0, 2)),
-                SpawnableFloors = new List<int>(this.SpawnableFloors),
+                SpawnableFloors = this.SpawnableFloors != null ? new List<int>(this.SpawnableFloors) : new List<int>(),
+                PreferredTraits = this.PreferredTraits != null ? new List<string>(this.PreferredTraits) : null,
+                DislikedTraits = this.DislikedTraits != null ? new List<string>(this.DislikedTraits) : null,
                 IsEventOnly = this.IsEventOnly,
-                EffectKey = this.EffectKey
+                EffectKey = this.EffectKey,
+                FixedGodID = this.FixedGodID,
+                Personality = this.Personality,
+                codexPath = this.codexPath,
+                imagePath = this.imagePath,
+                summary = this.summary
             };
         }
+        public NpcReaction EvaluateReactionTo(Player player)
+        {
+            if (EntityType != EntityType.Npc)
+                return NpcReaction.Neutral;
 
+            int score = 0;
+
+            // 선호 특성
+            foreach (var preferred in PreferredTraits)
+            {
+                if (player.HasTrait(preferred)) score += 1;
+            }
+
+            // 비선호 특성
+            foreach (var disliked in DislikedTraits)
+            {
+                if (player.HasTrait(disliked)) score -= 1;
+            }
+
+            // 신앙 비교 추후 상성로직 추가 예정
+            if (!string.IsNullOrEmpty(FixedGodID))
+            {
+                if (player.selectedGod != null && player.selectedGod.GodID == FixedGodID)
+                    score += 2;
+            }
+
+            if (score >= 2) return NpcReaction.Favorable;
+            if (score <= -2) return NpcReaction.Hostile;
+            return NpcReaction.Neutral;
+        }
     }
 }

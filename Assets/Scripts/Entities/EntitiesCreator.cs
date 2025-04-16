@@ -33,10 +33,12 @@ namespace Entities
             int level = Random.Range(floor, floor + 4);
 
             var generated = baseEnemy.Clone(level);
+            var sprite = Resources.Load<Sprite>(baseEnemy.imagePath);
+            generated.EnemySprite = sprite;
+
+            generated.summary = baseEnemy.summary;
 
             generated.initializeEffect();
-            generated.LoadEnemySprite();
-            generated.GetDescription();
 
             return generated;
         }

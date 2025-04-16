@@ -7,9 +7,13 @@ using UnityEngine;
 public class TraitJsonLine
 {
     public string TraitName;
-    public string FileName;
     public string PnN;
+    public string Rarity;
     public string TraitID;
     public int Cost;
     public string Effect;
+    public string CodexPath;
+    public string ImagePath;
+    public string Summary;
+    public string UnlockHint;
 }

@@ -45,9 +45,14 @@ namespace UI
                 Debug.LogWarning("종족데이터베이스가 없습니다!");
                 return;
             }
+            
+            Debug.Log($"[RaceButton ✅] 총 {DatabaseManager.Instance.raceList.Count}개의 종족 버튼 생성 시작");
 
             for (int i = 0; i < DatabaseManager.Instance.raceList.Count; i++)
             {
+                var race = DatabaseManager.Instance.raceList[i];
+                Debug.Log($"[RaceButton ▶] {i}: {race.raceID}, 이미지 경로: {race.imagePath}");
+                
                 Button button = Instantiate(raceButtonPrefab, buttonContainer);
                 Image buttonImage = button.GetComponent<Image>();
                 buttonImage.sprite = DatabaseManager.Instance.raceList[i].raceImage;
@@ -103,7 +108,7 @@ namespace UI
                 mainImg.sprite = selectedCharacter.subRaceImage;
                 mainImg.color = Color.white; 
                 nameArea.text = selectedCharacter.subRaceName;
-                descriptionArea.text = $"{selectedCharacter.subRaceName} <sprite=0>\n\n{selectedCharacter.subRaceDescription}";
+                descriptionArea.text = $"{selectedCharacter.subRaceName} <sprite=0>\n\n{selectedCharacter.codexText}";
 
                 // 버튼을 '다음 단계'로 설정
                 ConfigureButton(false);
@@ -243,7 +248,11 @@ namespace UI
         public void ChcToTrait()
         {
             Player.Instance.playerImg = mainImg.sprite;
-            //Player.Instance.SelectedRace(current);
+            RaceData currentRace = DatabaseManager.Instance.raceList[currentTribeIndex];
+            SubRaceData currentSubRace = currentRace.subRace[currentSubRaceIndex];
+
+            Player.Instance.selectedRace = currentRace;
+            Player.Instance.selectedSubRace = currentSubRace;
             Debug.Log($"PlayerImg 변경됨: {Player.Instance.playerImg}"); // 디버깅 코드 추가
 
             //FindObjectOfType<PlayerUIManager>().UpdatePlayerUI(Player.Instance); // UI 업데이트
@@ -258,6 +267,9 @@ namespace UI
             isFirst = false;
             HideDerivation();
             characterSelect.SetActive(false);
+            Player.Instance.selectedGod = null;
+            Player.Instance.selectedRace = null;
+            Player.Instance.selectedSubRace = null;
         }
         #endregion
     }

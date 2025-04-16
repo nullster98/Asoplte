@@ -1,0 +1,142 @@
+[
+  {
+    "dialogueID": "E1P1D1",
+    "choiceID": "E1P1D1C1",
+    "choiceName": "다음이벤트",
+    "nextPhaseID": "",
+    "nextEventID": "",
+    "nextDialogueID": "",
+    "condition": "",
+    "outcomeScript": ""
+  },
+  {
+    "dialogueID": "",
+    "choiceID": "E1P1D1C2",
+    "choiceName": "다음페이즈",
+    "nextPhaseID": "E1P2",
+    "nextEventID": "",
+    "nextDialogueID": "",
+    "condition": "HAS_TRAIT TP01",
+    "outcomeScript": ""
+  },
+  {
+    "dialogueID": "E1P2D1",
+    "choiceID": "E1P2D1C1",
+    "choiceName": "다음이벤트",
+    "nextPhaseID": "",
+    "nextEventID": "",
+    "nextDialogueID": "",
+    "condition": "",
+    "outcomeScript": ""
+  },
+  {
+    "dialogueID": "E2P1D1",
+    "choiceID": "E2P1D1C1",
+    "choiceName": "전투시작",
+    "nextPhaseID": "",
+    "nextEventID": "",
+    "nextDialogueID": "",
+    "condition": "",
+    "outcomeScript": "Trigger:Startbattle"
+  },
+  {
+    "dialogueID": "E3P1D1",
+    "choiceID": "E3P1D1C1",
+    "choiceName": "상자를 연다",
+    "nextPhaseID": "",
+    "nextEventID": "",
+    "nextDialogueID": "",
+    "condition": "",
+    "outcomeScript": "Trigger:GiveReward||Reward:Equipment:IE001"
+  },
+  {
+    "dialogueID": "E4P1D1",
+    "choiceID": "E4P1D1C1",
+    "choiceName": "무시한다",
+    "nextPhaseID": "",
+    "nextEventID": "",
+    "nextDialogueID": "",
+    "condition": "",
+    "outcomeScript": ""
+  },
+  {
+    "dialogueID": "E4P2D1",
+    "choiceID": "E4P2D1C1",
+    "choiceName": "거래한다",
+    "nextPhaseID": "",
+    "nextEventID": "",
+    "nextDialogueID": "",
+    "condition": "",
+    "outcomeScript": "Trigger:OpenShop"
+  },
+  {
+    "dialogueID": "",
+    "choiceID": "E4P2D1C2",
+    "choiceName": "무시한다",
+    "nextPhaseID": "",
+    "nextEventID": "",
+    "nextDialogueID": "",
+    "condition": "",
+    "outcomeScript": ""
+  },
+  {
+    "dialogueID": "",
+    "choiceID": "E4P2D1C3",
+    "choiceName": "공격한다",
+    "nextPhaseID": "E4P5",
+    "nextEventID": "",
+    "nextDialogueID": "",
+    "condition": "HAS_TRAIT TP02",
+    "outcomeScript": ""
+  },
+  {
+    "dialogueID": "E4P3D1",
+    "choiceID": "E4P3D1C1",
+    "choiceName": "거래한다",
+    "nextPhaseID": "",
+    "nextEventID": "",
+    "nextDialogueID": "",
+    "condition": "",
+    "outcomeScript": "Trigger:OpenShop"
+  },
+  {
+    "dialogueID": "",
+    "choiceID": "E4P3D1C2",
+    "choiceName": "무시한다",
+    "nextPhaseID": "",
+    "nextEventID": "",
+    "nextDialogueID": "",
+    "condition": "",
+    "outcomeScript": ""
+  },
+  {
+    "dialogueID": "",
+    "choiceID": "E4P3D1C3",
+    "choiceName": "공격한다",
+    "nextPhaseID": "E4P5",
+    "nextEventID": "",
+    "nextDialogueID": "",
+    "condition": "HAS_TRAIT TP02",
+    "outcomeScript": ""
+  },
+  {
+    "dialogueID": "E5P1D2",
+    "choiceID": "E5P1D2C1",
+    "choiceName": "다음페이즈",
+    "nextPhaseID": "",
+    "nextEventID": "",
+    "nextDialogueID": "",
+    "condition": "",
+    "outcomeScript": ""
+  },
+  {
+    "dialogueID": "",
+    "choiceID": "E5P1D2C2",
+    "choiceName": "다음이벤트",
+    "nextPhaseID": "",
+    "nextEventID": "",
+    "nextDialogueID": "",
+    "condition": "",
+    "outcomeScript": ""
+  }
+]

@@ -14,12 +14,12 @@ namespace Skill
         public int manaCost;
         public Sprite skillImg;
 
-        private readonly List<SkillEffect> Effects;
-
-        public SkillData(List<SkillEffect> effects)
-        {
-            Effects = effects;
-        }
+        // private readonly List<SkillEffect> Effects;
+        //
+        // public SkillData(List<SkillEffect> effects)
+        // {
+        //     Effects = effects;
+        // }
 
         public void ActivateSkill(Player player)
         {
@@ -34,10 +34,10 @@ namespace Skill
             Debug.Log($"{skillName} 스킬 사용! 마나 {manaCost} 소모.");
 
             // 효과 적용
-            foreach (var effect in Effects)
-            {
-                effect.ApplyEffect(player);
-            }
+            // foreach (var effect in Effects)
+            // {
+            //     effect.ApplyEffect(player);
+            // }
         }
     }
 }

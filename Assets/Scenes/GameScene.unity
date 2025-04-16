@@ -5239,7 +5239,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1221976052}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: BattleManager, Assembly-CSharp
         m_MethodName: BacktoBattleBtns
         m_Mode: 1
@@ -8399,8 +8399,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1997265349}
-        m_TargetAssemblyTypeName: EquipUI, Assembly-CSharp
+      - m_Target: {fileID: 1997265351}
+        m_TargetAssemblyTypeName: UI.EquipUI, Assembly-CSharp
         m_MethodName: CloseEquipDetail
         m_Mode: 1
         m_Arguments:
@@ -8491,7 +8491,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1221976050}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5986cfc671605664c80a35076959717c, type: 3}
+  m_Script: {fileID: 11500000, guid: d63b1d5d079faf4459976f3efa96acea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ui: {fileID: 1221976053}
@@ -8504,7 +8504,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1221976050}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ddb211dd47cf384487b3ce8a7ed7d85, type: 3}
+  m_Script: {fileID: 11500000, guid: d1a6315705150fe4e85288931b45cbb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   battleWindow: {fileID: 946958056}
@@ -8515,7 +8515,6 @@ MonoBehaviour:
   playerHp: {fileID: 227008989}
   entityHpText: {fileID: 548337972}
   entityHp: {fileID: 1356581801}
-  entitySprite: {fileID: 1496262121}
 --- !u!1 &1235535491
 GameObject:
   m_ObjectHideFlags: 0
@@ -9395,81 +9394,6 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1480698957}
-  m_CullTransparentMesh: 1
---- !u!1 &1496262119
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1496262120}
-  - component: {fileID: 1496262122}
-  - component: {fileID: 1496262121}
-  m_Layer: 5
-  m_Name: Monster
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1496262120
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1496262119}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1952503942}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -98.20581}
-  m_SizeDelta: {x: 803.5, y: 800}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1496262121
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1496262119}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &1496262122
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1496262119}
   m_CullTransparentMesh: 1
 --- !u!1 &1498178995
 GameObject:
@@ -11383,7 +11307,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1221976052}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: BattleManager, Assembly-CSharp
         m_MethodName: SkillBtn
         m_Mode: 1
@@ -12268,8 +12192,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1496262120}
+  m_Children: []
   m_Father: {fileID: 946958057}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -12661,8 +12584,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1997265347}
   - component: {fileID: 1997265348}
-  - component: {fileID: 1997265349}
   - component: {fileID: 1997265350}
+  - component: {fileID: 1997265351}
   m_Layer: 0
   m_Name: UIManager
   m_TagString: Untagged
@@ -12694,7 +12617,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1997265345}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 124d9c6c26759ed4bbf54563955f8f6f, type: 3}
+  m_Script: {fileID: 11500000, guid: dbfffe4024398db4f844bbe3e19b2605, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   hp: {fileID: 1678267267}
@@ -12704,6 +12627,7 @@ MonoBehaviour:
   currentGold: {fileID: 869308461}
   currentFaithPoint: {fileID: 578971046}
   playerImage: {fileID: 1721555627}
+  playerName: {fileID: 69687220}
   playerInfoBox: {fileID: 2006907185}
   infoImg: {fileID: 1165617149}
   characterName: {fileID: 827865400}
@@ -12711,8 +12635,8 @@ MonoBehaviour:
   traitTextBox: {fileID: 850271850}
   traitText: {fileID: 1044583167}
   traitContainer: {fileID: 433378587}
-  traitPrefab: {fileID: 2593810034020010840, guid: 2598521c2fd6e2e4a91fd6d883a958dd, type: 3}
---- !u!114 &1997265349
+  traitPrefab: {fileID: 4738205589686011740, guid: 91bba62abba9e2d4e81990890570ee3e, type: 3}
+--- !u!114 &1997265350
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -12721,12 +12645,30 @@ MonoBehaviour:
   m_GameObject: {fileID: 1997265345}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 92537b0f2963267428ad1bb9c02bb298, type: 3}
+  m_Script: {fileID: 11500000, guid: a5e7e5b7aae9de5448fef72ecaa4c7fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  acquistPannel: {fileID: 1991119531}
+  getImage: {fileID: 998484709}
+  getName: {fileID: 1559276749}
+  getDescription: {fileID: 1987255027}
+  confirmButton: {fileID: 384189553}
+  cancelButton: {fileID: 702447047}
+--- !u!114 &1997265351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1997265345}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 242eb10542974944a9502e0289aacbbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   equipinfo:
   - equipmentButtons: {fileID: 532316118}
-    equipmentImages: {fileID: 1642016634}
+    equipmentImages: {fileID: 1561679929}
   - equipmentButtons: {fileID: 1561679928}
     equipmentImages: {fileID: 1599068221}
   - equipmentButtons: {fileID: 708205497}
@@ -12742,24 +12684,6 @@ MonoBehaviour:
   equipDetailText: {fileID: 1933707174}
   equipDetailDescription: {fileID: 529648448}
   trashButton: {fileID: 566078299}
---- !u!114 &1997265350
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1997265345}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4086db8c56dcc914eb33c30ca8af8be8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  acquistPannel: {fileID: 1991119531}
-  getImage: {fileID: 998484709}
-  getName: {fileID: 1559276749}
-  getDescription: {fileID: 1987255027}
-  confirmButton: {fileID: 384189553}
-  cancelButton: {fileID: 702447047}
 --- !u!1 &2006907185
 GameObject:
   m_ObjectHideFlags: 0
@@ -13040,19 +12964,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 2041565367}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf68b6892f817e443bb8ecb82e7aab9f, type: 3}
+  m_Script: {fileID: 11500000, guid: 22037416d5cc67d46a832eabaf434a0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   eventText: {fileID: 853098932}
   eventSprite: {fileID: 975924960}
-  buttonContainer: {fileID: 1449012430}
-  buttonPrefab: {fileID: 555772823842051698, guid: e4d92286dbed35544ba60cd7b43f54ff, type: 3}
   eventScrollView: {fileID: 907760008}
   eventAreaBtn: {fileID: 907760011}
-  battleManger: {fileID: 1221976052}
+  buttonContainer: {fileID: 1449012430}
+  buttonPrefab: {fileID: 555772823842051698, guid: e4d92286dbed35544ba60cd7b43f54ff, type: 3}
+  battleManager: {fileID: 1221976052}
   acquisitionUI: {fileID: 1997265350}
-  floor: 0
   currentSpawnedEnemy: {fileID: 0}
+  floor: 0
 --- !u!1 &2044370905
 GameObject:
   m_ObjectHideFlags: 0
@@ -13708,7 +13632,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2102378788}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 41fa04ffb5eddcb4a9db29a6e0e379c1, type: 3}
+  m_Script: {fileID: 11500000, guid: 623d9fcfa6a5f144dbc5c5d6548b19d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   inventoryContainer: {fileID: 1619250019}
@@ -13800,8 +13724,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1221976052}
-        m_TargetAssemblyTypeName: BattleManager, Assembly-CSharp
-        m_MethodName: AtkBtn
+        m_TargetAssemblyTypeName: Game.BattleManager, Assembly-CSharp
+        m_MethodName: PlayerAttack
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

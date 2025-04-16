@@ -15,4 +15,7 @@ public class ItemJsonLine
     public int PurchasePrice;
     public int SalePrice;
     public string Effect;
+    public string CodexPath;
+    public string ImagePath;
+    public string Summary;
 }

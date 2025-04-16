@@ -430,7 +430,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 59144030}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd57075b4d543c2498208a0524598e46, type: 3}
+  m_Script: {fileID: 11500000, guid: 5b73f5f9f67899842bba9fb4aca9beef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   menu: {fileID: 1659559502}
@@ -710,7 +710,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 59144033}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_TargetAssemblyTypeName: Game.GameStartManager, Assembly-CSharp
         m_MethodName: GameStart
         m_Mode: 1
         m_Arguments:
@@ -2678,50 +2678,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 791330257}
   m_CullTransparentMesh: 1
---- !u!1 &809011344
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 809011345}
-  - component: {fileID: 809011346}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &809011345
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 809011344}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1122728392}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &809011346
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 809011344}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff2d98848c6645148ad35fcd98ee451e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &812940432
 GameObject:
   m_ObjectHideFlags: 0
@@ -3551,8 +3507,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: TraitScript, Assembly-CSharp
+      - m_Target: {fileID: 1482002269}
+        m_TargetAssemblyTypeName: Trait.TraitUI, Assembly-CSharp
         m_MethodName: PreviousButtion
         m_Mode: 1
         m_Arguments:
@@ -4193,7 +4149,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1102005949}
-  - component: {fileID: 1102005948}
+  - component: {fileID: 1102005950}
   m_Layer: 0
   m_Name: PlayerData
   m_TagString: Untagged
@@ -4201,22 +4157,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1102005948
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1102005947}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 53bd5c4245759894eab02bfb57447736, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerImg: {fileID: 0}
-  selectedTraits: []
-  selectedGodID: 0
-  selectedTraitID: 
 --- !u!4 &1102005949
 Transform:
   m_ObjectHideFlags: 0
@@ -4232,6 +4172,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1102005950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1102005947}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69b07a73e1c3d0f40bb19d3327df7ed2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerImg: {fileID: 0}
+  godID: 
+  _lastAppliedGodID: 
+  majorRaceID: 
+  subRaceID: 
 --- !u!1 &1122728391
 GameObject:
   m_ObjectHideFlags: 0
@@ -4264,7 +4221,6 @@ Transform:
   - {fileID: 2041565370}
   - {fileID: 59144032}
   - {fileID: 1482002268}
-  - {fileID: 809011345}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1160288530
@@ -5191,10 +5147,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1482002264}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c8ce454af51d2d4abf640a03afccf9b, type: 3}
+  m_Script: {fileID: 11500000, guid: dc897dfbfe5594d47ac7d22dc0ccedc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  raceDatabase: {fileID: 11400000, guid: 93d1a90bc202940488869d66ad7a9820, type: 2}
   mainImg: {fileID: 1469483344}
   nameArea: {fileID: 58240059}
   descriptionArea: {fileID: 1210958087}
@@ -5221,7 +5176,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1482002264}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a7937f9d833f41408370ba7101f24f5, type: 3}
+  m_Script: {fileID: 11500000, guid: 6760bf9792deef34da805bb994b9b1cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mainImage: {fileID: 764120756}
@@ -5229,7 +5184,7 @@ MonoBehaviour:
   rightImage: {fileID: 791330259}
   nameText: {fileID: 1160288532}
   infoText: {fileID: 2128284866}
-  player: {fileID: 1102005948}
+  player: {fileID: 1102005950}
   godSelect: {fileID: 682988543}
   godBackground: {fileID: 1352645926}
   characterSelect: {fileID: 2032912000}
@@ -5259,9 +5214,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1482002264}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a4cfb8fde03f1da47bd0e2c70ab6d60c, type: 3}
+  m_Script: {fileID: 11500000, guid: 6fa7ced9ce6e6a248ad4943c9b5a2861, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  traitSelect: {fileID: 1796247733}
   characterSelect: {fileID: 2032912000}
   postivePannel: {fileID: 1086557675}
   negativePannel: {fileID: 728895065}
@@ -6960,7 +6916,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1973424196}
-  - component: {fileID: 1973424195}
+  - component: {fileID: 1973424197}
   m_Layer: 0
   m_Name: DatabaseManager
   m_TagString: Untagged
@@ -6968,24 +6924,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1973424195
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1973424194}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38f7684387b9ee44c96b6203182db9e4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemDatabase: {fileID: 11400000, guid: 05f53ac303cfbc649809e3f4a8772989, type: 2}
-  entitiesDatabase: {fileID: 11400000, guid: 7c1e2cd123bac294289104054093cf1f, type: 2}
-  traitList: []
-  skillDatabase: {fileID: 0}
-  eventLines: []
-  godList: []
 --- !u!4 &1973424196
 Transform:
   m_ObjectHideFlags: 0
@@ -7001,6 +6939,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1973424197
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1973424194}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7796ca95ed747864cadf2f06f7a13a89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemList: []
+  entityList: []
+  npcList: []
+  enemyList: []
+  traitList: []
+  eventLines: []
+  godList: []
+  raceList: []
 --- !u!1 &2032912000
 GameObject:
   m_ObjectHideFlags: 0
@@ -7654,7 +7612,7 @@ GameObject:
   - component: {fileID: 2144877270}
   - component: {fileID: 2144877269}
   m_Layer: 5
-  m_Name: Species
+  m_Name: RaceCollection
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

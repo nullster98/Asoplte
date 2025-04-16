@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Game;
 using PlayerScript;
 using TMPro;
 using Trait;
@@ -45,9 +46,10 @@ namespace UI
         [SerializeField] private Image mp; //Mp바
         [SerializeField] private int currentProgress; //진행도
         [SerializeField] private Slider progressSlider; //슬라이더
-        [SerializeField] private TMP_Text currentGold;
-        [SerializeField] private TMP_Text currentFaithPoint;
+        [SerializeField] private TMP_Text currentGold; //현재 골드 
+        [SerializeField] private TMP_Text currentFaithPoint; //현재 신앙심
         [SerializeField] private Image playerImage;
+        [SerializeField] private TMP_Text playerName;
 
         [Header("정보창 UI")]
         [SerializeField] private GameObject playerInfoBox; // 플레이어 정보 박스
@@ -73,6 +75,8 @@ namespace UI
             playerImage.sprite = player.playerImg;
             currentGold.text = player.GetStat("Gold").ToString();
             currentFaithPoint.text = player.GetStat("FaithPoint").ToString();
+            playerName.text = player.name;
+            
         }
 
         private void UpdatePlayerInfo()
@@ -91,7 +95,7 @@ namespace UI
             UpdateTraitsUI();
         }
 
-        public void UpdateHpui()
+        public void UpdateHpUI()
         {
             if (Player.Instance != null)
                 // ReSharper disable once PossibleLossOfFraction
@@ -100,24 +104,27 @@ namespace UI
 
         private void UpdateTraitsUI()
         {
-            List<TraitData> traits = Player.Instance.selectedTraits;
+            Player player = Player.Instance;
+            if (player == null) return;
 
             foreach (Transform child in traitContainer) // 기존 UI 삭제
             {
                 Destroy(child.gameObject);
             }
 
-            foreach (TraitData trait in traits)
+            foreach (string traitID in player.selectedTraitIDs)
             {
+                TraitData traitData = DatabaseManager.Instance.GetTraitData(traitID);
+                
                 GameObject traitObj = Instantiate(traitPrefab, traitContainer); // UI 생성
                 Image traitImage = traitObj.GetComponent<Image>();
-                traitImage.sprite = trait.traitImage;
+                traitImage.sprite = traitData.traitImage;
 
                 // 마우스 호버 기능 추가
                 TraitHoverHandler hoverHandler = traitObj.AddComponent<TraitHoverHandler>();
                 hoverHandler.traitTextBox = traitTextBox;
                 hoverHandler.traitText = traitText;
-                hoverHandler.traitDescription = trait.traitDescription;
+                hoverHandler.traitDescription = traitData.summary;
             }
         }
 
@@ -141,6 +148,11 @@ namespace UI
                 Instance = this;
             else
                 Destroy(gameObject);
+        }
+
+        private void Start()
+        {
+            UpdatePlayerUI();
         }
 
     }

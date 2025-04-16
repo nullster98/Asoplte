@@ -24,14 +24,12 @@ public class BattleUI : MonoBehaviour
     [Header("Entity")]
     [SerializeField] private TMP_Text entityHpText;
     [SerializeField] private Slider entityHp;
-    [SerializeField] private Image entitySprite;
 
     public void OpenBattleWindow() => battleWindow.SetActive(true);
     public void HideBattleWindow() => battleWindow.SetActive(false);
 
-    public void UpdateEntityUI(Enemy enemy)
+    public void UpdateEntityUI(EntityObject enemy)
     {
-        entitySprite.sprite = enemy.enemyData.EnemySprite;
         entityHp.maxValue = enemy.enemyData.MaxHp;
         entityHp.value = enemy.GetStat("CurrentHP");
         entityHpText.text = $"{enemy.GetStat("CurrentHP")} / {enemy.enemyData.MaxHp}";
@@ -49,5 +47,10 @@ public class BattleUI : MonoBehaviour
     public void Log(string message)
     {
         battleLogs.text += $"\n{message}";
+    }
+    
+    public void ClearLog()
+    {
+        battleLogs.text = "";
     }
 }

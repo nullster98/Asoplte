@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Entities;
 using Game;
 using PlayerScript;
 using TMPro;
@@ -13,232 +14,155 @@ using UnityEngine.UI;
 namespace Event
 {
     public class EventManager : MonoBehaviour
+{
+    public static EventManager Instance { get; private set; }
+
+    [Header("UI Components")]
+    public TMP_Text eventText;
+    public Image eventSprite;
+    public ScrollRect eventScrollView;
+    public Button eventAreaBtn;
+    public Transform buttonContainer;
+    public GameObject buttonPrefab;
+
+    [Header("Managers")]
+    public BattleManager battleManager;
+    public AcquisitionUI acquisitionUI;
+
+    [Header("Current State")]
+    public GameObject currentSpawnedEnemy;
+    public int floor;
+
+    private List<EventChoice> currentChoices;
+    private Coroutine typingCoroutine;
+    private bool isTextPrinting = false;
+    private string fullDialogueText = "";
+    private bool dialogueEnded = false;
+
+    private bool isWaitingForUI = false;
+    private bool pendingHandleEventEnd = false;
+
+    public EventHandler eventHandler;
+
+    private void Awake()
     {
-        public static EventManager Instance { get; private set; }
-
-        [Header("Main Component")]
-        public TMP_Text eventText;
-        public Image eventSprite;
-        public Transform buttonContainer;
-        public GameObject buttonPrefab;
-        public ScrollRect eventScrollView;
-        public Button eventAreaBtn;
-
-        [Header("Managers")]
-        public EventHandler eventHandler;
-        public BattleManager battleManger;
-        public AcquisitionUI acquisitionUI;
-
-        [Header("Data")]
-        public int floor;
-        public GameObject currentSpawnedEnemy;
-
-        private void Awake()
+        if (Instance == null)
         {
-            if (Instance == null)
-            {
-                Instance = this;
+            Instance = this;
+            eventHandler = new EventHandler(battleManager, acquisitionUI);
+        }
+        else Destroy(gameObject);
+    }
 
-                if (DatabaseManager.Instance.eventLines == null || DatabaseManager.Instance.eventLines.Count == 0)
-                {
-                    Debug.LogError("[EventManager] eventLines가 비어 있습니다. JSON 로드에 실패했을 수 있습니다.");
-                    return;
-                }
+    private void Start()
+    {
+        eventAreaBtn.onClick.AddListener(OnAreaClicked);
+        eventHandler.StartEvent("E1");
+    }
 
-                if (battleManger == null || acquisitionUI == null)
-                {
-                    Debug.LogError("[EventManager] 필수 매니저(battleManager 또는 acquisitionUI)가 연결되지 않았습니다.");
-                    return;
-                }
-
-                eventHandler = new EventHandler(battleManger, acquisitionUI);
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
+    public void UpdateEventUI(string dialogue, List<EventChoice> choices = null)
+        {
+            if (typingCoroutine != null) StopCoroutine(typingCoroutine);
+            fullDialogueText = dialogue;
+            currentChoices = choices;
+            typingCoroutine = StartCoroutine(TypeText(dialogue, choices));
+            ClearChoiceButtons();
         }
 
-        public void Start()
+        private IEnumerator TypeText(string dialogue, List<EventChoice> choices = null)
         {
-            if (eventHandler == null)
-            {
-                Debug.LogError("EventHandler가 초기화되지 않았습니다!");
-                return;
-            }
-
-            eventHandler.StartEvent("StartEvent");
-        }
-
-        public void UpdateEventUI(List<DialogueBlock> dialogueBlocks)
-        {
+            isTextPrinting = true;
+            dialogueEnded = false;
             eventText.text = "";
-            this.eventSprite.sprite = null;
 
-            foreach (Transform child in buttonContainer)
+            foreach (char c in dialogue)
             {
-                Destroy(child.gameObject);
+                eventText.text += c;
+                yield return new WaitForSeconds(0.03f);
             }
 
-            StartCoroutine(PlayDialogueSequence(dialogueBlocks));
-        }
+            isTextPrinting = false;
+            dialogueEnded = true;
+            yield return null;
 
-        public EventPhase GetCurrentPhase()
-        {
-            if (eventHandler != null)
-                return eventHandler.GetCurrentPhase();
-            return null;
-        }
-
-        public void UpdateEventUI(string dialogue)
-        {
-            eventText.text = dialogue;
+            if (choices != null && choices.Count > 0)
+                ShowChoice(choices);
         }
 
         public void ShowChoice(List<EventChoice> choices)
         {
             ClearChoiceButtons();
-
             for (int i = 0; i < choices.Count; i++)
             {
                 var choice = choices[i];
+                if (choice.condition != null && !EventConditionEvaluator.IsConditionMet(choice.condition, Player.Instance))
+                    continue;
 
-                // ✅ requiredTraits 조건 처리
-                if (!string.IsNullOrEmpty(choice.requiredTraits))
-                {
-                    // 예: "탐구자+필멸자, 신앙인" → [ [탐구자, 필멸자], [신앙인] ]
-                    var orGroups = choice.requiredTraits
-                        .Split(',')
-                        .Select(group => group.Split('+')
-                            .Select(s => s.Trim()).ToList())
-                        .ToList();
+                var button = Instantiate(buttonPrefab, buttonContainer);
+                button.GetComponentInChildren<TMP_Text>().text = choice.choiceName;
+                int index = i;
+                button.GetComponent<Button>().onClick.AddListener(() => eventHandler.OnChoiceSelected(index));
+            }
+        }
 
-                    // 이 중 하나라도 만족하는지 (AND 그룹 하나 이상 만족하면 OK)
-                    bool isUnlocked = orGroups.Any(andGroup =>
-                        andGroup.All(req => Player.Instance.selectedTraits
-                            .Any(trait => trait.traitName == req)));
-
-                    if (!isUnlocked)
-                    {
-                        Debug.Log($"[ShowChoice] {choice.choiceName} 선택지는 조건({choice.requiredTraits}) 불충족으로 숨김.");
-                        continue;
-                    }
-                }
-
-                // ✅ 조건 만족한 경우 버튼 생성
-                GameObject buttonObj = Instantiate(buttonPrefab, buttonContainer);
-                TMP_Text btnText = buttonObj.GetComponentInChildren<TMP_Text>();
-                btnText.text = choice.choiceName;
-
-                int choiceIndex = i;
-                buttonObj.GetComponent<Button>().onClick.AddListener(() =>
-                    eventHandler.OnChoiceSelected(choiceIndex));
+        private void OnAreaClicked()
+        {
+            if (isTextPrinting)
+            {
+                if (typingCoroutine != null) StopCoroutine(typingCoroutine);
+                eventText.text = fullDialogueText;
+                isTextPrinting = false;
+                dialogueEnded = true;
+                if (currentChoices != null && currentChoices.Count > 0) ShowChoice(currentChoices);
+                return;
             }
 
-            if (eventScrollView != null)
-                eventScrollView.verticalNormalizedPosition = 1f;
+            if (dialogueEnded && buttonContainer.childCount == 0)
+            {
+                var dialogue = eventHandler.GetCurrentDialogue();
+                if (dialogue?.outcome != null)
+                {
+                    if (dialogue.outcome.battleTrigger)
+                    {
+                        NotifyUIOpened();
+                        battleManager.StartBattle(currentSpawnedEnemy);
+                        return;
+                    }
+
+                    if (dialogue.outcome.rewardTrigger && dialogue.outcome.rewardType.HasValue)
+                    {
+                        NotifyUIOpened();
+                        acquisitionUI.SetupAcquisitionUI(dialogue.outcome.rewardType.Value, dialogue.outcome.rewardID);
+                        return;
+                    }
+                }
+                eventHandler.ProcessNextDialogue();
+            }
+        }
+
+        public void NotifyUIOpened() => isWaitingForUI = true;
+        public void NotifyUIClosed()
+        {
+            isWaitingForUI = false;
+            if (pendingHandleEventEnd)
+            {
+                pendingHandleEventEnd = false;
+                eventHandler.HandleEventEnd();
+            }
+        }
+
+        public void RequestHandleEventEnd()
+        {
+            if (isWaitingForUI) pendingHandleEventEnd = true;
+            else eventHandler.HandleEventEnd();
         }
 
         private void ClearChoiceButtons()
         {
             foreach (Transform child in buttonContainer)
-            {
                 Destroy(child.gameObject);
-            }
-        }
-
-        public void PrepareBattleButton(EventOutcome outcome)
-        {
-            eventAreaBtn.onClick.RemoveAllListeners();
-            eventAreaBtn.onClick.AddListener(() =>
-            {
-                ExecuteBattleFromOutcome(outcome);
-            });
-        }
-
-        private IEnumerator PlayDialogueSequence(List<DialogueBlock> dialogueBlocks)
-        {
-            foreach (var block in dialogueBlocks)
-            {
-                eventText.text = block.dialogueText;
-
-                var phase = GetCurrentPhase();
-                if (phase != null && phase.backgroundImage != null)
-                {
-                    eventSprite.sprite = phase.backgroundImage;
-                }
-
-                // ✅ 선택지가 먼저 나오도록 우선 순위 조정
-                if (block.choices != null && block.choices.Count > 0)
-                {
-                    ShowChoice(block.choices);
-                    yield break;
-                }
-
-                if (block.outcome != null)
-                {
-                    if (block.outcome.giveReward)
-                    {
-                        acquisitionUI.SetupAcquisitionUI(block.outcome.rewardType.Value, block.outcome.rewardID);
-                        yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
-                    }
-                    else if (block.outcome.startBattle)
-                    {
-                        // startBattle == true일 경우 ScrollView 클릭 전투 준비
-                        PrepareBattleButton(block.outcome);
-                        yield break;
-                    }
-                }
-
-                yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
-            }
-
-            eventHandler.HandleEventEnd();
-        }
-
-        /*private void CreateChoiceButtons(List<EventChoice> choices)
-        {
-            for (int i = 0; i < choices.Count; i++)
-            {
-                EventChoice choice = choices[i];
-                GameObject newButton = Instantiate(buttonPrefab, buttonContainer);
-
-                TMP_Text buttonText = newButton.GetComponentInChildren<TMP_Text>();
-                if (buttonText != null)
-                    buttonText.text = choice.choiceName;
-
-                Button btn = newButton.GetComponent<Button>();
-                if (btn != null)
-                {
-                    int index = i;
-                    btn.onClick.AddListener(() => eventHandler.OnChoiceSelected(index));
-                }
-            }
-        }
-
-        public void OnChoiceSelected(int choiceIndex)
-        {
-            eventHandler.OnChoiceSelected(choiceIndex);
-        }*/
-
-        private void ExecuteBattleFromOutcome(EventOutcome outcome)
-        {
-            if (outcome.entityID == null)
-            {
-                Debug.LogError("ExecuteBattle: entityID가 null입니다.");
-                return;
-            }
-
-            var enemyData = DatabaseManager.Instance.GetEntitiesData(outcome.entityID);
-            if (enemyData == null)
-            {
-                Debug.LogError($"ID {outcome.entityID}의 적 데이터를 찾을 수 없습니다.");
-                return;
-            }
-
-            GameObject enemyObj = EntitySpawner.Spawn(enemyData, floor);
-            battleManger.StartBattle(enemyObj);
-            eventAreaBtn.onClick.RemoveAllListeners();
         }
     }
 }
+
+

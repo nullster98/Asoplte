@@ -12,7 +12,14 @@ public class EntityJsonLine
     public int MaxMP;
     public int Attack;
     public int Defense;
-    public List<int> SpawnFloor;
+    public string SpawnFloor;
     public bool IsEventOnly;
     public string Effect;
+    public string CodexPath;
+    public string ImagePath;
+    public string Summary;
+    public string PreferredTraits;
+    public string DislikedTraits;
+    public string FixedGodID;
+    public string Personality;
 }

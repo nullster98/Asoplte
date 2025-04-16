@@ -1,0 +1,132 @@
+[
+  {
+    "phaseID": "E1P1",
+    "dialogueID": "E1P1D1",
+    "dialoguePath": "Event/Descriptions/StartEvent",
+    "isEventEnd": "",
+    "condition": "",
+    "outcomeScript": "",
+    "nextEventID": "",
+    "nextPhaseID": ""
+  },
+  {
+    "phaseID": "E1P2",
+    "dialogueID": "E1P2D1",
+    "dialoguePath": "Event/Descriptions/StartEvent2",
+    "isEventEnd": "",
+    "condition": "",
+    "outcomeScript": "",
+    "nextEventID": "",
+    "nextPhaseID": ""
+  },
+  {
+    "phaseID": "E2P1",
+    "dialogueID": "E2P1D1",
+    "dialoguePath": "Event/Descriptions/BattleEvent",
+    "isEventEnd": "",
+    "condition": "",
+    "outcomeScript": "",
+    "nextEventID": "",
+    "nextPhaseID": ""
+  },
+  {
+    "phaseID": "E3P1",
+    "dialogueID": "E3P1D1",
+    "dialoguePath": "Event/Descriptions/ChestEvent",
+    "isEventEnd": "",
+    "condition": "",
+    "outcomeScript": "",
+    "nextEventID": "",
+    "nextPhaseID": ""
+  },
+  {
+    "phaseID": "E4P1",
+    "dialogueID": "E4P1D1",
+    "dialoguePath": "Event/Descriptions/StoreEvent",
+    "isEventEnd": "",
+    "condition": "",
+    "outcomeScript": "",
+    "nextEventID": "",
+    "nextPhaseID": ""
+  },
+  {
+    "phaseID": "E4P2",
+    "dialogueID": "E4P2D1",
+    "dialoguePath": "Event/Descriptions/Dwarf_Merchant_Friendly",
+    "isEventEnd": "",
+    "condition": "",
+    "outcomeScript": "",
+    "nextEventID": "",
+    "nextPhaseID": ""
+  },
+  {
+    "phaseID": "E4P3",
+    "dialogueID": "E4P3D1",
+    "dialoguePath": "Event/Descriptions/Dwarf_Merchant_Neutral",
+    "isEventEnd": "",
+    "condition": "",
+    "outcomeScript": "",
+    "nextEventID": "",
+    "nextPhaseID": ""
+  },
+  {
+    "phaseID": "E4P4",
+    "dialogueID": "E4P4D1",
+    "dialoguePath": "Event/Descriptions/Dwarf_Merchant_Hostile",
+    "isEventEnd": "",
+    "condition": "",
+    "outcomeScript": "",
+    "nextEventID": "",
+    "nextPhaseID": ""
+  },
+  {
+    "phaseID": "E4P5",
+    "dialogueID": "E4P5D1",
+    "dialoguePath": "Event/Descriptions/Dwarf_Merchant_GetAttacked",
+    "isEventEnd": "",
+    "condition": "",
+    "outcomeScript": "Trigger:Startbattle",
+    "nextEventID": "",
+    "nextPhaseID": ""
+  },
+  {
+    "phaseID": "E5P1",
+    "dialogueID": "E5P1D1",
+    "dialoguePath": "Event/Descriptions/Dialogue1",
+    "isEventEnd": "",
+    "condition": "",
+    "outcomeScript": "",
+    "nextEventID": "",
+    "nextPhaseID": ""
+  },
+  {
+    "phaseID": "",
+    "dialogueID": "E5P1D2",
+    "dialoguePath": "Event/Descriptions/Dialogue2",
+    "isEventEnd": "",
+    "condition": "HAS_TRAIT TP01",
+    "outcomeScript": "",
+    "nextEventID": "",
+    "nextPhaseID": ""
+  },
+  {
+    "phaseID": "",
+    "dialogueID": "E5P1D3",
+    "dialoguePath": "Event/Descriptions/Dialogue3",
+    "isEventEnd": "",
+    "condition": "",
+    "outcomeScript": "",
+    "nextEventID": "",
+    "nextPhaseID": ""
+  },
+  {
+    "phaseID": "",
+    "dialogueID": "E5P1D4",
+    "dialoguePath": "Event/Descriptions/Dialogue4",
+    "isEventEnd": "",
+    "condition": "",
+    "outcomeScript": "",
+    "nextEventID": "",
+    "nextPhaseID": ""
+  }
+]

@@ -4,6 +4,7 @@ using Event;
 using PlayerScript;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
@@ -11,19 +12,22 @@ namespace Game
 {
     public class BattleManager : MonoBehaviour
     {
-        private Enemy currentEnemy;
+        private EntityObject currentEnemy;
 
         [SerializeField] private BattleUI ui;
 
-        public void StartBattle(GameObject enemyObj)
+        public void StartBattle(GameObject entityObj)
         {
-            if (enemyObj == null)
+            EventManager.Instance.NotifyUIOpened();
+            Debug.Log($"[StartBattle] StartBattle 호출됨 / enemyObj: {entityObj}");
+
+            if (entityObj == null)
             {
                 Debug.LogError("전투 시작 실패: enemyObj가 null입니다.");
                 return;
             }
-            
-            currentEnemy = enemyObj.GetComponent<Enemy>();
+
+            currentEnemy = entityObj.GetComponent<EntityObject>();
             if (currentEnemy == null)
             {
                 Debug.LogError("Enemy 컴포넌트를 찾을 수 없습니다!");
@@ -36,35 +40,58 @@ namespace Game
 
             ui.Log($"{currentEnemy.enemyData.Name} 출현!");
 
-            Destroy(enemyObj);
+            //Destroy(entityObj);
         }
 
         public void PlayerAttack()
         {
-            int dmg = Player.Instance.GetStat("Atk");
-            currentEnemy.TakeDamage(dmg);
+            int playerDmg = Player.Instance.GetStat("Atk");
+            currentEnemy.TakeDamage(playerDmg);
+            StartCoroutine(HandleEnemyHitThenContinue(playerDmg));
+        }
 
-            ui.Log($"플레이어가 {dmg}의 데미지를 줌");
+        private IEnumerator HandleEnemyHitThenContinue(int damage)
+        {
+            yield return StartCoroutine(currentEnemy.FlashOnHit(Color.red, 0.1f));
+
+            ui.Log($"🗡️ 플레이어가 {currentEnemy.enemyData.Name}에게 {damage}의 데미지를 입혔다!");
             ui.UpdateEntityUI(currentEnemy);
 
-            if (currentEnemy.GetStat("CurrentHp") <= 0)
+            if (currentEnemy.GetStat("CurrentHP") <= 0)
             {
-                ui.Log($"{currentEnemy.enemyData.Name}을 처치했습니다!");
+                ui.Log($"☠️ {currentEnemy.enemyData.Name}이(가) 쓰러졌습니다!");
                 EndBattle();
+                yield break;
             }
-            else
-            {
-                //StartCoroutine(EnemyCounterAttack());
-            }
+
+            StartCoroutine(EnemyCounterAttack());
         }
 
         public void EndBattle()
         {
+            ui.ClearLog();
             ui.HideBattleWindow();
+            Destroy(EventManager.Instance.currentSpawnedEnemy);
             EventManager.Instance.currentSpawnedEnemy = null;
-            EventManager.Instance.eventHandler.HandleEventEnd();
-
+            EventManager.Instance.NotifyUIClosed();
+            EventManager.Instance.RequestHandleEventEnd();
         }
-        
+
+        private IEnumerator EnemyCounterAttack()
+        {
+            yield return new WaitForSeconds(0.5f);
+
+            int enemyDmg = currentEnemy.GetStat("Atk");
+            Player.Instance.TakeDamage(enemyDmg);
+            ui.Log($"⚔️ {currentEnemy.enemyData.Name}이(가) 플레이어에게 {enemyDmg}의 반격을 가했다!");
+            ui.UpdatePlayerUI();
+
+            if (Player.Instance.CurrentHP <= 0)
+            {
+                ui.Log("💀 플레이어가 쓰러졌습니다...");
+                EndBattle();
+            }
+        }
     }
+
 }

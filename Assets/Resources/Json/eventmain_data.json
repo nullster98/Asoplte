@@ -1,0 +1,37 @@
+[
+  {
+    "eventID": "E1",
+    "eventName": "시작이벤트",
+    "eventType": "Positive",
+    "allowedFloors": 1,
+    "isRecycle": true
+  },
+  {
+    "eventID": "E2",
+    "eventName": "전투이벤트",
+    "eventType": "Battle",
+    "allowedFloors": 1,
+    "isRecycle": false
+  },
+  {
+    "eventID": "E3",
+    "eventName": "보상이벤트",
+    "eventType": "Positive",
+    "allowedFloors": 1,
+    "isRecycle": false
+  },
+  {
+    "eventID": "E4",
+    "eventName": "상점이벤트",
+    "eventType": "Chaos",
+    "allowedFloors": 1,
+    "isRecycle": false
+  },
+  {
+    "eventID": "E5",
+    "eventName": "대사이벤트",
+    "eventType": "Chaos",
+    "allowedFloors": 1,
+    "isRecycle": false
+  }
+]

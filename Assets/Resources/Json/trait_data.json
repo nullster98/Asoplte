@@ -1,66 +1,98 @@
 [
   {
     "TraitName": "StrongFaith",
-    "FileName": "StrongFaith",
+    "Rarity": "Common",
     "PnN": "Positive",
-    "TraitID": 50001,
+    "TraitID": "TP01",
     "Cost": 5,
-    "Effect": "StrongFaith,Stat:MentalStat+10"
+    "Effect": "StrongFaith|Stat:MentalStat+10",
+    "CodexPath": "Trait/Positive/Descriptions/TP01",
+    "ImagePath": "Trait/Positive/Images/TP01",
+    "Summary": "굳건한 신앙",
+    "UnlockHint": ""
   },
   {
     "TraitName": "PowerfulForce",
-    "FileName": "PowerfulForce",
+    "Rarity": "Rare",
     "PnN": "Positive",
-    "TraitID": 50002,
+    "TraitID": "TP02",
     "Cost": 10,
-    "Effect": "PowerfulForce"
+    "Effect": "PowerfulForce",
+    "CodexPath": "Trait/Positive/Descriptions/TP02",
+    "ImagePath": "Trait/Positive/Images/TP02",
+    "Summary": "넘처나는 힘",
+    "UnlockHint": ""
   },
   {
     "TraitName": "MentalResponse",
-    "FileName": "MentalResponse",
+    "Rarity": "Epic",
     "PnN": "Positive",
-    "TraitID": 50003,
+    "TraitID": "TP03",
     "Cost": 15,
-    "Effect": "MentalResponse"
+    "Effect": "MentalResponse",
+    "CodexPath": "Trait/Positive/Descriptions/TP03",
+    "ImagePath": "Trait/Positive/Images/TP03",
+    "Summary": "정신수양",
+    "UnlockHint": ""
   },
   {
     "TraitName": "Absolute",
-    "FileName": "Absolute",
+    "Rarity": "Absolute",
     "PnN": "Positive",
-    "TraitID": 54999,
+    "TraitID": "TP999",
     "Cost": 999,
-    "Effect": "Absolute"
+    "Effect": "Absolute",
+    "CodexPath": "Trait/Positive/Descriptions/TP999",
+    "ImagePath": "Trait/Positive/Images/TP999",
+    "Summary": "절대자",
+    "UnlockHint": ""
   },
   {
     "TraitName": "Blind",
-    "FileName": "Blind",
+    "Rarity": "Epic",
     "PnN": "Negative",
-    "TraitID": 55001,
+    "TraitID": "TN01",
     "Cost": 5,
-    "Effect": "Blind"
+    "Effect": "Blind",
+    "CodexPath": "Trait/Negative/Descriptions/TN01",
+    "ImagePath": "Trait/Negative/Images/TN01",
+    "Summary": "맹인",
+    "UnlockHint": ""
   },
   {
     "TraitName": "Weakness",
-    "FileName": "Weakness",
+    "Rarity": "Rare",
     "PnN": "Negative",
-    "TraitID": 55002,
+    "TraitID": "TN02",
     "Cost": 10,
-    "Effect": "Weakness"
+    "Effect": "Weakness",
+    "CodexPath": "Trait/Negative/Descriptions/TN02",
+    "ImagePath": "Trait/Negative/Images/TN02",
+    "Summary": "허약",
+    "UnlockHint": ""
   },
   {
     "TraitName": "Sleepless",
-    "FileName": "Sleepless",
+    "Rarity": "Common",
     "PnN": "Negative",
-    "TraitID": 55003,
+    "TraitID": "TN03",
     "Cost": 15,
-    "Effect": "Sleepless"
+    "Effect": "Sleepless",
+    "CodexPath": "Trait/Negative/Descriptions/TN03",
+    "ImagePath": "Trait/Negative/Images/TN03",
+    "Summary": "불면증",
+    "UnlockHint": ""
   },
   {
     "TraitName": "AbsoluteN",
-    "FileName": "AbsoluteN",
+    "Rarity": "Absolute",
     "PnN": "Negative",
-    "TraitID": 59999,
+    "TraitID": "TN999",
     "Cost": 999,
-    "Effect": "AbsoluteN"
+    "Effect": "AbsoluteN",
+    "CodexPath": "Trait/Negative/Descriptions/TN999",
+    "ImagePath": "Trait/Negative/Images/TN999",
+    "Summary": "절대자N",
+    "UnlockHint": ""
   }
 ]

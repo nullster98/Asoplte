@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Utility;
 
 namespace Item
@@ -50,9 +51,12 @@ namespace Item
         public ItemType itemType;
         public Rarity rarity;
         public Sprite itemImage;
-        public string itemDescription;
+        public string imagePath;
+        public string codexText;
+        public string codexPath;
         public List<IEffect> effects = new();
         public string EffectKey;
+        public string summary;
         
         [Header("장비정보")] 
         public bool isEquipable;
@@ -62,28 +66,11 @@ namespace Item
         public int purchasePrice;
         public int salePrice;
 
-        public void LoadItemData()
-        {
-            string path = itemType switch
-            {
-                ItemType.Consumable => "Item/Consumable",
-                ItemType.Totem => "Item/Totem",
-                ItemType.Valuable => "Item/Valuable",
-                ItemType.Equipment => "Item/Equipment",
-                _ => "Item/Default"
-            };
-            
-            TextAsset textAsset = Resources.Load<TextAsset>($"{path}/Descriptions/{itemName}");
-            itemDescription = textAsset != null ? textAsset.text : "설명 없음";
-            
-            itemImage = Resources.Load<Sprite>($"{path}/Images/{itemName}");
-        }
-        
         public void initializeEffect()
         {
             if (string.IsNullOrWhiteSpace(EffectKey)) return;
             
-            string[] effectKeys = EffectKey.Split(',');
+            string[] effectKeys = EffectKey.Split('|');
             
             foreach (var key in effectKeys)
             {
@@ -117,7 +104,7 @@ namespace Item
                 purchasePrice = this.purchasePrice,
                 salePrice = this.salePrice,
                 itemImage = this.itemImage, // Sprite는 공유 가능
-                itemDescription = this.itemDescription,
+                codexPath = this.codexPath,
                 EffectKey = this.EffectKey
             };
 

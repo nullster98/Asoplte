@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using Item;
 using PlayerScript;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Utility;
 
 namespace Trait
@@ -18,6 +20,7 @@ namespace Trait
         public string traitName;
         public string fileName;
         public TraitPnN PnN;
+        public Rarity rarity;
         public string traitID;
         public int cost;
         public bool isUnlock;
@@ -25,41 +28,12 @@ namespace Trait
         public List<IEffect> traitEffect = new ();
 
         public Sprite traitImage;
-        public string traitDescription;
+        public string codexText;
+        public string codexPath;
+        public string imagePath;
         public string unlockHint;
-
-
-        public void LoadTraitData()
-        {
-            string path = PnN switch
-            {
-                TraitPnN.Positive => $"Trait/Positive/Images/{fileName}",
-                TraitPnN.Negative => $"Trait/Negative/Images/{fileName}",
-                _ => $"Trait/default"
-            };
-            traitImage = Resources.Load<Sprite>(path);
-
-            string Dpath = PnN switch
-            {
-                TraitPnN.Positive => $"Trait/Positive/Descriptions/{fileName}",
-                TraitPnN.Negative => $"Trait/Negative/Descriptions/{fileName}",
-                _ => $"Trait/default"
-            };
-            var descAsset = Resources.Load<TextAsset>(Dpath);
-            traitDescription = descAsset != null ? descAsset.text : "(설명 없음)";
-            if (descAsset == null) Debug.LogWarning($"[TraitData] 설명 파일 없음: {Dpath}");
-            
-            string Hpath= PnN switch
-            {
-                TraitPnN.Positive => $"Trait/Descriptions/Positive/{fileName}_Hint",
-                TraitPnN.Negative => $"Trait/Descriptions/Negative/{fileName}_Hint",
-                _ => $"Trait/default"
-            };
-            var hintAsset = Resources.Load<TextAsset>(Hpath);
-            unlockHint = hintAsset != null ? hintAsset.text : "(힌트 없음)";
-            if (hintAsset == null) Debug.LogWarning($"[TraitData] 힌트 파일 없음: {Hpath}");
-        }
-
+        public string summary;
+        
         public bool CanUnlock()
         {
             // TODO: 신앙값 또는 해금 조건 추가 필요
@@ -68,7 +42,13 @@ namespace Trait
 
         public void initializeEffect()
         {
-            string[] effectKeys = EffectKey.Split(',');
+            traitEffect.Clear();
+            if (string.IsNullOrWhiteSpace(EffectKey))
+            {
+                Debug.LogWarning($"[TraitData] '{traitID}'의 EffectKey가 비어 있음.");
+                return;
+            }
+            string[] effectKeys = EffectKey.Split('|');
             foreach (var key in effectKeys)
             {
                 var trimmedKey = key.Trim();
@@ -83,6 +63,10 @@ namespace Trait
                 {
                     Debug.LogWarning($"[❌ 생성 실패] {trimmedKey}");
                 }
+            }
+            if (traitEffect.Count == 0)
+            {
+                Debug.LogWarning($"[TraitData ⚠️] '{traitID}'에 등록된 효과가 하나도 없습니다.");
             }
         }
         

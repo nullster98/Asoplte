@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using PlayerScript;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Utility;
 
 namespace Race
@@ -17,7 +18,11 @@ namespace Race
         public string EffectKey;
 
         public Sprite raceImage;
-        public string raceDescription;
+        public string imagePath;
+        public string codexText;
+        public string codexPath;
+        public string summary;
+        public string unlockHint;
         
         public void InitializeRaceEffect()
         {
@@ -33,21 +38,13 @@ namespace Race
             }
         }
 
-        public void LoadRaceData()
-        {
-            raceImage = Resources.Load<Sprite>($"Race/Images/{fileName}");
-            if (raceImage == null)
-                Debug.LogWarning($"[❌] Race 이미지 로드 실패: Race/Images/{fileName}");
-            TextAsset description = Resources.Load<TextAsset>($"Race/Descriptions/{fileName}");
-            raceDescription = description != null ? description.text : "설명 없음";
-        }
-
     }
     [System.Serializable]
     public class SubRaceData
     {
         public string subRaceName;
         public string fileName;
+        public string parentRaceID;
         public string subRaceID;
         public int requireFaith;
         public bool isUnlocked;
@@ -55,8 +52,11 @@ namespace Race
         public string EffectKey;
 
         public Sprite subRaceImage;
-        public string subRaceDescription;
+        public string imagePath;
+        public string codexText;
+        public string codexPath;
         public string unlockHint;
+        public string summary;
         
         public void initializeSubRaceEffect(IEffect baseRaceEffect = null)
         {
@@ -72,7 +72,7 @@ namespace Race
             // 2. 소종족 효과 처리
             if (!string.IsNullOrWhiteSpace(EffectKey))
             {
-                string[] effectKeys = EffectKey.Split(',');
+                string[] effectKeys = EffectKey.Split('|');
 
                 foreach (var key in effectKeys)
                 {
@@ -91,18 +91,6 @@ namespace Race
                 }
             }
         }
-
-        public void LoadSubRaceData()
-        {
-            subRaceImage = Resources.Load<Sprite>($"Race/SubRace/Images/{fileName}");
-            if (subRaceImage == null)
-                Debug.LogWarning($"[❌] SubRace 이미지 로드 실패: Race/SubRace/Images/{fileName}");
-            TextAsset description = Resources.Load<TextAsset>($"Race/SubRace/Descriptions/{fileName}");
-            subRaceDescription = description != null ? description.text : "설명 없음";
-            TextAsset UnlockHint = Resources.Load<TextAsset>($"Race/SubRace/Descriptions/{fileName}_Hint");
-            unlockHint = UnlockHint != null ? UnlockHint.text : "준비중 입니다.";
-        }
-        
         
         public bool CanUnlock(int playerFaith)
         {

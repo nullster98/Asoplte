@@ -10,10 +10,10 @@ public static class EntitySpawner
     {
         EntitiesData rolled = EntitiesCreator.GenerateRandomEnemy(baseEnemy, floor);
         
-        GameObject prefab = Resources.Load<GameObject>($"Prefab/EnemyObject");
+        GameObject prefab = Resources.Load<GameObject>($"Prefab/EntityObject");
         if (baseEnemy == null)
         {
-            Debug.LogError("EnemySpawner: 전달된 EntitiesData가 null입니다!");
+            Debug.LogError("EntitySpawner: 전달된 EntitiesData가 null입니다!");
         }
         
         Debug.Log("Spawner실행");
@@ -24,21 +24,39 @@ public static class EntitySpawner
         {
             Debug.LogError("Canvas 오브젝트를 찾을 수 없습니다!");
         }
-
         // Instantiate under Canvas
-        GameObject enemyObj = Object.Instantiate(prefab, canvas.transform);
-
+        GameObject entityObj = Object.Instantiate(prefab, Vector3.zero, Quaternion.identity, canvas.transform);;
+        ApplyUISpriteStandardLayout(entityObj, 500f, 500f, 350f);
         // 초기화
-        Enemy enemy = enemyObj.GetComponent<Enemy>();
-        if (enemy != null)
+        EntityObject entity = entityObj.GetComponent<EntityObject>();
+        if (entity != null)
         {
-            enemy.Initialize(rolled);
+            entity.Initialize(rolled);
+            entity.InitializeRandomLoadout(rolled.EntityType, floor);
+            entity.ApplySelectedData(); // IEffect 기반 적용
         }
-        Debug.Log("생성된 오브젝트 이름: " + enemyObj.name);
-        Debug.Log("Enemy 컴포넌트: " + enemyObj.GetComponent<Enemy>());
+        //SpriteRenderer spriteRenderer = entityObj.GetComponentInChildren<SpriteRenderer>();
+        EventManager.Instance.currentSpawnedEnemy = entityObj;
 
-        EventManager.Instance.currentSpawnedEnemy = enemyObj;
-
-        return enemyObj;
+        return entityObj;
     }
+
+    private static void ApplyUISpriteStandardLayout(GameObject entityObj, float width = 500f, float height = 500f, float yOffset = 350f)
+    {
+        var image = entityObj.GetComponentInChildren<UnityEngine.UI.Image>();
+        if (image != null)
+        {
+            image.rectTransform.sizeDelta = new Vector2(width, height);
+            Debug.Log($"[Spawner] Image sizeDelta set to ({width}, {height})");
+        }
+
+        var rect = entityObj.GetComponent<RectTransform>();
+        if (rect != null)
+        {
+            rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(0.5f, 0.5f);
+            rect.anchoredPosition = new Vector2(0f, yOffset);
+            Debug.Log($"[Spawner] anchoredPosition set to Y: {yOffset}");
+        }
+    }
+    
 }

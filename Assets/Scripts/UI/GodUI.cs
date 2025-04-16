@@ -98,7 +98,7 @@ namespace UI
             var current = GetCurrentGod();
 
             Debug.Log($"[GodUI] 현재 godName: {current.GodName}, fileName: {current.FileName}");
-            Debug.Log($"[GodUI] GetDescription(): {current.GodDescription}");
+            Debug.Log($"[GodUI] GetDescription(): {current.codexPath}");
         }
         
         public void InitializeUI()
@@ -130,7 +130,7 @@ namespace UI
             sb.AppendLine();
 
             // 🟢 2. 설명
-            sb.AppendLine($"{god.GodDescription}");
+            sb.AppendLine($"{god.codexText}");
             sb.AppendLine();
 
             // 🟢 3. 고유 효과 먼저 출력
@@ -170,13 +170,15 @@ namespace UI
         {
             godSelect.SetActive(false);
             characterSelect.SetActive(true);
-            player.SelectedGod(GetCurrentGod());
+            player.selectedGod = GetCurrentGod();
         }
 
         public void PreviousButton()
         {
+            godSelect.SetActive(false);
             gameMenu.SetActive(false);
             selectMenu.SetActive(true);
+            Player.Instance.selectedGod = null;
         }
     }
 }

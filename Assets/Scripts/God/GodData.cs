@@ -3,6 +3,7 @@ using Entities;
 using PlayerScript;
 using Unity;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Utility;
 
@@ -21,10 +22,15 @@ namespace God
         public bool IsUnlocked;
         public Sprite GodImage;
         public Sprite GodBackgroundImage;
-        public string GodDescription;
+        public string codexText;
+        public string codexPath;
+        public string imagePath;
+        public string bgPath;
+        public string summary;
+        public string unlockHint;
         public void initializeEffect()
         {
-            string[] effectKeys = EffectKey.Split(',');
+            string[] effectKeys = EffectKey.Split('|');
             foreach (var key in effectKeys)
             {
                 var trimmedKey = key.Trim();
@@ -40,14 +46,6 @@ namespace God
                     Debug.LogWarning($"[❌ 생성 실패] {trimmedKey}");
                 }
             }
-        }
-
-        public void LoadGodData()
-        {
-            GodImage = Resources.Load<Sprite>($"God/Images/{FileName}");
-            GodBackgroundImage = Resources.Load<Sprite>($"God/Backgrounds/{FileName}_BG");
-            TextAsset description = Resources.Load<TextAsset>($"God/Descriptions/{FileName}");
-            GodDescription = description != null ? description.text : "설명 안적음";
         }
 
         public Dictionary<string, int> GodStats = new Dictionary<string, int>
