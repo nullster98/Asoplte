@@ -35,7 +35,7 @@ public class OutcomeParser
             
             if(command.StartsWith("Stat:", StringComparison.OrdinalIgnoreCase))
             {
-                var match = Regex.Match(command, @"^Stat:(\w+)([+-]\d+)");
+                var match = Regex.Match(command, @"^Stat:([a-zA-Z0-9_]+)([+-]\d+)$");
                 if (match.Success)
                 {
                     parsed.statModifiers.Add(new StatModifier
@@ -45,11 +45,46 @@ public class OutcomeParser
                     });
                 }
             }
+            // ────── Trait 추가 (랜덤 포함) ──────
+            else if (command.StartsWith("Trait:add_?"))
+            {
+                // 예: Trait:add_?{Positive}
+                var match = Regex.Match(command, @"Trait:add_\?\{(\w+)\}");
+                if (match.Success)
+                {
+                    var category = match.Groups[1].Value; // Positive / Negative
+                    parsed.addTraits.Add($"?{{{category}}}");
+                }
+                else
+                {
+                    parsed.addTraits.Add("?{Any}");
+                }
+            }
+
+            // ────── Trait 제거 (랜덤 포함) ──────
+            else if (command.StartsWith("Trait:remove_?"))
+            {
+                // 예: Trait:remove_?{Positive}
+                var match = Regex.Match(command, @"Trait:remove_\?\{(\w+)\}");
+                if (match.Success)
+                {
+                    var category = match.Groups[1].Value;
+                    parsed.removeTraits.Add($"?{{{category}}}");
+                }
+                else
+                {
+                    parsed.removeTraits.Add("?{Any}");
+                }
+            }
+
+            // ────── Trait 추가 (정해진 ID) ──────
             else if (command.StartsWith("Trait:add_"))
             {
                 var trait = command.Replace("Trait:add_", "").Trim();
                 parsed.addTraits.Add(trait);
             }
+
+            // ────── Trait 제거 (정해진 ID) ──────
             else if (command.StartsWith("Trait:remove_"))
             {
                 var trait = command.Replace("Trait:remove_", "").Trim();

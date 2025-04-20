@@ -54,12 +54,12 @@ namespace Game
         {
             yield return StartCoroutine(currentEnemy.FlashOnHit(Color.red, 0.1f));
 
-            ui.Log($"🗡️ 플레이어가 {currentEnemy.enemyData.Name}에게 {damage}의 데미지를 입혔다!");
+            ui.Log($"플레이어가 {currentEnemy.enemyData.Name}에게 {damage}의 데미지를 입혔다!");
             ui.UpdateEntityUI(currentEnemy);
 
             if (currentEnemy.GetStat("CurrentHP") <= 0)
             {
-                ui.Log($"☠️ {currentEnemy.enemyData.Name}이(가) 쓰러졌습니다!");
+                ui.Log($"️{currentEnemy.enemyData.Name}이(가) 쓰러졌습니다!");
                 EndBattle();
                 yield break;
             }
@@ -83,7 +83,7 @@ namespace Game
 
             int enemyDmg = currentEnemy.GetStat("Atk");
             Player.Instance.TakeDamage(enemyDmg);
-            ui.Log($"⚔️ {currentEnemy.enemyData.Name}이(가) 플레이어에게 {enemyDmg}의 반격을 가했다!");
+            ui.Log($"{currentEnemy.enemyData.Name}이(가) 플레이어에게 {enemyDmg}의 반격을 가했다!");
             ui.UpdatePlayerUI();
 
             if (Player.Instance.CurrentHP <= 0)

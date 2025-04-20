@@ -21,6 +21,8 @@ namespace Event
     public TMP_Text eventText;
     public Image eventSprite;
     public ScrollRect eventScrollView;
+    public Slider currentProgressSlider;
+    public int currentProgress = 1;
     public Button eventAreaBtn;
     public Transform buttonContainer;
     public GameObject buttonPrefab;
@@ -28,6 +30,7 @@ namespace Event
     [Header("Managers")]
     public BattleManager battleManager;
     public AcquisitionUI acquisitionUI;
+    public EffectResultUI effectResultUI;
 
     [Header("Current State")]
     public GameObject currentSpawnedEnemy;
@@ -58,6 +61,7 @@ namespace Event
     {
         eventAreaBtn.onClick.AddListener(OnAreaClicked);
         eventHandler.StartEvent("E1");
+        currentProgressSlider.value = currentProgress;
     }
 
     public void UpdateEventUI(string dialogue, List<EventChoice> choices = null)

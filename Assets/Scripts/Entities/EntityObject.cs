@@ -125,7 +125,7 @@ namespace Entities
         
         public IEnumerator FlashOnHit(Color flashColor, float duration = 0.1f)
         {
-            var image = GetComponentInChildren<UnityEngine.UI.Image>();
+            var image = GetComponentInChildren<Image>();
             if (image == null) yield break;
 
             Color original = image.color;

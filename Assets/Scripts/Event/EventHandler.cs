@@ -180,9 +180,48 @@ namespace Event
 
             if (outcome.stateTrigger)
             {
-                outcome.modifyStat?.ForEach(mod => Player.Instance.ChangeStat(mod.stat, mod.amount));
-                outcome.addTrait?.ForEach(Player.Instance.AddTrait);
-                outcome.removeTrait?.ForEach(Player.Instance.RemoveTrait);
+                if (outcome.modifyStat != null)
+                {
+                    foreach (var mod in outcome.modifyStat)
+                    {
+                        Player.Instance.ChangeStat(mod.stat, mod.amount);
+
+                        var type = mod.amount >= 0 
+                            ? EffectChangeType.StatIncrease 
+                            : EffectChangeType.StatDecrease;
+
+                        EventManager.Instance.effectResultUI
+                            .SetupResultUI(type, mod.stat, mod.amount);
+
+                        return;
+                    }
+                }
+
+                if (outcome.addTrait != null)
+                {
+                    foreach (var id in outcome.addTrait)
+                    {
+                        Player.Instance.AddTrait(id);
+
+                        EventManager.Instance.effectResultUI
+                            .SetupResultUI(EffectChangeType.GainTrait, id);
+
+                        return;
+                    }
+                }
+
+                if (outcome.removeTrait != null)
+                {
+                    foreach (var id in outcome.removeTrait)
+                    {
+                        Player.Instance.RemoveTrait(id);
+
+                        EventManager.Instance.effectResultUI
+                            .SetupResultUI(EffectChangeType.RemoveTrait, id);
+
+                        return;
+                    }
+                }
             }
         }
 
@@ -215,19 +254,48 @@ namespace Event
 
             if (outcome.stateTrigger)
             {
-                outcome.modifyStat?.ForEach(mod => Player.Instance.ChangeStat(mod.stat, mod.amount));
-                outcome.addTrait?.ForEach(Player.Instance.AddTrait);
-                outcome.removeTrait?.ForEach(Player.Instance.RemoveTrait);
-                return;
-            }
+                if (outcome.modifyStat != null)
+                {
+                    foreach (var mod in outcome.modifyStat)
+                    {
+                        var type = mod.amount >= 0 
+                            ? EffectChangeType.StatIncrease 
+                            : EffectChangeType.StatDecrease;
 
-            // if (Random.value <= outcome.spawnChance)
-            // {
-            //     var enemy = EntitySpawner.Spawn(
-            //         DatabaseManager.Instance.GetEntitiesData(outcome.entityID),
-            //         EventManager.Instance.floor);
-            //     EventManager.Instance.currentSpawnedEnemy = enemy;
-            // }
+                        EventManager.Instance.effectResultUI
+                            .SetupResultUI(type, mod.stat, mod.amount);
+
+                        return;
+                    }
+                }
+
+                if (outcome.addTrait != null)
+                {
+                    foreach (var id in outcome.addTrait)
+                    {
+                        Player.Instance.AddTrait(id);
+
+                        EventManager.Instance.effectResultUI
+                            .SetupResultUI(EffectChangeType.GainTrait, id);
+
+                        return;
+                    }
+                }
+
+                if (outcome.removeTrait != null)
+                {
+                    foreach (var id in outcome.removeTrait)
+                    {
+                        Player.Instance.RemoveTrait(id);
+
+                        EventManager.Instance.effectResultUI
+                            .SetupResultUI(EffectChangeType.RemoveTrait, id);
+
+                        return;
+                    }
+                }
+            }
+            
         }
 
         private void PhaseOutcome(EventOutcome outcome)
@@ -257,8 +325,26 @@ namespace Event
                 EventManager.Instance.currentSpawnedEnemy = null;
             }
 
+            if (EventManager.Instance.currentProgress == 9)
+            {
+                StartEvent("E99");
+                EventManager.Instance.currentProgress++;
+                EventManager.Instance.currentProgressSlider.value = EventManager.Instance.currentProgress;
+                return;
+            }
+
+            if (EventManager.Instance.currentProgress == 10)
+            {
+                StartEvent("E101");
+                return;
+            }
+
+            var excludedTages = EventTag.Rest | EventTag.Boss | EventTag.None;
+
             var usableEvents = DatabaseManager.Instance.eventLines
-                .Where(e => (e.isRecycle || !usedEvents.Contains(e.eventID)) && e.eventType != EventTag.None)
+                .Where(e =>
+                    (e.isRecycle || !usedEvents.Contains(e.eventID))
+                    && (e.eventType & excludedTages) == 0)
                 .ToList();
 
             if (usableEvents.Count == 0)
@@ -269,6 +355,8 @@ namespace Event
 
             var next = usableEvents[Random.Range(0, usableEvents.Count)];
             StartEvent(next.eventID);
+            EventManager.Instance.currentProgress++;
+            EventManager.Instance.currentProgressSlider.value = EventManager.Instance.currentProgress;
         }
 
         private void MoveToNextPhase(string nextPhaseID)

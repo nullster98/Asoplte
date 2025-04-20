@@ -106,6 +106,11 @@ namespace PlayerScript
             ChangeStat("CurrentHP", amount);
         }
 
+        public void Die()
+        {
+            //EndingUI.
+        }
+
         void Start()
         {
             StartStat();
@@ -173,8 +178,20 @@ namespace PlayerScript
         {
             if (stats.ContainsKey(statName))
             {
+                int before = stats[statName];
                 stats[statName] += value;
-                Debug.Log($"{statName}이(가) {value} 만큼 변경됨. 현재 값: {stats[statName]}");
+                if (statName == "CurrentHP")
+                {
+                    int max = GetStat("HP");
+                    stats[statName] = Mathf.Clamp(stats[statName], 0, max);
+                }
+                else if (statName == "CurrentMP")
+                {
+                    int max = GetStat("MP");
+                    stats[statName] = Mathf.Clamp(stats[statName], 0, max);
+                }
+                int after = stats[statName];
+                Debug.Log($"[ChangeStat] {statName}: {before} → {after} (변화량: {value})");
             }
             else
             {
@@ -401,29 +418,25 @@ namespace PlayerScript
 
         public void AddTrait(string traitID)
         {
-            if (string.IsNullOrEmpty(traitID))
+            if (string.IsNullOrWhiteSpace(traitID))
             {
                 Debug.LogWarning("[Player] 추가하려는 traitID가 비어있다냥!");
                 return;
             }
 
+            // 데이터베이스에서 TraitData 가져오기 먼저!
+            var traitData = DatabaseManager.Instance.GetTraitData(traitID);
+            if (traitData == null)
+            {
+                Debug.LogWarning($"[Player] traitID {traitID}에 해당하는 TraitData가 존재하지 않아 추가 불가!");
+                return; // ❌ traitID 유효하지 않으면 등록도 하지 않음
+            }
+
             // 이미 가지고 있는지 확인하고, 없으면 ID 추가
-            if (selectedTraitIDs.Add(traitID)) // Add 성공 시 true 반환 (즉, 새로 추가된 경우)
+            if (selectedTraitIDs.Add(traitID))
             {
                 Debug.Log($"[Player] 특성 ID {traitID} 추가됨.");
-
-                // 데이터베이스에서 TraitData 가져오기
-                var traitData = DatabaseManager.Instance.GetTraitData(traitID);
-                if (traitData != null)
-                {
-                    // 실제 효과 적용은 ApplyTraitEffect 함수에 위임
-                    ApplyTraitEffect(traitData); // 내부 호출용 함수 사용 (아래 정의)
-                }
-                else
-                {
-                    Debug.LogWarning($"[Player] traitID {traitID}에 해당하는 특성을 찾을 수 없어 효과 적용 불가!");
-                    // ID는 추가되었지만 효과는 적용 못한 상태. 롤백 필요시: selectedTraitIDs.Remove(traitID);
-                }
+                ApplyTraitEffect(traitData);
             }
             else
             {

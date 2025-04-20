@@ -68,5 +68,75 @@
     "phaseName": "대사이벤트",
     "imagePath": "Event/Images/StartEvent",
     "outcomeScript": ""
+  },
+  {
+    "eventID": "E6",
+    "phaseID": "E6P1",
+    "phaseName": "HP감소이벤트",
+    "imagePath": "Event/Images/고문함정",
+    "outcomeScript": ""
+  },
+  {
+    "eventID": "E7",
+    "phaseID": "E7P1",
+    "phaseName": "특성획득이벤트",
+    "imagePath": "Event/Images/마법진",
+    "outcomeScript": ""
+  },
+  {
+    "eventID": "E8",
+    "phaseID": "E8P1",
+    "phaseName": "특성제거이벤트",
+    "imagePath": "Event/Images/연금술",
+    "outcomeScript": ""
+  },
+  {
+    "eventID": "E9",
+    "phaseID": "E9P1",
+    "phaseName": "거미굴",
+    "imagePath": "Event/Images/거미굴",
+    "outcomeScript": ""
+  },
+  {
+    "eventID": "E10",
+    "phaseID": "E10P1",
+    "phaseName": "슬라임",
+    "imagePath": "Event/Images/슬라임",
+    "outcomeScript": ""
+  },
+  {
+    "eventID": "E11",
+    "phaseID": "E11P1",
+    "phaseName": "암전1",
+    "imagePath": "Event/Images/암전1",
+    "outcomeScript": ""
+  },
+  {
+    "eventID": "",
+    "phaseID": "E11P2",
+    "phaseName": "암전2",
+    "imagePath": "Event/Images/암전2",
+    "outcomeScript": ""
+  },
+  {
+    "eventID": "",
+    "phaseID": "E11P3",
+    "phaseName": "암전3",
+    "imagePath": "Event/Images/암전3",
+    "outcomeScript": ""
+  },
+  {
+    "eventID": "E99",
+    "phaseID": "E99P1",
+    "phaseName": "휴식",
+    "imagePath": "Event/Images/휴식",
+    "outcomeScript": ""
+  },
+  {
+    "eventID": "E101",
+    "phaseID": "E101P1",
+    "phaseName": "보스1번",
+    "imagePath": "Event/Images/StartEvent",
+    "outcomeScript": "Entity:EB01"
   }
 ]

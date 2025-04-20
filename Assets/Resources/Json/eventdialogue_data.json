@@ -128,5 +128,125 @@
     "outcomeScript": "",
     "nextEventID": "",
     "nextPhaseID": ""
+  },
+  {
+    "phaseID": "E6P1",
+    "dialogueID": "E6P1D1",
+    "dialoguePath": "Event/Descriptions/고문함정",
+    "isEventEnd": "",
+    "condition": "",
+    "outcomeScript": "",
+    "nextEventID": "",
+    "nextPhaseID": ""
+  },
+  {
+    "phaseID": "E7P1",
+    "dialogueID": "E7P1D1",
+    "dialoguePath": "Event/Descriptions/마법진",
+    "isEventEnd": "",
+    "condition": "",
+    "outcomeScript": "",
+    "nextEventID": "",
+    "nextPhaseID": ""
+  },
+  {
+    "phaseID": "E8P1",
+    "dialogueID": "E8P1D1",
+    "dialoguePath": "Event/Descriptions/연금술",
+    "isEventEnd": "",
+    "condition": "",
+    "outcomeScript": "",
+    "nextEventID": "",
+    "nextPhaseID": ""
+  },
+  {
+    "phaseID": "E9P1",
+    "dialogueID": "E9P1D1",
+    "dialoguePath": "Event/Descriptions/거미굴",
+    "isEventEnd": "",
+    "condition": "",
+    "outcomeScript": "",
+    "nextEventID": "",
+    "nextPhaseID": ""
+  },
+  {
+    "phaseID": "E10P1",
+    "dialogueID": "E10P1D1",
+    "dialoguePath": "Event/Descriptions/슬라임",
+    "isEventEnd": "",
+    "condition": "",
+    "outcomeScript": "",
+    "nextEventID": "",
+    "nextPhaseID": ""
+  },
+  {
+    "phaseID": "",
+    "dialogueID": "E10P1D2",
+    "dialoguePath": "Event/Descriptions/슬라임2",
+    "isEventEnd": "",
+    "condition": "",
+    "outcomeScript": "Entity:EM02||Chance:50",
+    "nextEventID": "",
+    "nextPhaseID": ""
+  },
+  {
+    "phaseID": "",
+    "dialogueID": "E10P1D3",
+    "dialoguePath": "Event/Descriptions/슬라임3",
+    "isEventEnd": "",
+    "condition": "",
+    "outcomeScript": "Entity:EM02||Chance:30",
+    "nextEventID": "",
+    "nextPhaseID": ""
+  },
+  {
+    "phaseID": "E11P1",
+    "dialogueID": "E11P1D1",
+    "dialoguePath": "Event/Descriptions/암전1",
+    "isEventEnd": "",
+    "condition": "",
+    "outcomeScript": "",
+    "nextEventID": "",
+    "nextPhaseID": ""
+  },
+  {
+    "phaseID": "E11P2",
+    "dialogueID": "E11P2D1",
+    "dialoguePath": "Event/Descriptions/암전2",
+    "isEventEnd": "",
+    "condition": "",
+    "outcomeScript": "",
+    "nextEventID": "",
+    "nextPhaseID": ""
+  },
+  {
+    "phaseID": "E11P3",
+    "dialogueID": "E11P3D1",
+    "dialoguePath": "Event/Descriptions/암전3",
+    "isEventEnd": "",
+    "condition": "",
+    "outcomeScript": "",
+    "nextEventID": "",
+    "nextPhaseID": ""
+  },
+  {
+    "phaseID": "E99P1",
+    "dialogueID": "E99P1D1",
+    "dialoguePath": "Event/Descriptions/휴식",
+    "isEventEnd": "",
+    "condition": "",
+    "outcomeScript": "",
+    "nextEventID": "",
+    "nextPhaseID": ""
+  },
+  {
+    "phaseID": "E101P1",
+    "dialogueID": "E101P1D1",
+    "dialoguePath": "Event/Descriptions/보스1",
+    "isEventEnd": "",
+    "condition": "",
+    "outcomeScript": "",
+    "nextEventID": "",
+    "nextPhaseID": ""
   }
 ]

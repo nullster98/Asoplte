@@ -33,5 +33,61 @@
     "eventType": "Chaos",
     "allowedFloors": 1,
     "isRecycle": false
+  },
+  {
+    "eventID": "E6",
+    "eventName": "HP감소이벤트",
+    "eventType": "Negative",
+    "allowedFloors": 1,
+    "isRecycle": false
+  },
+  {
+    "eventID": "E7",
+    "eventName": "특성획득이벤트",
+    "eventType": "Positive",
+    "allowedFloors": 1,
+    "isRecycle": false
+  },
+  {
+    "eventID": "E8",
+    "eventName": "특성제거이벤트",
+    "eventType": "Negative",
+    "allowedFloors": 1,
+    "isRecycle": false
+  },
+  {
+    "eventID": "E9",
+    "eventName": "거미굴이벤트",
+    "eventType": "Battle",
+    "allowedFloors": 1,
+    "isRecycle": false
+  },
+  {
+    "eventID": "E10",
+    "eventName": "슬라임이벤트",
+    "eventType": "Battle",
+    "allowedFloors": 1,
+    "isRecycle": false
+  },
+  {
+    "eventID": "E11",
+    "eventName": "암전이벤트",
+    "eventType": "Chaos",
+    "allowedFloors": 1,
+    "isRecycle": false
+  },
+  {
+    "eventID": "E99",
+    "eventName": "휴식이벤트",
+    "eventType": "Rest",
+    "allowedFloors": 1,
+    "isRecycle": true
+  },
+  {
+    "eventID": "E101",
+    "eventName": "보스이벤트",
+    "eventType": "Boss",
+    "allowedFloors": 1,
+    "isRecycle": false
   }
 ]

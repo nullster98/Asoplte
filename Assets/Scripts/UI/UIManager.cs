@@ -39,7 +39,7 @@ namespace UI
 
     public class UIManager : MonoBehaviour
     {
-        private static UIManager Instance { get; set; }
+        public static UIManager Instance { get; set; }
 
         [Header("플레이어 UI")]
         [SerializeField] private Image hp; //HP바
@@ -64,7 +64,6 @@ namespace UI
 
         public Action<int?> OnChoiceSelected;
 
-
         public void UpdatePlayerUI()
         {
             Player player = Player.Instance;
@@ -79,7 +78,7 @@ namespace UI
             
         }
 
-        private void UpdatePlayerInfo()
+        public void UpdatePlayerInfo()
         {
             Player player = Player.Instance;
 
@@ -98,8 +97,11 @@ namespace UI
         public void UpdateHpUI()
         {
             if (Player.Instance != null)
-                // ReSharper disable once PossibleLossOfFraction
-                hp.fillAmount = Player.Instance.GetStat("CurrentHP") / Player.Instance.GetStat("HP");
+            {
+                float current = Player.Instance.GetStat("CurrentHP");
+                float max = Player.Instance.GetStat("HP");
+                hp.fillAmount = max > 0 ? current / max : 0f;
+            }
         }
 
         private void UpdateTraitsUI()
@@ -115,6 +117,11 @@ namespace UI
             foreach (string traitID in player.selectedTraitIDs)
             {
                 TraitData traitData = DatabaseManager.Instance.GetTraitData(traitID);
+                if (traitData == null)
+                {
+                    Debug.LogWarning($"[UIManager] TraitData '{traitID}' 를 찾을 수 없음. selectedTraitIDs에 잘못된 ID가 있음");
+                    continue;
+                }
                 
                 GameObject traitObj = Instantiate(traitPrefab, traitContainer); // UI 생성
                 Image traitImage = traitObj.GetComponent<Image>();
@@ -153,6 +160,7 @@ namespace UI
         private void Start()
         {
             UpdatePlayerUI();
+            UpdateHpUI();
         }
 
     }
