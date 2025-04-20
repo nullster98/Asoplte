@@ -11,9 +11,11 @@ namespace Utility
 {
     public static class EffectFactory
     {
+        // 정규식 패턴 정의
         private static readonly Regex statPattern = new(@"Stat:(\w+)([+-]\d+)", RegexOptions.Compiled);
         private static readonly Regex healPattern = new(@"Heal:HP\+?(\d+)(%)?", RegexOptions.Compiled);
         
+        // DSL 문자열을 기반으로 IEffect 객체 생성
         public static IEffect Create(string key)
         {
             if (string.IsNullOrWhiteSpace(key)) return null;
@@ -36,6 +38,7 @@ namespace Utility
                 return new HealEffect(value, isPercent);
             }
             
+            // 등록된 고유 효과
             if (EffectRegistry.Contains(key))
             {
                 return EffectRegistry.Create(key);

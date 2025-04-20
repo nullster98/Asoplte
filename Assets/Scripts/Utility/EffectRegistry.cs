@@ -5,8 +5,10 @@ using UnityEngine;
 
 public static class EffectRegistry
 {
+    // 문자열 키 → 생성자 함수 매핑
     private static readonly Dictionary<string, Func<IEffect>> registry = new();
 
+    // 효과 등록
     public static void Register(string key, Func<IEffect> creator)
     {
         if(!registry.ContainsKey(key))
@@ -17,7 +19,7 @@ public static class EffectRegistry
     public static IEffect Create(string key) => registry.TryGetValue(key, out var create)
                                                 ? create() : null;
     
-    [RuntimeInitializeOnLoadMethod]
+    [RuntimeInitializeOnLoadMethod] // 모든 IEffect 구현체의 정적 생성자 강제 실행 → 자동 등록 유도
     public static void InitializeAllEffects()
     {
         var types = typeof(IEffect).Assembly.GetTypes();

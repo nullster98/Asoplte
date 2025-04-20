@@ -37,6 +37,7 @@ namespace Event
             ProcessPhase();
         }
 
+        // 이벤트 내부 상태 초기화
         private void SetCurrentEventAndPhase(string eventID, int phaseIndex, int dialogueIndex)
         {
             currentEvent = DatabaseManager.Instance.eventLines.Find(e => e.eventID == eventID);
@@ -60,7 +61,7 @@ namespace Event
             this.dialogueIndex = (dialogueIndex >= 0 && dialogueIndex < currentDialogues.Count) ? dialogueIndex : 0;
         }
 
-        // 📌 Phase/Dialogue 실행
+        // Phase/Dialogue 실행
         private void ProcessPhase()
         {
             if (currentPhase == null)
@@ -77,6 +78,7 @@ namespace Event
             ProcessDialogue();
         }
 
+        // 대사 출력 처리
         private void ProcessDialogue()
         {
             while (dialogueIndex < currentDialogues.Count)
@@ -118,7 +120,7 @@ namespace Event
         public void ProcessNextDialogue() => ProcessDialogue();
         public DialogueBlock GetCurrentDialogue() => (dialogueIndex - 1 >= 0 && dialogueIndex - 1 < currentDialogues.Count) ? currentDialogues[dialogueIndex - 1] : null;
 
-        // 📌 선택지 처리
+        // 선택지 처리
         public void OnChoiceSelected(int choiceIndex)
         {
             Debug.Log($"[EventHandler] 선택지 클릭됨 - 인덱스: {choiceIndex}, 현재 대사 인덱스: {dialogueIndex}");
@@ -140,6 +142,7 @@ namespace Event
             HandleChoiceFlow(choice);
         }
 
+        // 선택지 클릭 후 이동 처리
         private void HandleChoiceFlow(EventChoice choice)
         {
             if (!string.IsNullOrEmpty(choice.nextDialogueID))
@@ -169,7 +172,7 @@ namespace Event
             HandleEventEnd();
         }
 
-        // 📌 Outcome 처리
+        // 대사 결과 처리
         private void DialogueOutcome(EventOutcome outcome)
         {
             if (outcome.rewardTrigger && outcome.rewardType.HasValue)
@@ -225,6 +228,7 @@ namespace Event
             }
         }
 
+        // 선택지 결과 처리
         private void ChoiceOutcome(EventOutcome outcome)
         {
             if (outcome.battleTrigger)
@@ -298,6 +302,7 @@ namespace Event
             
         }
 
+        //페이즈 시작 시 결과 처리(현재는 Entity등장 처리만 있음)
         private void PhaseOutcome(EventOutcome outcome)
         {
             if (!outcome.spawnEntity || string.IsNullOrEmpty(outcome.entityID)) return;
@@ -311,7 +316,7 @@ namespace Event
             }
         }
 
-        // 📌 이벤트 흐름 종료 및 전환
+        // 이벤트 흐름 종료 및 전환
         public void HandleEventEnd()
         {
             if (!usedEvents.Contains(currentEvent.eventID))
@@ -359,6 +364,7 @@ namespace Event
             EventManager.Instance.currentProgressSlider.value = EventManager.Instance.currentProgress;
         }
 
+        //지정된 페이즈 ID로 이동
         private void MoveToNextPhase(string nextPhaseID)
         {
             var next = currentEvent.phases.Find(p => p.phaseID == nextPhaseID);
@@ -376,6 +382,7 @@ namespace Event
             }
         }
 
+        // nextphaseId 없이 대사가 종료되었을 경우에 대체
         private void TryFallbackPhaseOrEnd()
         {
             if (currentPhaseIndex + 1 < currentEvent.phases.Count)

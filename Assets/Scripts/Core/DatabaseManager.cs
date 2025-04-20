@@ -42,32 +42,32 @@ namespace Game
             }
         }
 
-        public EntitiesData GetEntitiesData(string entityID)
+        public EntitiesData GetEntitiesData(string entityID) //entity 데이터 반환 [ID기반]
         {
             return entityList.Find(entity => entity.EntityID == entityID);
         }
 
-        public ItemData GetItemData(string itemID)
+        public ItemData GetItemData(string itemID) //item 데이터 반환 [ID기반]
         {
             return itemList.Find(item => item.itemID == itemID);
         }
 
-        public GodData GetGodData(string godID)
+        public GodData GetGodData(string godID)//god 데이터 반환 [ID기반]
         {
             return godList.Find(god => god.GodID == godID);
         }
 
-        public TraitData GetTraitData(string traitID)
+        public TraitData GetTraitData(string traitID)//trait 데이터 반환 [ID기반]
         {
             return traitList.Find(trait => trait.traitID == traitID);
         }
 
-        public ItemData GetRandomItem(int floor)
+        public ItemData GetRandomItem(int floor)//층수 기반 랜덤아이템 반환
         {
             return GetRandomItemByRarity(itemList, floor);
         }
 
-        public ItemData GetRandomEquipment(int floor)
+        public ItemData GetRandomEquipment(int floor)//층수 기반 랜덤 장비"만" 반환
         {
             var pool = itemList.Where(i => i.itemType == ItemType.Equipment).ToList();
             if (pool.Count == 0)
@@ -92,22 +92,24 @@ namespace Game
             return filtered.GetRandom();
         }
 
-        public TraitData GetRandomTrait(int floor)
+        public TraitData GetRandomTrait(int floor)//층수 기반 랜덤 특성 반환
         {
             return GetRandomTraitByRarity(traitList, floor);
         }
 
-        public GodData GetRandomGod()
+        public GodData GetRandomGod()//랜덤한 신앙 반환
         {
             return godList.GetRandom();
         }
 
+        //층수 기반 희귀도를 반영하여 무작위 아이템 반환
         private ItemData GetRandomItemByRarity(List<ItemData> pool, int floor)
         {
             var rarity = GetRarity(floor);
             return pool.Where(i => i.rarity == rarity).ToList().GetRandom();
         }
         
+        //층수 기반 희귀도를 반영하여 무작위 특성 반환
         private TraitData GetRandomTraitByRarity(List<TraitData> pool, int floor)
         {
             var rarity = GetRarity(floor);
@@ -163,15 +165,16 @@ namespace Game
             }
 
             return weights.Keys.First();
-        }
+        }//층수 기반 희귀도 확률 정의
 
-        private void ParseEntityList()
+        private void ParseEntityList()//entityList를 enemyList / npcList로 분리
         {
             npcList = entityList.Where(e => e.EntityType == EntityType.Npc).ToList();
             enemyList = entityList.Where(e => e.EntityType == EntityType.Monster ||
                                               e.EntityType == EntityType.Boss).ToList();
         }
         
+        // subRace ID 기반으로 상위 종족과 하위 종족 데이터 반환
         public (RaceData race, SubRaceData sub) GetSubRaceByID(string subRaceID)
         {
             foreach (var race in raceList)
@@ -185,22 +188,27 @@ namespace Game
             return (null, null);
         }
 
+        // 모든 데이터 불러오기 + 리소스 (텍스트, 이미지 등) 연결
         public void LoadAll()
         {
+            // Effect 레지스트리에 등록
             GodEffectRegistry.RegisterAll();
             TraitEffectRegistry.RegisterAll();
             RaceEffectRegistry.RegisterAll();
             ItemEffectRegistry.RegisterAll();
             EntityEffectRegistry.RegisterAll();
                 
+            // JSON에서 데이터 로드
             itemList = JsonLoader.LoadItemData();
             godList = JsonLoader.LoadGodData();
             traitList = JsonLoader.LoadTraitData();
             eventLines = JsonLoader.LoadCompleteEventData();
             raceList = JsonLoader.LoadRaceData();
             entityList = JsonLoader.LoadEntitiesData();
-            ParseEntityList();
             
+            ParseEntityList(); // NPC/Enemy 분류
+            
+            // 이벤트 대사 및 이미지 리소스 로드
             foreach(var e in eventLines)
             {
                 foreach (var phase in e.phases)
@@ -224,7 +232,8 @@ namespace Game
                 }
             }
             
-            
+            // 신, 특성, 종족, 아이템별 codexPath 및 이미지 로드
+            // (각 항목 별 codexText와 이미지 Sprite로 연결됨)
             foreach (var god in godList)
             {
                 if (!string.IsNullOrEmpty(god.codexPath))

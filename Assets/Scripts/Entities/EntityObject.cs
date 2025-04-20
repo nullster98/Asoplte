@@ -47,7 +47,7 @@ namespace Entities
 
         public NpcReaction reaction;
 
-        private void Start()
+        private void Start() //NPC일 경우 이곳에서 반응 결정
         {
             if (enemyData.EntityType == EntityType.Npc)
             {
@@ -55,7 +55,7 @@ namespace Entities
             }
         }
 
-        public void Initialize(EntitiesData data)
+        public void Initialize(EntitiesData data) //EntityData기반 초기화
         {
             enemyData = data;
             SetStat("CurrentHP", data.MaxHp); 
@@ -76,6 +76,7 @@ namespace Entities
             }
         }
         
+        // 무작위 특성/신앙/장비를 층수 기반으로 설정
         public void InitializeRandomLoadout(EntityType type, int floor)
         {
             traitIDs.Clear();
@@ -123,6 +124,7 @@ namespace Entities
             if (CurrentHP <= 0) SetStat("CurrentHP", 0);
         }
         
+        // 피격 시 색상 반짝이는 연출
         public IEnumerator FlashOnHit(Color flashColor, float duration = 0.1f)
         {
             var image = GetComponentInChildren<Image>();
@@ -140,12 +142,12 @@ namespace Entities
             if (CurrentHP > HP) SetStat("CurrentHP", HP);
         }
 
-        public void ApplyEffect(IEffect effect)
+        public void ApplyEffect(IEffect effect)// 단일 효과 적용
         {
             effect.ApplyEffect(this);
         }
 
-        public void ApplyEffectList(IEnumerable<IEffect> effects)
+        public void ApplyEffectList(IEnumerable<IEffect> effects)// 효과 리스트 전체 적용
         {
             foreach (var effect in effects)
             {
@@ -153,7 +155,7 @@ namespace Entities
             }
         }
 
-        public void ApplySelectedData()
+        public void ApplySelectedData()// 신앙, 특성, 아이템의 효과를 불러와 적용
         {
             if (!string.IsNullOrEmpty(godID))
             {
@@ -214,7 +216,7 @@ namespace Entities
             }
         }
 
-        public int GetStat(string key)
+        public int GetStat(string key)// 스탯 값 조회
         {
             return stats.TryGetValue(key, out int value) ? value : 0;
         }

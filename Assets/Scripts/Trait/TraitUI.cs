@@ -44,21 +44,21 @@ namespace Trait
             // 초기 설정 - 시작 시 두 버튼 모두 기본 설정으로
             //SetButtonColors(PostiveBtn, Color.black, Color.white); // Positive 버튼을 흰색 배경, 검은색 글자로 설정
             //SetButtonColors(NegavieBtn, Color.white, Color.black); // Negative 버튼을 흰색 배경, 검은색 글자로 설정
-
+            
+            //비용순 정렬 후 생성
             DatabaseManager.Instance.traitList = DatabaseManager.Instance.traitList.OrderBy(t => t.cost).ToList();
             CreateTraitButtons();
             CreateSelectButtons();
 
 
         }
-
-        // Update is called once per frame
-        void Update()
+        
+        void Update() // 리팩토링 시 이것도 따로 뺴서 함수로 만들기
         {
             costArea.text = "Cost : " + totalCost.ToString() + " / " + Player.Instance.MaxCost;
         }
 
-        public void PostiveBtnAction() //Positive 버튼을 눌렀을 때
+        public void PositiveBtnAction() //Positive 버튼을 눌렀을 때
         {
             // Positive 버튼 색상: 검은 배경, 흰 글자
             //SetButtonColors(PostiveBtn, Color.black, Color.white);
@@ -165,7 +165,7 @@ namespace Trait
             }
         }
 
-      private void RemoveTrait(int index)
+      private void RemoveTrait(int index) //이미 선택한 특성 다시 빼기
         {
             if (index < selectedTraits.Count)
             {
@@ -213,7 +213,7 @@ namespace Trait
             }
         }
 
-        private void PushTrait(TraitData selectedTrait)
+        private void PushTrait(TraitData selectedTrait) //특성 눌렀을때
         {
             // 특성 설명 업데이트
             descriptionArea.text = $"{selectedTrait.traitName} [{selectedTrait.rarity}]\n[Cost: {selectedTrait.cost}]\n\n{selectedTrait.codexText}";

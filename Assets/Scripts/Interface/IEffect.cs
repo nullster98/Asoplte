@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using PlayerScript;
 using UnityEngine;
 
-public interface IEffect
+public interface IEffect // 모든 효과 클래스가 구현해야 하는 인터페이스
 {
     void ApplyEffect(IUnit target);
-    string EffectDescription { get; }
+    string EffectDescription { get; } // 효과 설명 문자열
 }
 
+// 스탯 증가/감소 효과
 public class StatModifierEffect : IEffect, IRemovableEffect
 {
     private readonly string stat;
@@ -23,19 +24,19 @@ public class StatModifierEffect : IEffect, IRemovableEffect
         this.stat = stat;
         this.amount = amount;
     }
-    public void ApplyEffect(IUnit target)
+    public void ApplyEffect(IUnit target) // 스탯에 효과 적용
     {
         target.ChangeStat(stat, amount);
     }
-    public void RemoveEffect(IUnit target)
+    public void RemoveEffect(IUnit target) // 스탯 효과 제거 (원상복구)
     {
         target.ChangeStat(stat, -amount);
     }
-    public string EffectDescription => null;
+    public string EffectDescription => null; // 현재 미사용 중
 
 }
 
-public class HealEffect : IEffect
+public class HealEffect : IEffect // 체력 회복 효과
 {
     private readonly int healAmount;
     private readonly bool isPercentage;

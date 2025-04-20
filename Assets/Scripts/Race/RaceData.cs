@@ -40,7 +40,7 @@ namespace Race
 
     }
     [System.Serializable]
-    public class SubRaceData
+    public class SubRaceData // 종족 하위 분류
     {
         public string subRaceName;
         public string fileName;
@@ -92,7 +92,7 @@ namespace Race
             }
         }
         
-        public bool CanUnlock(int playerFaith)
+        public bool CanUnlock(int playerFaith) // 현재 신앙 포인트로 해금 가능한지 확인
         {
             return playerFaith >= requireFaith;
         }

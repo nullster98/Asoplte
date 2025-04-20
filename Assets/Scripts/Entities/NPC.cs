@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Entities
 {
-    public class NPC : MonoBehaviour, IUnit
+    public class NPC : MonoBehaviour, IUnit //아직 미사용, 틀만 잡아놓기
     {
         private EntitiesData npcData;
             

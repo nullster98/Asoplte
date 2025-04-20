@@ -12,11 +12,11 @@ namespace Game
 {
     public class BattleManager : MonoBehaviour
     {
-        private EntityObject currentEnemy;
+        private EntityObject currentEnemy; // 현재 전투 중인 적 오브젝트
 
         [SerializeField] private BattleUI ui;
 
-        public void StartBattle(GameObject entityObj)
+        public void StartBattle(GameObject entityObj) // 전투 시작 처리
         {
             EventManager.Instance.NotifyUIOpened();
             Debug.Log($"[StartBattle] StartBattle 호출됨 / enemyObj: {entityObj}");
@@ -43,14 +43,16 @@ namespace Game
             //Destroy(entityObj);
         }
 
-        public void PlayerAttack()
+        public void PlayerAttack() // 플레이어가 공격을 선택했을 때
         {
             int playerDmg = Player.Instance.GetStat("Atk");
             currentEnemy.TakeDamage(playerDmg);
             StartCoroutine(HandleEnemyHitThenContinue(playerDmg));
         }
 
-        private IEnumerator HandleEnemyHitThenContinue(int damage)
+        
+        // 적이 피격되고 상태 갱신 후 반격 여부 판단
+        private IEnumerator HandleEnemyHitThenContinue(int damage) 
         {
             yield return StartCoroutine(currentEnemy.FlashOnHit(Color.red, 0.1f));
 
@@ -67,17 +69,17 @@ namespace Game
             StartCoroutine(EnemyCounterAttack());
         }
 
-        public void EndBattle()
+        public void EndBattle() // 전투 종료 처리
         {
-            ui.ClearLog();
-            ui.HideBattleWindow();
-            Destroy(EventManager.Instance.currentSpawnedEnemy);
-            EventManager.Instance.currentSpawnedEnemy = null;
-            EventManager.Instance.NotifyUIClosed();
-            EventManager.Instance.RequestHandleEventEnd();
+            ui.ClearLog(); //로그 지우고
+            ui.HideBattleWindow(); // UI 닫고
+            Destroy(EventManager.Instance.currentSpawnedEnemy); // 오브젝트 제거하고
+            EventManager.Instance.currentSpawnedEnemy = null; //초기화 시켜주고
+            EventManager.Instance.NotifyUIClosed(); // 닫힘 알림 넣어주고
+            EventManager.Instance.RequestHandleEventEnd(); // 다음 이벤트로
         }
 
-        private IEnumerator EnemyCounterAttack()
+        private IEnumerator EnemyCounterAttack() // 적의 반격 처리
         {
             yield return new WaitForSeconds(0.5f);
 

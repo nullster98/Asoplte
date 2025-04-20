@@ -34,7 +34,7 @@ namespace UI
             
         }
         
-        private GodData GetCurrentGod()
+        private GodData GetCurrentGod() // 현재 인덱스의 GodData 반환
         {
             if (DatabaseManager.Instance.godList == null || DatabaseManager.Instance.godList.Count == 0)
                 return null;
@@ -43,21 +43,21 @@ namespace UI
             return DatabaseManager.Instance.GetGodData(godID);
         }
 
-        public void OnNextButtonPressed()
+        public void OnNextButtonPressed() // ▶ 버튼 (다음 "신"으로 이동)
         {
             if (DatabaseManager.Instance.godList.Count == 0) return;
             currentIndex = (currentIndex + 1) % DatabaseManager.Instance.godList.Count;
             UpdateUI();
         }
 
-        public void OnPreviousButtonPressed()
+        public void OnPreviousButtonPressed() // ◀ 버튼 (이전 "신"으로 이동)
         {
             if (DatabaseManager.Instance.godList.Count == 0) return;
             currentIndex = (currentIndex - 1 + DatabaseManager.Instance.godList.Count) % DatabaseManager.Instance.godList.Count;
             UpdateUI();
         }
 
-        private void UpdateUI()
+        private void UpdateUI() // UI 전체 갱신
         {
             if (DatabaseManager.Instance.godList.Count == 0)
             {
@@ -101,7 +101,7 @@ namespace UI
             Debug.Log($"[GodUI] GetDescription(): {current.codexPath}");
         }
         
-        public void InitializeUI()
+        public void InitializeUI() // 초기 신 목록 로드 및 첫 UI 갱신
         {
             if (DatabaseManager.Instance.godList == null)
             {
@@ -121,19 +121,19 @@ namespace UI
             UpdateUI();
         }
 
-        private string GenerateEffectText(GodData god)
+        private string GenerateEffectText(GodData god) // 신 효과 설명 텍스트 생성
         {
             var sb = new System.Text.StringBuilder();
 
-            // 🟢 1. 이름
+            // 1. 이름
             sb.AppendLine($"<size=100>{god.GodName}</size>");
             sb.AppendLine();
 
-            // 🟢 2. 설명
+            // 2. 설명
             sb.AppendLine($"{god.codexText}");
             sb.AppendLine();
 
-            // 🟢 3. 고유 효과 먼저 출력
+            // 3. 고유 효과 먼저 출력
             bool hasEffect = false;
             foreach (var effect in god.SpecialEffect)
             {
@@ -144,7 +144,7 @@ namespace UI
                 }
             }
 
-            // 🟢 4. 스탯 효과 출력
+            // 4. 스탯 효과 출력
             foreach (var effect in god.SpecialEffect)
             {
                 Debug.Log($"[디버그] 효과 타입: {effect.GetType().Name}");
@@ -157,7 +157,7 @@ namespace UI
                 }
             }
 
-            // 🟢 5. 아무 효과도 없을 경우
+            // 5. 아무 효과도 없을 경우
             if (!hasEffect)
             {
                 sb.AppendLine("- 효과 없음");
@@ -166,14 +166,14 @@ namespace UI
             return sb.ToString();
         }
 
-        public void GodSelectToCharacterSelect()//신앙선택에서 종족선택으로 넘어가는 버튼
+        public void GodSelectToCharacterSelect()// 다음 버튼 (종족선택으로)
         {
             godSelect.SetActive(false);
             characterSelect.SetActive(true);
             player.selectedGod = GetCurrentGod();
         }
 
-        public void PreviousButton()
+        public void PreviousButton() // 이전 버튼 (캐릭터 선택으로 되돌아가기)
         {
             godSelect.SetActive(false);
             gameMenu.SetActive(false);

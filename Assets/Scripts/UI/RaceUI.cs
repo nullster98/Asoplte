@@ -33,8 +33,8 @@ namespace UI
 
         private void Start()
         {
-            CreateRaceButtons();
-            HideDerivation();
+            CreateRaceButtons(); // 종족 선택 버튼 생성
+            HideDerivation(); // 파생 종족 UI 숨김 처리
         }
 
         // 종족 버튼 생성 및 초기화
@@ -82,6 +82,7 @@ namespace UI
         }
         
 
+        // 파생 종족 선택
         private void SelectDerivedCharacter(int characterIndex)
         {
             currentSubRaceIndex = characterIndex;
@@ -127,6 +128,7 @@ namespace UI
             UpdateUI();
         }
 
+        // 버튼 상태 설정: 해금 / 다음 단계 / 선택불가
         private void ConfigureButton(bool isUnlock, float cost = 0f, bool isUnavailable = false)
         {
             if (isUnavailable)
@@ -158,7 +160,7 @@ namespace UI
 
             unlockButton.gameObject.SetActive(true);
         }
-        public void UnlockCharacter()
+        public void UnlockCharacter() // 파생 종족 해금 처리
         {
             RaceData currentTribe = DatabaseManager.Instance.raceList[currentTribeIndex];
             SubRaceData selectedCharacter = currentTribe.subRace[currentSubRaceIndex];
@@ -177,7 +179,7 @@ namespace UI
             }
         }
 
-        private void UpdateUI()
+        private void UpdateUI() // 좌우 파생 종족 미리보기 이미지 갱신
         {
             RaceData currentTribe = DatabaseManager.Instance.raceList[currentTribeIndex];
             if (currentTribe.subRace.Count == 0)
@@ -198,7 +200,7 @@ namespace UI
             rightImg.color = currentTribe.subRace[rightIndex].isUnlocked ? Color.white : new Color(0.5f, 0.5f, 0.5f);
         }
 
-        public void ShowNextCharacter()
+        public void ShowNextCharacter() // 다음 캐릭터로 전환
         {
             RaceData currentTribe = DatabaseManager.Instance.raceList[currentTribeIndex];
             if (currentTribe.subRace.Count > 0)
@@ -208,7 +210,7 @@ namespace UI
             }
         }
 
-        public void ShowPreviousCharacter()
+        public void ShowPreviousCharacter() // 이전 캐릭터로 전환
         {
             RaceData currentTribe = DatabaseManager.Instance.raceList[currentTribeIndex];
             if (currentTribe.subRace.Count > 0)
@@ -218,7 +220,7 @@ namespace UI
             }
         }
 
-        public void HideDerivation()
+        public void HideDerivation() // 파생 종족 이미지 및 버튼 비활성화
         {
             if (!isFirst)
             {

@@ -9,7 +9,7 @@ using Utility;
 
 namespace Trait
 {
-    public enum TraitPnN
+    public enum TraitPnN //특성 분류 (긍정/부정)
     {
         Positive,
         Negative
@@ -34,13 +34,13 @@ namespace Trait
         public string unlockHint;
         public string summary;
         
-        public bool CanUnlock()
+        public bool CanUnlock() // 해금 조건 검사
         {
             // TODO: 신앙값 또는 해금 조건 추가 필요
             return true;
         }
 
-        public void initializeEffect()
+        public void initializeEffect() // EffectKey를 바탕으로 traitEffect 리스트 구성
         {
             traitEffect.Clear();
             if (string.IsNullOrWhiteSpace(EffectKey))

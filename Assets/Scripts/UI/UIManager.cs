@@ -78,7 +78,7 @@ namespace UI
             
         }
 
-        public void UpdatePlayerInfo()
+        public void UpdatePlayerInfo() //플레이어 상세정보 박스
         {
             Player player = Player.Instance;
 
@@ -94,7 +94,7 @@ namespace UI
             UpdateTraitsUI();
         }
 
-        public void UpdateHpUI()
+        public void UpdateHpUI() //체력 업데이트
         {
             if (Player.Instance != null)
             {
@@ -104,7 +104,7 @@ namespace UI
             }
         }
 
-        private void UpdateTraitsUI()
+        private void UpdateTraitsUI() //현재 가진 특성
         {
             Player player = Player.Instance;
             if (player == null) return;

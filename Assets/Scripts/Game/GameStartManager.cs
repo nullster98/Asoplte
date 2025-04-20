@@ -18,7 +18,7 @@ namespace Game
         [SerializeField] private TMP_Text faithPoint;
         [SerializeField] private GodUI godUI;
         
-        public void Start()
+        public void Start() //초기 설정
         {
             menu.SetActive(true);
             StartGame();
@@ -32,7 +32,7 @@ namespace Game
             }
         }
 
-        public void Update()
+        public void Update() //다음 리팩토링 시 매프레임 체크가 아니라 신앙 포인트를 사용할떄마다 리프레쉬 해주면됨
         {
             faithPoint.text = "신앙 포인트 : " + Player.Instance.GetFaithString();
         }
@@ -54,7 +54,7 @@ namespace Game
             godUI.InitializeUI();
         }
 
-        private void StartGame()
+        private void StartGame() // 모든 선택 UI 초기화 (숨기기)
         {
             gameMenu.SetActive(false);
             godSelect.SetActive(false);
@@ -63,7 +63,7 @@ namespace Game
             traitSelect.SetActive(false);
         }
 
-        public void ChangeSpeciesOn()
+        public void ChangeSpeciesOn() // 종족 선택 UI를 활성화
         {
             speciesSelect.SetActive(true);
         }

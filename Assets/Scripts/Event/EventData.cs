@@ -10,7 +10,7 @@ using UnityEngine.Serialization;
 namespace Event
 {
     [Flags]
-    public enum EventTag //이벤트 태그들
+    public enum EventTag //이벤트 유형
     {
         None = 0,
         Start = 1 << 0, // 1
@@ -39,7 +39,7 @@ namespace Event
     }
 
     [Serializable]
-    public class EventPhase
+    public class EventPhase// 이벤트 내 개별 페이즈
     {
         public string phaseName;
         public string phaseID;
@@ -53,7 +53,7 @@ namespace Event
     }
 
     [Serializable]
-    public class DialogueBlock
+    public class DialogueBlock// 대사 블록 단위
     {
         public string dialogueText;
         public string dialoguePath;
@@ -71,7 +71,7 @@ namespace Event
 
     
     [Serializable]
-    public class EventOutcome
+    public class EventOutcome// 선택지 또는 대사 후 발생하는 결과 처리 구조
     {
         //전투관련
         public bool battleTrigger;
@@ -109,14 +109,14 @@ namespace Event
         }
     }
     
-    public class StatModifier
+    public class StatModifier// 스탯 변경용 구조
     {
         public string stat;
         public int amount;
     }
     
     [Serializable]
-    public class EventChoice
+    public class EventChoice//이벤트 내 선택지
     {
         public string choiceName; //선택지 이름
         public string choiceID;
@@ -129,12 +129,12 @@ namespace Event
         
         public string dialogueID;
 
-        public bool CanPlayerSelect(Player player)
+        public bool CanPlayerSelect(Player player)// 선택지가 조건을 만족하는지 여부 평가
         {
             return EventConditionEvaluator.IsConditionMet(condition, player);
         }
 
-        public bool IsEventEnd()
+        public bool IsEventEnd()// 이벤트 종료 여부 확인
         {
             return (string.IsNullOrEmpty(nextEventID) || nextEventID == "END") && (string.IsNullOrEmpty(nextPhaseID));
         }

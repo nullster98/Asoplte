@@ -9,8 +9,8 @@ namespace UI
     [System.Serializable]
     public class EquipInfo
     {
-        public Button equipmentButtons;
-        public Image equipmentImages;
+        public Button equipmentButtons; // 슬롯 클릭용 버튼
+        public Image equipmentImages; // 장비 아이콘 이미지
     }
 
     public class EquipUI : MonoBehaviour
@@ -79,6 +79,7 @@ namespace UI
                 : Resources.Load<Sprite>($"Images/Items/Equipment/default");
         }
 
+        //슬롯 클릭 시 장비 상세 UI 열기
         private void OpenEquipDetailUI(EquipmentType slot)
         {
             Debug.Log($"OpenEquipDetailUI 호출됨: {slot}");
@@ -113,11 +114,13 @@ namespace UI
             });
         }
 
+        // 장비 상세 UI 닫기
         public void CloseEquipDetail()
         {
             equipDetailUI.SetActive(false);
         }
 
+        // 장비 버리기(해제 처리)
         private void TrashEquip(EquipmentType slot)
         {
             if(slot == EquipmentType.None) return;

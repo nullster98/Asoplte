@@ -6,14 +6,14 @@ using Utility;
 
 namespace Item
 {
-    public enum ItemTarget
+    public enum ItemTarget //아이템 적용 대상
     {
         Player,
         Enemy,
         Both
     }
 
-    public enum Rarity
+    public enum Rarity //희귀도
     {
         Common,
         Rare,
@@ -22,7 +22,7 @@ namespace Item
         Absolute
     }
 
-    public enum EquipmentType
+    public enum EquipmentType //장비 부위
     {
         None = -1,
         Helmet = 0,
@@ -33,7 +33,7 @@ namespace Item
         Shoes = 5
     }
 
-    public enum ItemType
+    public enum ItemType //아이템 분류
     {
         None,
         Consumable,
@@ -43,7 +43,7 @@ namespace Item
     }
 
     [System.Serializable]
-    public class ItemData
+    public class ItemData // 아이템 구조
     {
         [Header("기본정보")]
         public string itemName;
@@ -66,7 +66,7 @@ namespace Item
         public int purchasePrice;
         public int salePrice;
 
-        public void initializeEffect()
+        public void initializeEffect() // EffectKey 문자열 기반으로 효과 생성
         {
             if (string.IsNullOrWhiteSpace(EffectKey)) return;
             
@@ -91,7 +91,7 @@ namespace Item
             }
         }
         
-        public ItemData Clone()
+        public ItemData Clone() // 아이템 복제 (효과 리스트 포함)
         {
             var copy = new ItemData
             {

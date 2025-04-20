@@ -29,7 +29,7 @@ namespace Item
             else Destroy(gameObject);
         }
 
-        public void AddItem(string itemID)
+        public void AddItem(string itemID) // 인벤토리에 아이템 추가
         {
             int slot = -1;
             for (int i = 0; i < inventory.Length; i++)
@@ -67,7 +67,7 @@ namespace Item
             UpdateInventoryUI();
         }
 
-        public void RemoveItem(int slot)
+        public void RemoveItem(int slot) // 인벤토리에서 아이템 제거
         {
             if (slot < 0 || slot >= inventory.Length || inventory[slot] == null)
             {
@@ -84,7 +84,7 @@ namespace Item
             UpdateInventoryUI();
         }
 
-        public void PrintInventory()
+        public void PrintInventory() // 현재 인벤토리 상태 로그 출력
         {
             for (int i = 0; i < inventory.Length; i++)
             {
@@ -93,18 +93,17 @@ namespace Item
             }
         }
 
-        public void ToggleInventory()
+        public void ToggleInventory() // 인벤토리 UI 열기/닫기
         {
             inventoryContainer.SetActive(!inventoryContainer.activeSelf);
         }
 
-        public void ToggleEquipment()
+        public void ToggleEquipment() // 장비창 UI 열기/닫기
         { 
             equipContainer.SetActive(!equipContainer.activeSelf);
         }
 
-        //  아이템 UI 자동 생성 및 제거
-        // ReSharper disable Unity.PerformanceAnalysis
+        // 인벤토리 UI를 현재 데이터와 동기화하여 갱신
         private void UpdateInventoryUI()
         {
             for (int i = 0; i < inventory.Length; i++)
@@ -130,7 +129,7 @@ namespace Item
             }
         }
 
-        void Start()
+        void Start()  // 초기화: 인벤토리 비우고 UI 갱신
         {
             for(int i = 0; i < inventory.Length;i++)
             {

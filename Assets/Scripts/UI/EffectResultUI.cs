@@ -13,7 +13,7 @@ using UI;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum EffectChangeType
+public enum EffectChangeType // 효과 타입 분류: 특성 추가/제거, 스탯 증감
 {
    GainTrait,
    RemoveTrait,
@@ -31,6 +31,7 @@ public class EffectResultUI : MonoBehaviour
    private EffectChangeType changeType;
    private object currentResult;
 
+   // 외부에서 호출 → 결과 UI 구성
     public void SetupResultUI(EffectChangeType changeType, string id, int amount = 0)
     {
         EventManager.Instance.NotifyUIOpened();
@@ -129,7 +130,7 @@ public class EffectResultUI : MonoBehaviour
         eventResultContainer.SetActive(true);
     }
 
-    private void SetupStatUI(string stat, int amount, bool isIncrease)
+    private void SetupStatUI(string stat, int amount, bool isIncrease) // 스탯 변화 UI 설정
     {
         string suffix = isIncrease ? "_Up" : "_Down";
         string spritePath = $"StatUI/Stats/Stat{suffix}";
@@ -140,7 +141,7 @@ public class EffectResultUI : MonoBehaviour
         resultText.text = $"<b>스탯 {(isIncrease ? "증가" : "감소")} - {stat}</b>\n{sign}{Mathf.Abs(amount)}";
     }
 
-    public void CheckBtn()
+    public void CheckBtn() // 확인 버튼 클릭 → 효과 실제 적용
     {
         onConfirmAction?.Invoke(); // 실제 적용
         UIManager.Instance.UpdateHpUI();

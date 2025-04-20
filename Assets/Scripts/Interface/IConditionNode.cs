@@ -9,7 +9,7 @@ public interface IConditionNode
     bool Evaluate(Player player);
 }
 
-// 🔹 특성 보유 여부
+// 특성 보유 여부
 public class HasTraitNode : IConditionNode
 {
     private string traitID;
@@ -22,12 +22,12 @@ public class HasTraitNode : IConditionNode
     public bool Evaluate(Player player)
     {
         bool result = player.HasTrait(traitID);
-        if (!result) Debug.Log($"[❌] 조건 불충족: HAS_TRAIT {traitID}");
+        if (!result) Debug.Log($"조건 불충족: HAS_TRAIT {traitID}");
         return result;
     }
 }
 
-// 🔹 신앙심 비교
+// 신앙심 비교
 public class FaithConditionNode : IConditionNode
 {
     private string op;
@@ -43,7 +43,7 @@ public class FaithConditionNode : IConditionNode
     {
         int faith = player.FaithStat;
         bool result = EvaluateComparison(faith, op, value);
-        if (!result) Debug.Log($"[❌] 조건 불충족: FAITH {op} {value} (현재: {faith})");
+        if (!result) Debug.Log($"조건 불충족: FAITH {op} {value} (현재: {faith})");
         return result;
     }
 
@@ -59,7 +59,7 @@ public class FaithConditionNode : IConditionNode
     }
 }
 
-// 🔹 스탯 비교
+// 스탯 비교
 public class StatConditionNode : IConditionNode
 {
     private string statName;
@@ -77,7 +77,7 @@ public class StatConditionNode : IConditionNode
     {
         int stat = player.GetStat(statName);
         bool result = EvaluateComparison(stat, op, value);
-        if (!result) Debug.Log($"[❌] 조건 불충족: STAT {statName} {op} {value} (현재: {stat})");
+        if (!result) Debug.Log($"조건 불충족: STAT {statName} {op} {value} (현재: {stat})");
         return result;
     }
 
@@ -93,7 +93,7 @@ public class StatConditionNode : IConditionNode
     }
 }
 
-// 🔹 신 확인
+// 신 확인
 public class GodIsNode : IConditionNode
 {
     private string godID;
@@ -106,12 +106,12 @@ public class GodIsNode : IConditionNode
     public bool Evaluate(Player player)
     {
         bool result = player.selectedGod?.GodID == godID;
-        if (!result) Debug.Log($"[❌] 조건 불충족: GOD IS {godID} (현재: {player.selectedGod?.GodID})");
+        if (!result) Debug.Log($"조건 불충족: GOD IS {godID} (현재: {player.selectedGod?.GodID})");
         return result;
     }
 }
 
-// 🔹 종족 확인
+// 종족 확인
 public class RaceIsNode : IConditionNode
 {
     private string raceID;
@@ -124,12 +124,12 @@ public class RaceIsNode : IConditionNode
     public bool Evaluate(Player player)
     {
         bool result = player.HasRace(raceID);
-        if (!result) Debug.Log($"[❌] 조건 불충족: RACE IS {raceID} (현재: {player.fullRaceID})");
+        if (!result) Debug.Log($"조건 불충족: RACE IS {raceID} (현재: {player.fullRaceID})");
         return result;
     }
 }
 
-// 🔹 층수 비교
+// 층수 비교
 public class FloorConditionNode : IConditionNode
 {
     private string op;
@@ -145,7 +145,7 @@ public class FloorConditionNode : IConditionNode
     {
         int floor = EventManager.Instance.floor;
         bool result = EvaluateComparison(floor, op, value);
-        if (!result) Debug.Log($"[❌] 조건 불충족: FLOOR {op} {value} (현재: {floor})");
+        if (!result) Debug.Log($"조건 불충족: FLOOR {op} {value} (현재: {floor})");
         return result;
     }
 
@@ -161,7 +161,7 @@ public class FloorConditionNode : IConditionNode
     }
 }
 
-// 🔹 부정 조건
+// 부정 조건
 public class NotConditionNode : IConditionNode
 {
     private IConditionNode inner;
@@ -174,12 +174,12 @@ public class NotConditionNode : IConditionNode
     public bool Evaluate(Player player)
     {
         bool result = !inner.Evaluate(player);
-        if (!result) Debug.Log($"[❌] 조건 불충족: NOT 조건 내부가 true");
+        if (!result) Debug.Log($"조건 불충족: NOT 조건 내부가 true");
         return result;
     }
 }
 
-// 🔹 AND 조건
+// AND 조건
 public class AndConditionNode : IConditionNode
 {
     private IConditionNode left, right;
@@ -195,12 +195,12 @@ public class AndConditionNode : IConditionNode
         bool resultL = left.Evaluate(player);
         bool resultR = right.Evaluate(player);
         if (!resultL || !resultR)
-            Debug.Log("[❌] 조건 불충족: AND 조건 둘 중 하나 이상 실패");
+            Debug.Log("조건 불충족: AND 조건 둘 중 하나 이상 실패");
         return resultL && resultR;
     }
 }
 
-// 🔹 OR 조건
+// OR 조건
 public class OrConditionNode : IConditionNode
 {
     private IConditionNode left, right;
@@ -216,7 +216,7 @@ public class OrConditionNode : IConditionNode
         bool resultL = left.Evaluate(player);
         bool resultR = right.Evaluate(player);
         if (!resultL && !resultR)
-            Debug.Log("[❌] 조건 불충족: OR 조건 둘 다 실패");
+            Debug.Log("조건 불충족: OR 조건 둘 다 실패");
         return resultL || resultR;
     }
 }

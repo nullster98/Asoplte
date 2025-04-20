@@ -18,7 +18,7 @@ namespace UI
         Skill // 스킬
     }
 
-    public class AcquisitionUI : MonoBehaviour
+    public class AcquisitionUI : MonoBehaviour //획득시 선택(장착 / 버리기) 가능한 UI
     {
         [SerializeField] private GameObject acquistPannel;
         [SerializeField] private Image getImage;
@@ -31,6 +31,7 @@ namespace UI
         private object currentObject; // 현재 UI에 표시된 데이터 (Item, Trait, Skill 등)
 
 
+        // 획득 UI를 세팅하고 표시
         public void SetupAcquisitionUI(AcquisitionType type, string id)
         {
             EventManager.Instance.NotifyUIOpened();
@@ -84,6 +85,7 @@ namespace UI
         }
 
 
+        // 아이템 또는 장비 획득 시 UI 업데이트
         private void UpdateItemUI(ItemData itemData)
         {
             getImage.sprite = itemData.itemImage;
@@ -125,6 +127,7 @@ namespace UI
             confirmButton.onClick.AddListener(ApplyReward);
         }
 
+        // 특성 획득 시 UI 업데이트
         private void UpdateTraitUI(TraitData trait)
         {
             getImage.sprite = trait.traitImage;
@@ -148,7 +151,7 @@ namespace UI
         });
     }*/
 
-        private void ApplyReward()
+        private void ApplyReward() // 실제 효과를 플레이어에게 적용
         {
             switch (currentType)
             {
@@ -168,6 +171,7 @@ namespace UI
         }
 
 
+        // UI 닫기 및 이벤트 진행 재개
         public void CloseAcquisitionUI()
         {
             acquistPannel.SetActive(false);

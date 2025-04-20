@@ -6,7 +6,7 @@ using Utility;
 
 namespace Entities
 {
-    public enum EntityType
+    public enum EntityType //Entity 종류
     {
         None,
         Monster,
@@ -14,14 +14,14 @@ namespace Entities
         Npc
     }
 
-    public enum NpcReaction
+    public enum NpcReaction // NPC전용 플레이어에게 보일 반응
     {
         Favorable,
         Neutral,
         Hostile
     }
     [System.Serializable]
-    public class EntitiesData
+    public class EntitiesData //모든 Entity에 대한 데이터. 추후 Enemy,Boss/NPC를 나눌 예정
     {
         public string EntityID;
         public EntityType EntityType;
@@ -48,7 +48,7 @@ namespace Entities
 
         public string linkedEventPhaseID;
 
-        public void initializeEffect()
+        public void initializeEffect() //EffectKey기반으로 실제 효과 리스트 생성
         {
             if (string.IsNullOrWhiteSpace(EffectKey))
             {
@@ -77,7 +77,7 @@ namespace Entities
             }
         }
         
-        public void InitializeNpcBehavior()
+        public void InitializeNpcBehavior() //NPC의 고정 신앙 및 성향 출력시
         {
             if (EntityType != EntityType.Npc) return;
 
@@ -85,7 +85,7 @@ namespace Entities
             Debug.Log($"{Name}의 성향: {Personality}, 고정 신앙: {FixedGodID}");
         }
 
-        public EntitiesData Clone(int level)
+        public EntitiesData Clone(int level) //특정 레벨을 기반으로 능력치가 반영된 클론 생성
         {
             return new EntitiesData
             {
@@ -108,7 +108,7 @@ namespace Entities
                 summary = this.summary
             };
         }
-        public NpcReaction EvaluateReactionTo(Player player)
+        public NpcReaction EvaluateReactionTo(Player player) //NPC가 플레이어를 평가하여 반응을 반환
         {
             if (EntityType != EntityType.Npc)
                 return NpcReaction.Neutral;

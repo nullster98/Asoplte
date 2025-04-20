@@ -25,17 +25,19 @@ public class BattleUI : MonoBehaviour
     [SerializeField] private TMP_Text entityHpText;
     [SerializeField] private Slider entityHp;
 
+    // 전투 UI 열기
     public void OpenBattleWindow() => battleWindow.SetActive(true);
+    // 전투 UI 닫기
     public void HideBattleWindow() => battleWindow.SetActive(false);
 
-    public void UpdateEntityUI(EntityObject enemy)
+    public void UpdateEntityUI(EntityObject enemy) // 적 HP UI 업데이트
     {
         entityHp.maxValue = enemy.enemyData.MaxHp;
         entityHp.value = enemy.GetStat("CurrentHP");
         entityHpText.text = $"{enemy.GetStat("CurrentHP")} / {enemy.enemyData.MaxHp}";
     }
     
-    public void UpdatePlayerUI()
+    public void UpdatePlayerUI() // 플레이어 HP UI 업데이트
     {
         int cur = Player.Instance.GetStat("CurrentHP");
         int max = Player.Instance.GetStat("HP");
@@ -44,12 +46,12 @@ public class BattleUI : MonoBehaviour
         playerHpText.text = $"{cur} / {max}";
     }
     
-    public void Log(string message)
+    public void Log(string message) // 로그 메시지 추가
     {
         battleLogs.text += $"\n{message}";
     }
     
-    public void ClearLog()
+    public void ClearLog() // 로그 초기화
     {
         battleLogs.text = "";
     }

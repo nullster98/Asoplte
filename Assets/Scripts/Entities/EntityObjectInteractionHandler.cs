@@ -13,8 +13,8 @@ public class EntityObjectInteractionHandler : MonoBehaviour, IPointerClickHandle
     public GameObject infoPanel;
     public EventHandler eventHandler;
 
-    private float holdTime = 0.5f;
-    private bool isHolding = false;
+    private float holdTime = 0.5f;// 꾹 누름 인식 시간 (초 단위)
+    private bool isHolding = false;// 꾹 누르는 중인지 여부
 
     void Awake()
     {
@@ -28,7 +28,7 @@ public class EntityObjectInteractionHandler : MonoBehaviour, IPointerClickHandle
         }
     }
 
-    public void OnPointerClick(PointerEventData eventData)
+    public void OnPointerClick(PointerEventData eventData)// 클릭 시 호출 (NPC만 반응함)
     {
         if (entity.enemyData.EntityType == EntityType.Npc)
         {
@@ -46,13 +46,13 @@ public class EntityObjectInteractionHandler : MonoBehaviour, IPointerClickHandle
 
             if (phaseIndex < 0)
             {
-                Debug.LogWarning($"[❌] NpcReaction {reaction}에 대응하는 PhaseIndex 없음");
+                Debug.LogWarning($"NpcReaction {reaction}에 대응하는 PhaseIndex 없음");
                 return;
             }
 
             if (phaseIndex < 0)
             {
-                Debug.LogWarning($"[❌] NpcReaction {reaction}에 대응하는 PhaseIndex 없음");
+                Debug.LogWarning($"NpcReaction {reaction}에 대응하는 PhaseIndex 없음");
                 return;
             }
 
@@ -60,18 +60,18 @@ public class EntityObjectInteractionHandler : MonoBehaviour, IPointerClickHandle
         }
     }
 
-    public void OnPointerDown(PointerEventData eventData)
+    public void OnPointerDown(PointerEventData eventData)// 마우스(또는 터치) 누름 시작 시 호출
     {
         isHolding = true;
         StartCoroutine(HoldCheck());
     }
 
-    public void OnPointerUp(PointerEventData eventData)
+    public void OnPointerUp(PointerEventData eventData)// 마우스(또는 터치) 떼었을 때 호출
     {
         isHolding = false;
     }
 
-    private IEnumerator HoldCheck()
+    private IEnumerator HoldCheck()// 일정 시간 동안 누르고 있으면 정보 패널 표시
     {
         float timer = 0f;
         while (isHolding && timer < holdTime)

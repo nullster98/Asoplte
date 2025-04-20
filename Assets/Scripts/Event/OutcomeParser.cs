@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class OutcomeParser 
 {
-    public class ParsedOutcome
+    public class ParsedOutcome //결과 파싱을 담는곳
     {
         public List<StatModifier> statModifiers = new ();
         public List<string> addTraits = new ();
@@ -23,11 +23,13 @@ public class OutcomeParser
         public bool shopTrigger;
     }
 
+    // Outcome DSL을 파싱하여 ParsedOutcome 구조로 변환
     public static ParsedOutcome Parse(string outcomeScript)
     {
         var parsed = new ParsedOutcome();
         if(string.IsNullOrWhiteSpace(outcomeScript)) return parsed;
         
+        //구분자는 "|"
         var commands = outcomeScript.Split('|', StringSplitOptions.RemoveEmptyEntries);
         foreach (var rawCommand in commands)
         {
@@ -90,6 +92,7 @@ public class OutcomeParser
                 var trait = command.Replace("Trait:remove_", "").Trim();
                 parsed.removeTraits.Add(trait);
             }
+            // ────── 보상 트리거 ────── 
             else if (command.StartsWith("Reward:", StringComparison.OrdinalIgnoreCase))
             {
                 var rewardPart = command.Replace("Reward:", "").Trim();
@@ -105,10 +108,12 @@ public class OutcomeParser
                     Debug.LogWarning($"[OutcomeParser] Reward 구문 오류: {command}");
                 }
             }
+            // ────── ID기반 Entity 소환 ────── 
             else if (command.StartsWith("Entity:", StringComparison.OrdinalIgnoreCase))
             {
                 parsed.entityID = command.Replace("Entity:", "").Trim();
             }
+            // ────── Entity가 소환된 확률 ────── 
             else if (command.StartsWith("Chance:", StringComparison.OrdinalIgnoreCase))
             {
                 if (float.TryParse(command.Replace("Chance:", "").Trim(), out var result))
@@ -116,18 +121,22 @@ public class OutcomeParser
                     parsed.spawnChance = result;
                 }
             }
+            // ────── 전투 시작(UI활성화) 트리거 ────── 
             else if (command.Equals("Trigger:StartBattle", StringComparison.OrdinalIgnoreCase))
             {
                 parsed.battleTrigger = true;
             }
+            // ────── 보상 지급(UI활성화) 트리거 ────── 
             else if (command.Equals("Trigger:GiveReward", StringComparison.OrdinalIgnoreCase))
             {
                 parsed.rewardTrigger = true;
             }
+            // ────── 상태 변화(UI활성화) 트리거 ────── 
             else if (command.Equals("Trigger:State", StringComparison.OrdinalIgnoreCase))
             {
                 parsed.stateTrigger = true;
             }
+            // ────── 상점 NPC 전용 상점 오픈 트리거 ────── 
             else if (command.Equals("Trigger:OpenShop", StringComparison.OrdinalIgnoreCase))
             {
                 parsed.shopTrigger = true;
@@ -141,6 +150,7 @@ public class OutcomeParser
         return parsed;
     }
 
+    // ParsedOutcome → 실제 EventOutcome 변환
     public static EventOutcome ToEventOutcome(ParsedOutcome parsed)
     {
         return new EventOutcome

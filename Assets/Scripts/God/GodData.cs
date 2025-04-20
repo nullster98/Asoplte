@@ -28,7 +28,7 @@ namespace God
         public string bgPath;
         public string summary;
         public string unlockHint;
-        public void initializeEffect()
+        public void initializeEffect() // EffectKey를 기반으로 실제 효과 객체 생성 및 등록
         {
             string[] effectKeys = EffectKey.Split('|');
             foreach (var key in effectKeys)
@@ -48,6 +48,7 @@ namespace God
             }
         }
 
+        // 신 고유 스탯 (선택 시 IUnit 객체에게 부여됨)
         public Dictionary<string, int> GodStats = new Dictionary<string, int>
         {
             {"Atk", 0},
