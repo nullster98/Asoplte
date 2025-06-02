@@ -56,7 +56,7 @@ Project Apostle은 선택지 기반 2D 싱글 로그라이크 게임이다냥! �
 *   **대상 통합 처리**: `IUnit` 인터페이스로 모든 유닛 기능 정의 🎯
 *   **효과 처리 자동화**: `EffectFactory & Registry` 시스템으로 효과 처리 ⚙️
 *   **데이터 자동화**: Google Sheet + Json 파이프라인으로 데이터 관리 📊
-    *   [Google Sheet Link](https://docs.google.com/spreadsheets/d/1aq027V04s4wilLNBEvcgEEYGdaq6YAwCn2dw_Szd2rE/edit?usp=sharing) 🌐
+    *   [Google Sheet Link]([https://docs.google.com/spreadsheets/d/1aq027V04s4wilLNBEvcgEEYGdaq6YAwCn2dw_Szd2rE/edit?usp=sharing](https://docs.google.com/spreadsheets/d/1aq027VO4s4wilLNBEvcgEEYGdaq6YAwCn2dw_Szd2rE/edit?gid=0#gid=0)) 🌐
 *   **선택 및 분기처리**: 이벤트 구조 시스템으로 분기 로직 관리 🔀
 *   **동적 생성**: Entity 구조 시스템으로 객체 동적 생성 ➕
 
